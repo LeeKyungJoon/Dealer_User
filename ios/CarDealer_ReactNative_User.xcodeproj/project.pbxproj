@@ -17,6 +17,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* CarDealer_ReactNative_UserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CarDealer_ReactNative_UserTests.m */; };
 		416707B12668A1296FD2FD80 /* libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6097DC210800B0D576F696DC /* libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a */; };
 		5001CDB1BBC0AC73CE2E538A /* libPods-CarDealer_ReactNative_User.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C48322862CD4EFF4FDF855 /* libPods-CarDealer_ReactNative_User.a */; };
+		655DAD3B24FE18DA009DCB1E /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 655DAD3A24FE18DA009DCB1E /* Fonts */; };
 		65E3703424FDD04300733C89 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65E3703324FDD04300733C89 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		932EBA063B1AC3452D3B7550 /* libPods-CarDealer_ReactNative_User-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C023FA0F660E55CF196FCCB /* libPods-CarDealer_ReactNative_User-tvOSTests.a */; };
@@ -58,6 +59,7 @@
 		5B0F0865448C287B5F470231 /* Pods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.release.xcconfig"; path = "Target Support Files/Pods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests/Pods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.release.xcconfig"; sourceTree = "<group>"; };
 		5C023FA0F660E55CF196FCCB /* libPods-CarDealer_ReactNative_User-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CarDealer_ReactNative_User-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6097DC210800B0D576F696DC /* libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		655DAD3A24FE18DA009DCB1E /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		65E3703324FDD04300733C89 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7513DE0B6AD1BC7A41A77429 /* Pods-CarDealer_ReactNative_User-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarDealer_ReactNative_User-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-CarDealer_ReactNative_User-tvOSTests/Pods-CarDealer_ReactNative_User-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CarDealer_ReactNative_User/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				655DAD3A24FE18DA009DCB1E /* Fonts */,
 				13B07FAE1A68108700A75B9A /* CarDealer_ReactNative_User */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CarDealer_ReactNative_UserTests */,
@@ -346,6 +349,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				65E3703424FDD04300733C89 /* GoogleService-Info.plist in Resources */,
+				655DAD3B24FE18DA009DCB1E /* Fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
