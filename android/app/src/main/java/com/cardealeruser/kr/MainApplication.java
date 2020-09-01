@@ -1,4 +1,4 @@
-package com.cardealer_reactnative_user;
+package com.cardealeruser.kr;
 
 import android.app.Application;
 import android.content.Context;

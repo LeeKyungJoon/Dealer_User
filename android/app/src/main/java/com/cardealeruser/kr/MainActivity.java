@@ -1,4 +1,4 @@
-package com.cardealer_reactnative_user;
+package com.cardealeruser.kr;
 
 import com.facebook.react.ReactActivity;
 
