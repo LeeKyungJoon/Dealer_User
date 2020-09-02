@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Header } from "react-native-elements";
 import scale from "../../common/Scale";
 import {
@@ -14,8 +14,19 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import Modal from "react-native-modal";
 
-export default function SignUp() {
+export default function SearchPassword() {
+  const [isvisible, setIsvisible] = useState(false);
+
+  const _open = () => {
+    setIsvisible(true);
+  };
+
+  const _hide = () => {
+    setIsvisible(false);
+  };
+
   return (
     <>
       <Header
@@ -39,7 +50,7 @@ export default function SignUp() {
             />
           </TouchableOpacity>
         }
-        centerComponent={<Text style={{ ...styles.title }}>회원가입</Text>}
+        centerComponent={<Text style={{ ...styles.title }}>비밀번호 찾기</Text>}
       />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={{ ...styles.container }}>
@@ -55,60 +66,53 @@ export default function SignUp() {
           >
             <View>
               <Text style={{ ...styles.subtitle, marginTop: scale(15) }}>
-                이메일 주소를 입력해주세요
+                가입 이메일 주소를 입력해주세요
               </Text>
               <TextInput
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
                 placeholder={"이메일 주소를 입력하세요."}
                 placeholderTextColor={"#bababa"}
               />
-              <Text style={{ ...styles.subtitle, marginTop: scale(25) }}>
-                비밀번호를 입력해주세요
-              </Text>
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"비밀번호를 입력하세요. (영문, 숫자 포함)"}
-                placeholderTextColor={"#bababa"}
-                secureTextEntry={true}
-              />
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(5) }}
-                placeholder={"비밀번호를 확인하세요."}
-                placeholderTextColor={"#bababa"}
-                secureTextEntry={true}
-              />
-              <Text style={{ ...styles.subtitle, marginTop: scale(25) }}>
-                이름을 입력해주세요
-              </Text>
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"이름을 입력하세요."}
-                placeholderTextColor={"#bababa"}
-              />
-              <Text style={{ ...styles.subtitle, marginTop: scale(25) }}>
-                휴대전화를 입력해주세요
-              </Text>
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"01012345678"}
-                placeholderTextColor={"#bababa"}
-              />
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  ...styles.verifybutton,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  alignSelf: "center",
+                  marginTop: scale(18),
+                }}
+                onPress={() => {
+                  _open();
+                }}
+              >
+                <Text style={{ ...styles.verifytext }}>인증요청</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={{
-                ...styles.bottombutton,
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: Platform.OS === "ios" ? 0 : scale(30),
-                marginTop: scale(60),
-              }}
-              delayPressIn={0}
-            >
-              <Text style={{ ...styles.bottomtext }}>다음</Text>
-            </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
       </TouchableWithoutFeedback>
+      <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+        <View
+          style={{
+            ...styles.modalbox,
+            padding: scale(20),
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={{ ...styles.modaltitle }}>
+            이메일로 임시 비밀번호가 전송됐습니다.
+          </Text>
+          <TouchableOpacity
+            delayPressIn={0}
+            onPress={() => {
+              _hide();
+            }}
+          >
+            <Text style={{ ...styles.modalconfirm }}>확인</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -157,20 +161,41 @@ const styles = StyleSheet.create({
     color: "#000000",
     paddingHorizontal: scale(10),
   },
-  bottombutton: {
-    width: scale(330),
-    height: scale(40),
-    borderRadius: 10,
-    backgroundColor: "#dddddd",
+  verifybutton: {
+    width: scale(59),
+    height: scale(25.5),
+    backgroundColor: "#565656",
   },
-  bottomtext: {
-    fontFamily: "Jalnan",
-    fontSize: scale(15),
-    fontWeight: "normal",
+  verifytext: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
     fontStyle: "normal",
-    lineHeight: scale(25),
     letterSpacing: 0,
     textAlign: "center",
     color: "#ffffff",
+  },
+  modalbox: {
+    width: scale(280),
+    height: scale(100),
+    backgroundColor: "#ffffff",
+    borderStyle: "solid",
+    borderWidth: 0.3,
+    borderColor: "#707070",
+  },
+  modaltitle: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  modalconfirm: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "right",
+    color: "#459bfe",
   },
 });

@@ -15,7 +15,7 @@ import {
   Keyboard,
 } from "react-native";
 
-export default function SignUp() {
+export default function SingIn() {
   return (
     <>
       <Header
@@ -39,7 +39,7 @@ export default function SignUp() {
             />
           </TouchableOpacity>
         }
-        centerComponent={<Text style={{ ...styles.title }}>회원가입</Text>}
+        centerComponent={<Text style={{ ...styles.title }}>로그인</Text>}
       />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={{ ...styles.container }}>
@@ -71,28 +71,20 @@ export default function SignUp() {
                 placeholderTextColor={"#bababa"}
                 secureTextEntry={true}
               />
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(5) }}
-                placeholder={"비밀번호를 확인하세요."}
-                placeholderTextColor={"#bababa"}
-                secureTextEntry={true}
-              />
-              <Text style={{ ...styles.subtitle, marginTop: scale(25) }}>
-                이름을 입력해주세요
-              </Text>
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"이름을 입력하세요."}
-                placeholderTextColor={"#bababa"}
-              />
-              <Text style={{ ...styles.subtitle, marginTop: scale(25) }}>
-                휴대전화를 입력해주세요
-              </Text>
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"01012345678"}
-                placeholderTextColor={"#bababa"}
-              />
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row",
+                  marginTop: scale(15),
+                }}
+              >
+                <Text style={{ ...styles.search }}>비밀번호 찾기</Text>
+                <Image
+                  style={{ ...styles.more }}
+                  source={require("../../images/more_ic_40.png")}
+                />
+              </TouchableOpacity>
             </View>
             <TouchableOpacity
               style={{
@@ -104,7 +96,7 @@ export default function SignUp() {
               }}
               delayPressIn={0}
             >
-              <Text style={{ ...styles.bottomtext }}>다음</Text>
+              <Text style={{ ...styles.bottomtext }}>로그인</Text>
             </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
@@ -156,6 +148,19 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "#000000",
     paddingHorizontal: scale(10),
+  },
+  more: {
+    width: scale(10),
+    height: scale(10),
+  },
+  search: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(12),
+    fontStyle: "normal",
+    lineHeight: scale(25),
+    letterSpacing: -scale(0.36),
+    textAlign: "left",
+    color: "#459bfe",
   },
   bottombutton: {
     width: scale(330),
