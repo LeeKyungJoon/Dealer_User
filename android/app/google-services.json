@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "374067282181",
+    "firebase_url": "https://dealer-of-delivery.firebaseio.com",
+    "project_id": "dealer-of-delivery",
+    "storage_bucket": "dealer-of-delivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374067282181:android:2884c6695025cb4f54f76c",
+        "android_client_info": {
+          "package_name": "com.cardealeruser.kr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374067282181-aqd9q6b1oclojudkb0ngonbp0lk5fdim.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHm8AForapnpuZ4nwjk8Qfry8F3BJ1Oc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374067282181-aqd9q6b1oclojudkb0ngonbp0lk5fdim.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
