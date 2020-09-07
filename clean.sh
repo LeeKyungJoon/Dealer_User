@@ -2,7 +2,6 @@ echo '*****************************************'
 echo 'Remove node_modules folder'
 echo '*****************************************'
 rm -rf ./node_modules yarn.lock
-yarn cache clean
 echo '*****************************************'
 echo 'Yarn install'
 echo '*****************************************'
