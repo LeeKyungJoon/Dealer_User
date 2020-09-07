@@ -274,7 +274,154 @@ export default function MyCarBuyMain() {
               <Text style={{ ...styles.real }}>
                 #리얼 후기 <Text style={{ color: "#1d1d1d" }}>확인하기</Text>
               </Text>
-              <View></View>
+              <View
+                style={{
+                  marginBottom: scale(15),
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                }}
+              >
+                <View
+                  style={{
+                    width: scale(157.5),
+                    height: scale(180),
+                    backgroundColor: "#ffffff",
+                    elevation: 1.5,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                  }}
+                >
+                  <ImageBackground
+                    style={{ ...styles.realcar }}
+                    source={require("../../../images/g_703.png")}
+                  >
+                    <Image
+                      style={{
+                        ...styles.premark,
+                        position: "absolute",
+                      }}
+                      source={require("../../../images/premium.png")}
+                    />
+                  </ImageBackground>
+                  <Image
+                    style={{
+                      width: scale(30),
+                      height: scale(30),
+                      position: "absolute",
+                      right: 4,
+                      bottom: 40,
+                    }}
+                    source={require("../../../images/shutterstock_682551649.png")}
+                  />
+                  <View
+                    style={{
+                      paddingHorizontal: scale(4),
+                      paddingVertical: scale(7),
+                    }}
+                  >
+                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
+                    <Text style={{ ...styles.review }} numberOfLines={2}>
+                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
+                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
+                      기도합니다. 제발제발 좋게 써주세요.
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    width: scale(157.5),
+                    height: scale(180),
+                    backgroundColor: "#ffffff",
+                    elevation: 1.5,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                    marginBottom: scale(20),
+                  }}
+                >
+                  <ImageBackground
+                    style={{ ...styles.realcar }}
+                    source={require("../../../images/g_703.png")}
+                  ></ImageBackground>
+                  <Image
+                    style={{
+                      width: scale(30),
+                      height: scale(30),
+                      position: "absolute",
+                      right: 4,
+                      bottom: 40,
+                    }}
+                    source={require("../../../images/shutterstock_682551649.png")}
+                  />
+                  <View
+                    style={{
+                      paddingHorizontal: scale(4),
+                      paddingVertical: scale(7),
+                    }}
+                  >
+                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
+                    <Text style={{ ...styles.review }} numberOfLines={2}>
+                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
+                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
+                      기도합니다. 제발제발 좋게 써주세요.
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    width: scale(157.5),
+                    height: scale(180),
+                    backgroundColor: "#ffffff",
+                    elevation: 1.5,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                    marginBottom: scale(20),
+                  }}
+                >
+                  <ImageBackground
+                    style={{ ...styles.realcar }}
+                    source={require("../../../images/g_703.png")}
+                  ></ImageBackground>
+                  <Image
+                    style={{
+                      width: scale(30),
+                      height: scale(30),
+                      position: "absolute",
+                      right: 4,
+                      bottom: 40,
+                    }}
+                    source={require("../../../images/shutterstock_682551649.png")}
+                  />
+                  <View
+                    style={{
+                      paddingHorizontal: scale(4),
+                      paddingVertical: scale(7),
+                    }}
+                  >
+                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
+                    <Text style={{ ...styles.review }} numberOfLines={2}>
+                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
+                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
+                      기도합니다. 제발제발 좋게 써주세요.
+                    </Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </ScrollView>
         </View>
@@ -395,5 +542,26 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: "left",
     color: "#459bfe",
+  },
+  realcar: {
+    width: scale(157.5),
+    height: scale(130),
+  },
+  smallcarname: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(8),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#459bfe",
+  },
+  review: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(8),
+    fontStyle: "normal",
+    lineHeight: 10,
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#000000",
   },
 });
