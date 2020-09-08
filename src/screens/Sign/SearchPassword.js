@@ -36,7 +36,7 @@ export default function SearchPassword() {
         statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
         containerStyle={{
           borderBottomWidth: 0,
-          height: scale(78),
+          height: scale(80),
         }}
         leftComponent={
           <TouchableOpacity

@@ -25,7 +25,7 @@ export default function SignUp() {
         statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
         containerStyle={{
           borderBottomWidth: 0,
-          height: scale(78),
+          height: scale(80),
         }}
         leftComponent={
           <TouchableOpacity
@@ -57,11 +57,26 @@ export default function SignUp() {
               <Text style={{ ...styles.subtitle, marginTop: scale(15) }}>
                 이메일 주소를 입력해주세요
               </Text>
-              <TextInput
-                style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"이메일 주소를 입력하세요."}
-                placeholderTextColor={"#bababa"}
-              />
+              <View style={{ ...styles.righton, marginTop: scale(12) }}>
+                <TextInput
+                  style={{ ...styles.rightoninput, marginLeft: scale(10) }}
+                  placeholder={"이메일 주소를 입력하세요."}
+                  placeholderTextColor={"#bababa"}
+                />
+                <TouchableOpacity
+                  delayPressIn={0}
+                  style={{
+                    width: scale(59),
+                    height: scale(25.5),
+                    backgroundColor: "#bbbbbb",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginRight: scale(15),
+                  }}
+                >
+                  <Text style={{ ...styles.rightbutton }}>중복확인</Text>
+                </TouchableOpacity>
+              </View>
               <Text style={{ ...styles.subtitle, marginTop: scale(25) }}>
                 비밀번호를 입력해주세요
               </Text>
@@ -88,9 +103,29 @@ export default function SignUp() {
               <Text style={{ ...styles.subtitle, marginTop: scale(25) }}>
                 휴대전화를 입력해주세요
               </Text>
+              <View style={{ ...styles.righton, marginTop: scale(12) }}>
+                <TextInput
+                  style={{ ...styles.rightoninput, marginLeft: scale(10) }}
+                  placeholder={"01012345678"}
+                  placeholderTextColor={"#bababa"}
+                />
+                <TouchableOpacity
+                  delayPressIn={0}
+                  style={{
+                    width: scale(59),
+                    height: scale(25.5),
+                    backgroundColor: "#bbbbbb",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginRight: scale(15),
+                  }}
+                >
+                  <Text style={{ ...styles.rightbutton }}>인증요청</Text>
+                </TouchableOpacity>
+              </View>
               <TextInput
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"01012345678"}
+                placeholder={"인증번호를 입력하세요."}
                 placeholderTextColor={"#bababa"}
               />
             </View>
@@ -140,6 +175,36 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: "left",
     color: "#222222",
+  },
+  righton: {
+    width: scale(330),
+    height: scale(40),
+    borderRadius: 10,
+    backgroundColor: "#ffffff",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#dddddd",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  rightoninput: {
+    width: scale(200),
+    backgroundColor: "#ffffff",
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    letterSpacing: -0.39,
+    textAlign: "left",
+    color: "#000000",
+  },
+  rightbutton: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#ffffff",
   },
   inputstyle: {
     width: scale(330),
