@@ -15,7 +15,58 @@ const Width = Dimensions.get("window").width;
 
 const Height = Dimensions.get("window").height;
 
+// 
+import {AccessToken, GraphRequest, GraphRequestManager, LoginManager} from 'react-native-fbsdk';
+// 
+
 export default function MainScreen() {
+
+
+  const _responseInfoCallback = async (error, result) => {
+    //페북전용
+    if (error) {
+      console.log('Error fetching data 1 : ' + JSON.stringify(error));
+    } else {
+      console.log('Result : ' + JSON.stringify(result));
+      console.log('Result Name: ' + result.name || '');
+      const names = (result.name || '').split(' ');
+      let firstName = names[1];
+      let lastName = names[0];
+      console.log('firstName : ' + firstName);
+      console.log('lastName : ' + lastName);
+      if (result.name || ('' === lastName && !firstName)) {
+        firstName = result.last_name;
+        lastName = result.first_name;
+      }
+      const email = result.email;
+      const user_img_url = result.picture.data.url ?? '';
+    }
+  };
+
+  const FaceBook = async () => {
+    let result;
+    try {
+      LoginManager.setLoginBehavior('NATIVE_ONLY');
+      result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    } catch (error) {
+      LoginManager.setLoginBehavior('WEB_ONLY');
+      result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    }
+    console.log('@@@@@@@@@@@@@@@@@ result : ' + JSON.stringify(result));
+    if (result.isCancelled) {
+    } else {
+      AccessToken.getCurrentAccessToken().then(data => {
+        // console.log(data.accessToken.toString())
+        const infoRequest = new GraphRequest(
+          '/me?fields=name,picture,email,last_name,first_name',
+          null,
+          _responseInfoCallback
+        );
+        new GraphRequestManager().addRequest(infoRequest).start();
+      });
+    }
+  }
+
   return (
     <>
       <Header
@@ -108,6 +159,9 @@ export default function MainScreen() {
             <TouchableOpacity
               style={{ flexDirection: "row", alignItems: "center" }}
               delayPressIn={0}
+              onPress={() => {
+                FaceBook()
+              }}
             >
               <Image
                 style={{ ...styles.bottomicon }}
