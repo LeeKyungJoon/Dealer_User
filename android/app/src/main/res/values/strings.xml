@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CarDealer_ReactNative_User</string>
+    <string name="facebook_app_id">409226896718329</string> <string name="fb_login_protocol_scheme">fb409226896718329</string>
+
 </resources>
