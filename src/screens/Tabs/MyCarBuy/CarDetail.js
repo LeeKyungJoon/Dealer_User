@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Header, CheckBox } from "react-native-elements";
+import { Header } from "react-native-elements";
 import scale from "../../../common/Scale";
 import {
+  ScrollView,
   TouchableOpacity,
   Image,
   StyleSheet,
@@ -14,7 +15,6 @@ import {
   Platform,
 } from "react-native";
 import Swiper from "react-native-swiper";
-import { ScrollView } from "react-native-gesture-handler";
 
 const Width = Dimensions.get("window").width;
 
