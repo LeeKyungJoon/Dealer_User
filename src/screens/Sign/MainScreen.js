@@ -19,9 +19,13 @@ const Height = Dimensions.get("window").height;
 import {AccessToken, GraphRequest, GraphRequestManager, LoginManager} from 'react-native-fbsdk';
 // 
 
+// 
+import InstagramLogin from 'react-native-instagram-login'
+// 
+
 export default function MainScreen() {
 
-
+  // 페이스북 콜백
   const _responseInfoCallback = async (error, result) => {
     //페북전용
     if (error) {
@@ -65,6 +69,13 @@ export default function MainScreen() {
         new GraphRequestManager().addRequest(infoRequest).start();
       });
     }
+  }
+
+  // 인스타그램 콜백
+  const setIgToken = async (data) => {
+    await store.save('igToken', data.access_token)
+    await store.save('igUserId', data.user_id)
+    this.setState({ igToken: data.access_token, igUserId: data.user_id})
   }
 
   return (
@@ -147,6 +158,9 @@ export default function MainScreen() {
             <TouchableOpacity
               style={{ flexDirection: "row", alignItems: "center" }}
               delayPressIn={0}
+              onPress={() => {
+                this.instagramLogin.show()
+              }}
             >
               <Image
                 style={{ ...styles.bottomicon }}
@@ -184,6 +198,15 @@ export default function MainScreen() {
               </Text>
             </TouchableOpacity>
           </View>
+          <InstagramLogin
+              ref={ref => (this.instagramLogin = ref)}
+              appId='1660689697418817'
+              appSecret='a7d6dbe15f7f2139b12f3d87eb79fd8d'
+              // redirectUrl='your-redirect-Url'
+              scopes={['user_profile', 'user_media']}
+              onLoginSuccess={ setIgToken }
+              onLoginFailure={(data) => console.log(data)}
+          />
         </View>
       </SafeAreaView>
     </>
