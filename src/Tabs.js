@@ -2,11 +2,11 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image } from "react-native";
 import scale from "./common/Scale";
-import MyCarBuy from "./screens/Tabs/MyCarBuy/MyCarBuyMain";
-import MyCarSell from "./screens/Tabs/MyCarSell/MyCarSellMain";
-import Consult from "./screens/Tabs/Consult/ConsultMain";
-import Notic from "./screens/Tabs/Notic/NoticMain";
-import MyInfo from "./screens/Tabs/MyInfo/MyInfoMain";
+import MyCarBuy from "./screens/Tabs/MyCarBuyTab";
+import MyCarSell from "./screens/Tabs/MyCarSellTab";
+import Consult from "./screens/Tabs/ConsultTab";
+import Notic from "./screens/Tabs/NoticTab";
+import MyInfo from "./screens/Tabs/MyInfoTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -47,7 +47,7 @@ export default function Tabs() {
   return (
     <Tab.Navigator
       backBehavior="initialRoute"
-      initialRouteName={"내차사기"}
+      initialRouteName={"내차구매"}
       tabBarOptions={{
         activeTintColor: "#459bfe",
         inactiveTintColor: "#bababa",
