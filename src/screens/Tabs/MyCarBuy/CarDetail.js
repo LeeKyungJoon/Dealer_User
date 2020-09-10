@@ -11,6 +11,7 @@ import {
   View,
   ImageBackground,
   TextInput,
+  Platform,
 } from "react-native";
 import Swiper from "react-native-swiper";
 import { ScrollView } from "react-native-gesture-handler";
@@ -158,16 +159,8 @@ export default function CarDetail() {
           <View style={{ paddingHorizontal: scale(15) }}>
             <View
               style={{
+                ...styles.sameview,
                 flexDirection: "row",
-                backgroundColor: "#ffffff",
-                elevation: 1.5,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
                 justifyContent: "space-between",
                 paddingHorizontal: scale(36.5),
                 paddingVertical: scale(20),
@@ -241,15 +234,8 @@ export default function CarDetail() {
             </View>
             <View
               style={{
-                ...styles.calculator,
-                elevation: 1.5,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
+                ...styles.sameview,
+                height: scale(58.8),
                 marginTop: scale(20),
               }}
             >
@@ -259,7 +245,9 @@ export default function CarDetail() {
                 }}
                 delayPressIn={0}
                 style={{
-                  ...styles.calculator,
+                  width: scale(330),
+                  backgroundColor: "#ffffff",
+                  height: scale(58.8),
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -282,15 +270,12 @@ export default function CarDetail() {
             {drop ? (
               <View
                 style={{
-                  ...styles.calculatordetail,
-                  elevation: 1.5,
-                  shadowColor: "#000",
+                  ...styles.sameview,
                   shadowOffset: {
                     width: 0,
                     height: 2,
                   },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 1.41,
+                  height: scale(214),
                   paddingHorizontal: scale(15),
                 }}
               >
@@ -463,16 +448,9 @@ export default function CarDetail() {
             ) : null}
             <View
               style={{
-                ...styles.baseinfo,
+                ...styles.sameview,
+                height: scale(216.3),
                 marginTop: scale(20),
-                elevation: 1.5,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
                 paddingHorizontal: scale(15),
                 paddingVertical: scale(20),
               }}
@@ -557,18 +535,9 @@ export default function CarDetail() {
             </View>
             <View
               style={{
-                width: scale(330),
+                ...styles.sameview,
                 height: scale(189.8),
-                backgroundColor: "#ffffff",
                 marginTop: scale(20),
-                elevation: 1.5,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
                 paddingVertical: scale(20),
                 paddingHorizontal: scale(15),
               }}
@@ -646,6 +615,224 @@ export default function CarDetail() {
                   {/*<Text style={{...styles.selectboxtext}}>스마트키</Text>*/}
                 </View>
               </View>
+            </View>
+            <View
+              style={{
+                ...styles.sameview,
+                height: scale(151.8),
+                marginTop: scale(20),
+                paddingHorizontal: scale(15),
+                paddingVertical: scale(20),
+              }}
+            >
+              <Text style={{ ...styles.anotherviewtitle }}>A/S 정보</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: scale(15),
+                }}
+              >
+                <Text style={{ ...styles.baseinfotitle }}>
+                  제조사보증 (차체/일반)
+                </Text>
+                <Text style={{ ...styles.baseinfodesc }}>보증기간 종료</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: scale(7),
+                }}
+              >
+                <Text style={{ ...styles.baseinfotitle }}>
+                  제조사보증 (엔진/주요)
+                </Text>
+                <Text style={{ ...styles.baseinfodesc }}>
+                  45,241km / 1년 9개월
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: scale(7),
+                }}
+              >
+                <Text style={{ ...styles.baseinfotitle }}>
+                  제조사보증 (하이브리드부품)
+                </Text>
+                <Text style={{ ...styles.baseinfodesc }}>
+                  145,241km / 6년 9개월
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: scale(7),
+                }}
+              >
+                <Text style={{ ...styles.baseinfotitle }}>딜러보증</Text>
+                <Text style={{ ...styles.baseinfodesc, color: "#459bfe" }}>
+                  2,000km / 1개월
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                ...styles.sameview,
+                height: scale(433),
+                paddingHorizontal: scale(15),
+                paddingVertical: scale(20),
+                marginTop: scale(20),
+              }}
+            >
+              <View
+                style={{
+                  borderStyle: "solid",
+                  borderBottomWidth: 0.3,
+                  borderColor: "#707070",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  style={{ ...styles.profile }}
+                  source={require("../../../images/shutterstock_682551649.png")}
+                />
+                <Text style={{ ...styles.name, marginTop: scale(7) }}>
+                  홍길동 인증딜러
+                </Text>
+                <View style={{ flexDirection: "row", marginTop: scale(7) }}>
+                  <Image
+                    style={{ ...styles.star }}
+                    source={require("../../../images/likes_on.png")}
+                  />
+                  <Image
+                    style={{ ...styles.star }}
+                    source={require("../../../images/likes_on.png")}
+                  />
+                  <Image
+                    style={{ ...styles.star }}
+                    source={require("../../../images/likes_on.png")}
+                  />
+                  <Image
+                    style={{ ...styles.star }}
+                    source={require("../../../images/likes_on.png")}
+                  />
+                  <Image
+                    style={{ ...styles.star }}
+                    source={require("../../../images/likes_off.png")}
+                  />
+                </View>
+                <Text
+                  style={{
+                    ...styles.score,
+                    marginTop: scale(4),
+                    marginBottom: scale(20),
+                  }}
+                >
+                  4점 / 후기 55
+                </Text>
+              </View>
+              <Text style={{ ...styles.introduce, marginTop: scale(20) }}>
+                안녕하세요. 배달의 딜러 우수 인증딜러 홍길동입니다.{"\n"}
+                우수 인증딜러는 배달의 딜러 내에 약 5000명 딜러종사자 중 배달의
+                딜러에서 인증한 50명에 선정된 우수 딜러입니다.{"\n"}
+                {"\n"}어떤 차량을 선택하는지도 중요하지만 어떤 딜러와 인연이
+                될지 선택하는 것이 더욱 중요합니다. 단 한번의 계약으로 평생의
+                카매니저가 되어드리겠습니다. ^^{"\n"}
+                {"\n"}- 차종 : 니로 1.6 하이브리드 노블레스{"\n"}- 특이사항 :
+                무사고 A급 차량{"\n"}
+                {"\n"}* 전액 할부가능 (차대금+이전비+보험료 포함){"\n"}
+                {"\n"}오시는 길{"\n"}-> 수원시 권선구 권선로 341 오토컬렉션
+              </Text>
+            </View>
+            <Image
+              style={{
+                width: scale(330),
+                height: scale(160),
+                marginTop: scale(20),
+              }}
+              source={require("../../../images/no_path.png")}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: scale(20),
+              }}
+            >
+              <Text style={{ ...styles.errortext }}>
+                배달의 딜러는 실거래 및 정보에 대한 모든 책임이 판매자에게
+                있습니다.
+              </Text>
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  width: scale(59),
+                  height: scale(25.5),
+                  backgroundColor: "#bbbbbb",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ ...styles.reporttext }}>신고하기</Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: scale(25),
+                marginBottom: Platform.OS === "ios" ? 0 : scale(25),
+              }}
+            >
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  ...styles.yellowbutton,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  style={{ ...styles.yellowbuttonicon }}
+                  source={require("../../../images/consult_ic_160.png")}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  ...styles.yellowbutton,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  style={{ ...styles.yellowbuttonicon }}
+                  source={require("../../../images/call_ic_160.png")}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  width: scale(200),
+                  height: scale(40),
+                  borderRadius: 10,
+                  backgroundColor: "#001740",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ ...styles.ordertext }}>주문하기</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -776,24 +963,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#ffffff",
   },
-  calculator: {
-    width: scale(330),
-    height: scale(58.8),
-    backgroundColor: "#ffffff",
-  },
-  calculatordetail: {
-    width: scale(330),
-    height: scale(214),
-    backgroundColor: "#ffffff",
-  },
   moreless: {
     width: scale(22),
     height: scale(22),
-  },
-  baseinfo: {
-    width: scale(330),
-    height: scale(216.3),
-    backgroundColor: "#ffffff",
   },
   baseinfotitle: {
     fontFamily: "Roboto-Regular",
@@ -892,5 +1064,86 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "center",
+  },
+  sameview: {
+    width: scale(330),
+    backgroundColor: "#ffffff",
+    elevation: 1.5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+  },
+  profile: {
+    width: scale(50),
+    height: scale(50),
+  },
+  name: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(12),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#1d1d1d",
+  },
+  star: {
+    width: scale(24),
+    height: scale(24),
+  },
+  score: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#1d1d1d",
+  },
+  introduce: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    lineHeight: 15,
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  errortext: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(8),
+    fontStyle: "normal",
+    lineHeight: 25,
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#b2b2b2",
+  },
+  reporttext: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#ffffff",
+  },
+  yellowbutton: {
+    width: scale(60),
+    height: scale(40),
+    borderRadius: 10,
+    backgroundColor: "#ffd619",
+  },
+  yellowbuttonicon: {
+    width: scale(40),
+    height: scale(40),
+  },
+  ordertext: {
+    fontFamily: "Jalnan",
+    fontSize: scale(15),
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#ffffff",
   },
 });
