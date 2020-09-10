@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={"none"} initialRouteName={"Sign"}>
+      <Stack.Navigator headerMode={"none"} initialRouteName={"Tabs"}>
         <Stack.Screen name={"Sign"} component={Sign} />
         <Stack.Screen name={"Tabs"} component={Tabs} />
         <Stack.Screen name={"SearchCar"} component={SearchCar} />

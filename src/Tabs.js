@@ -40,7 +40,7 @@ export default function Tabs() {
       name: "내정보",
       com: MyInfo,
       inactiveIcon: require("./images/mypage_ic_off_120.png"),
-      activeIcon: require("./images/mypage_ic_off_120.png"),
+      activeIcon: require("./images/mypage_ic_on_120.png"),
     },
   ];
 
