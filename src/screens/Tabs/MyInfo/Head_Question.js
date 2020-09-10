@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, SafeAreaView,TouchableOpacity,Image ,StyleSheet} from "react-native";
 import scale from "../../../common/Scale";
 import { Header } from "react-native-elements";
 
@@ -53,47 +45,20 @@ export default function MyInfoMain() {
           </TouchableOpacity>
         }
       />
-      <ScrollView>
-        <View style={{ flex: 1 }}>
-          <Text>내 정보</Text>
-          <View style={{ alignItems: "center" }}>
-            {/* <Image source={require('')}/> */}
-            <View
-              style={{
-                width: scale(90),
-                position: "relative",
-                height: scale(90),
-                borderRadius: 10,
-                backgroundColor: "#001740",
-              }}
-            >
-              <View
-                style={{
-                  position: "absolute",
-                  width: scale(30),
-                  height: scale(30),
-                  borderRadius: 100,
-                  backgroundColor: "#b2b2b2",
-                  right: -scale(15),
-                  bottom: 0,
-                }}
-              />
-            </View>
-          </View>
-          <Text>홍길동</Text>
-          <Text>dealer_app@gmail.com</Text>
-          <View/>
-        </View>
-      </ScrollView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Text>공지사항</Text>
+        <Text>공지사항</Text>
+        <Text>공지사항</Text>
+        <Text>공지사항</Text>
+        <Text>공지사항</Text>
+        <Text>공지사항</Text>
+        <Text>공지사항</Text>
+      </SafeAreaView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  title_txt: {},
-  desc_txt: {},
-  row_view: {},
-  boundary: {},
   search: {
     width: scale(18),
     height: scale(18),
