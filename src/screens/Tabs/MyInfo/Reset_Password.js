@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView,TouchableOpacity,Image ,StyleSheet} from "reac
 import scale from "../../../common/Scale";
 import { Header } from "react-native-elements";
 
-export default function MyInfoMain() {
+export default function MyInfoMain(props) {
   return (
     <>
       <Header
