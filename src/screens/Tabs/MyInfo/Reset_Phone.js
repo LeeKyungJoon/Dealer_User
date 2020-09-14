@@ -1,9 +1,21 @@
-import React from "react";
-import { View, Text, SafeAreaView,TouchableOpacity,Image ,StyleSheet} from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  StyleSheet,
+} from "react-native";
 import scale from "../../../common/Scale";
 import { Header } from "react-native-elements";
+import { ScrollView } from "react-native";
 
 export default function MyInfoMain(props) {
+  const [error, setError] = useState(false);
+  const [number, set_number] = useState();
+  const [confirm, set_confirm] = useState();
   return (
     <>
       <Header
@@ -14,45 +26,183 @@ export default function MyInfoMain(props) {
           borderBottomWidth: 0,
           height: scale(80),
         }}
+        placement="left"
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              props.navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
-              style={{ ...styles.search }}
-              source={require("../../../images/search_ic_72.png")}
+              style={{ width: scale(20), height: scale(20) }}
+              source={require("../../../images/back_ic_80.png")}
             />
           </TouchableOpacity>
         }
         centerComponent={
-          <Image
-            style={{ ...styles.mainlogo }}
-            source={require("../../../images/logo.png")}
-          />
-        }
-        rightComponent={
-          <TouchableOpacity
-            style={{ marginRight: scale(5) }}
-            delayPressIn={0}
-            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
+          <Text
+            style={{
+              fontSize: scale(16),
+              color: "#ffffff",
+              fontFamily: "Jalnan",
+            }}
           >
-            <Image
-              style={{ ...styles.alert }}
-              source={require("../../../images/alert_ic_72.png")}
-            />
-          </TouchableOpacity>
+            내 정보
+          </Text>
         }
       />
-      <SafeAreaView style={{ flex: 1 }}>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
+      <SafeAreaView style={{ flex: 1, padding: scale(15) }}>
+        <ScrollView style={{ flex: 1 }}>
+          <Text style={{ fontSize: scale(15), fontWeight: "bold" }}>
+            휴대전화 번호 재설정
+          </Text>
+          <Text
+            style={{
+              marginTop: scale(25),
+              fontSize: scale(13),
+              color: "#1d1d1d",
+            }}
+          >
+            휴대전화 번호
+          </Text>
+          <View
+            style={{
+              position: "relative",
+              marginTop: scale(9),
+            }}
+          >
+            <TextInput
+              value={number}
+              style={{
+                borderColor: "#707070",
+                borderWidth: 0.3,
+                borderRadius: 5,
+                paddingHorizontal: scale(15),
+                fontSize: scale(13),
+              }}
+              placeholder={"-없이 번호 입력하세요."}
+              placeholderTextColor={"#bababa"}
+              keyboardType="numeric"
+              maxLength={11}
+              onChangeText={(text) => set_number(text)}
+            />
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                position: "absolute",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: scale(6),
+                top: "15%",
+                right: scale(10),
+                zIndex: 999,
+                backgroundColor: "#bbbbbb",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: scale(10),
+                  color: "#ffffff",
+                  textAlign: "center",
+                }}
+              >
+                인증요청
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text
+            style={{
+              marginTop: scale(50),
+              fontSize: scale(13),
+              color: "#1d1d1d",
+            }}
+          >
+            인증번호
+          </Text>
+          <View
+            style={{
+              position: "relative",
+              marginTop: scale(9),
+            }}
+          >
+            <TextInput
+              style={
+                error
+                  ? {
+                      borderColor: "#ff0000",
+                      borderWidth: 1,
+                      borderRadius: 5,
+                      paddingHorizontal: scale(15),
+                      fontSize: scale(13),
+                    }
+                  : {
+                      borderColor: "#707070",
+                      borderWidth: 0.3,
+                      borderRadius: 5,
+                      paddingHorizontal: scale(15),
+                      fontSize: scale(13),
+                    }
+              }
+              placeholder={"인증번호를 입력하세요."}
+              placeholderTextColor={"#bababa"}
+              keyboardType="numeric"
+              maxLength={6}
+              value={confirm}
+              onChangeText={(text) => set_confirm(text)}
+            />
+            {error ? (
+              <TouchableOpacity
+                onPress={() => {
+                  set_confirm("");
+                  setError(false);
+                }}
+                style={{
+                  width: scale(20),
+                  borderRadius: 100,
+                  height: scale(20),
+                  position: "absolute",
+                  top: scale(13),
+                  right: scale(10),
+                  zIndex: 999,
+                  backgroundColor: "#b9b9b9",
+                }}
+              />
+            ) : null}
+          </View>
+          {error ? (
+            <Text
+              style={{
+                fontSize: scale(10),
+                color: "#ff0000",
+                marginTop: scale(7),
+              }}
+            >
+              비밀번호가 맞지 않습니다.
+            </Text>
+          ) : null}
+        </ScrollView>
+        <TouchableOpacity
+          onPress={() => {
+            setError(true);
+          }}
+          style={{
+            backgroundColor: "#001740",
+            padding: scale(12.5),
+            justifyContent: "center",
+            borderRadius: 10,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{ fontFamily: "Jalnan", fontSize: 15, color: "#ffffff" }}
+          >
+            변경하기
+          </Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </>
   );
