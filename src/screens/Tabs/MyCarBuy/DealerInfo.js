@@ -137,7 +137,7 @@ export default function AllBuyPay() {
                 {"\n"}홍 길 동이 되겠습니다.{"\n"}
                 {"\n"}
                 {"\n"}
-                {"\n"}오시는 길{"\n"}-> 수원시 권선구 권선로 341 오토컬렉션
+                {"\n"}오시는 길{"\n"}-{">"} 수원시 권선구 권선로 341 오토컬렉션
               </Text>
               <TouchableOpacity
                 style={{
@@ -329,6 +329,349 @@ export default function AllBuyPay() {
                 <Text style={{ ...styles.reviewfield }}>후기 남기기</Text>
               </TouchableOpacity>
             </View>
+            <View
+              style={{
+                ...styles.sameview,
+                marginTop: scale(20),
+                paddingHorizontal: scale(15),
+              }}
+            >
+              <View
+                style={{
+                  paddingVertical: scale(25),
+
+                  borderStyle: "solid",
+                  borderBottomWidth: 0.3,
+                  borderColor: "rgba(112, 112, 112, 0.4)",
+                }}
+              >
+                <Text style={{ ...styles.reviewcount }}>
+                  총 55개의 후기가 있습니다
+                </Text>
+              </View>
+              <View
+                style={{
+                  paddingTop: scale(20),
+                  paddingBottom: scale(10),
+                  borderStyle: "solid",
+                  borderBottomWidth: 0.3,
+                  borderColor: "rgba(112, 112, 112, 0.4)",
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ ...styles.namecarname }}>김희*님</Text>
+                  <View
+                    style={{
+                      width: 0,
+                      height: 16,
+                      opacity: 0.4,
+                      borderStyle: "solid",
+                      borderWidth: 0.5,
+                      borderColor: "#707070",
+                      marginHorizontal: scale(5),
+                    }}
+                  />
+                  <Text style={{ ...styles.namecarname }}>
+                    현대 더 럭셔리 그랜저
+                  </Text>
+                </View>
+                <Text style={{ ...styles.reviewyear, marginTop: scale(2) }}>
+                  2020년 05월 06일
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: scale(15),
+                  }}
+                >
+                  <View style={{ alignItems: "center" }}>
+                    <Text style={{ ...styles.small }}>친절도</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_off.png")}
+                      />
+                    </View>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <Text style={{ ...styles.small }}>전문성</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_off.png")}
+                      />
+                    </View>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <Text style={{ ...styles.small }}>가격만족도</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_off.png")}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <Text style={{ ...styles.desc, marginTop: scale(15) }}>
+                  딜러분께서 친절하게 설명도 해주시고 쉽게 이해시켜주셔서 너무
+                  편리하게 거래하였어요! ㅏㅁ사합니다~!
+                </Text>
+              </View>
+              <View
+                style={{
+                  paddingTop: scale(20),
+                  paddingBottom: scale(10),
+                  borderStyle: "solid",
+                  borderBottomWidth: 0.3,
+                  borderColor: "rgba(112, 112, 112, 0.4)",
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ ...styles.namecarname }}>김희*님</Text>
+                  <View
+                    style={{
+                      width: 0,
+                      height: 16,
+                      opacity: 0.4,
+                      borderStyle: "solid",
+                      borderWidth: 0.5,
+                      borderColor: "#707070",
+                      marginHorizontal: scale(5),
+                    }}
+                  />
+                  <Text style={{ ...styles.namecarname }}>
+                    현대 더 럭셔리 그랜저
+                  </Text>
+                </View>
+                <Text style={{ ...styles.reviewyear, marginTop: scale(2) }}>
+                  2020년 05월 06일
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: scale(15),
+                  }}
+                >
+                  <View style={{ alignItems: "center" }}>
+                    <Text style={{ ...styles.small }}>친절도</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_off.png")}
+                      />
+                    </View>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <Text style={{ ...styles.small }}>전문성</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_off.png")}
+                      />
+                    </View>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <Text style={{ ...styles.small }}>가격만족도</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_on.png")}
+                      />
+                      <Image
+                        style={{ ...styles.star1 }}
+                        source={require("../../../images/likes_off.png")}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <Text style={{ ...styles.desc, marginTop: scale(15) }}>
+                  딜러분께서 친절하게 설명도 해주시고 쉽게 이해시켜주셔서 너무
+                  편리하게 거래하였어요! ㅏㅁ사합니다~!
+                </Text>
+              </View>
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingVertical: scale(17),
+                }}
+              >
+                <Text style={{ ...styles.moretext }}>전체보기</Text>
+                <Image
+                  style={{ ...styles.moreic }}
+                  source={require("../../../images/more_ic_72.png")}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                ...styles.sameview,
+                marginTop: scale(20),
+                paddingVertical: scale(20),
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingHorizontal: scale(15),
+                  marginBottom: scale(15),
+                }}
+              >
+                <Text style={{ ...styles.namecarname }}>판매중인 차량</Text>
+                <TouchableOpacity delayPressIn={0}>
+                  <Text style={{ ...styles.smalltext }}>전체보기 {">"}</Text>
+                </TouchableOpacity>
+              </View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                style={{ marginLeft: scale(15) }}
+              >
+                <View style={{ marginRight: scale(10) }}>
+                  <Image
+                    style={{ ...styles.carimage }}
+                    source={require("../../../images/1111.png")}
+                  />
+                  <Text style={{ ...styles.carname }}>BMW</Text>
+                  <Text style={{ ...styles.carpackage }}>528i 풀패키지</Text>
+                  <Text style={{ ...styles.carprice }}>4000만원</Text>
+                </View>
+                <View style={{ marginRight: scale(10) }}>
+                  <Image
+                    style={{ ...styles.carimage }}
+                    source={require("../../../images/1111.png")}
+                  />
+                  <Text style={{ ...styles.carname }}>BMW</Text>
+                  <Text style={{ ...styles.carpackage }}>528i 풀패키지</Text>
+                  <Text style={{ ...styles.carprice }}>4000만원</Text>
+                </View>
+                <View style={{ marginRight: scale(10) }}>
+                  <Image
+                    style={{ ...styles.carimage }}
+                    source={require("../../../images/1111.png")}
+                  />
+                  <Text style={{ ...styles.carname }}>BMW</Text>
+                  <Text style={{ ...styles.carpackage }}>528i 풀패키지</Text>
+                  <Text style={{ ...styles.carprice }}>4000만원</Text>
+                </View>
+                <View style={{ marginRight: scale(10) }}>
+                  <Image
+                    style={{ ...styles.carimage }}
+                    source={require("../../../images/1111.png")}
+                  />
+                  <Text style={{ ...styles.carname }}>BMW</Text>
+                  <Text style={{ ...styles.carpackage }}>528i 풀패키지</Text>
+                  <Text style={{ ...styles.carprice }}>4000만원</Text>
+                </View>
+              </ScrollView>
+            </View>
+            <Image
+              style={{
+                width: scale(330),
+                height: scale(160),
+                marginTop: scale(20),
+                marginBottom: scale(25),
+              }}
+              source={require("../../../images/no_path.png")}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -456,6 +799,71 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "center",
+    color: "#459bfe",
+  },
+  reviewcount: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(12),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#1d1d1d",
+  },
+  namecarname: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(12),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  reviewyear: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(9),
+    fontStyle: "normal",
+    letterSpacing: -0.27,
+    textAlign: "left",
+    color: "#999999",
+  },
+  moreic: {
+    width: scale(18),
+    height: scale(18),
+  },
+  moretext: {
+    fontFamily: "Jalnan",
+    fontSize: scale(16),
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#999999",
+  },
+  carimage: {
+    width: scale(125),
+    height: scale(100),
+  },
+  carname: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  carpackage: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  carprice: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
     color: "#459bfe",
   },
 });
