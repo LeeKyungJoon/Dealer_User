@@ -186,7 +186,7 @@ export default function MyInfoMain(props) {
               setLogoutModal(true);
             }}
           >
-            <Text style={{ color: "#ffffff", fontSize: scale(15) }}>
+            <Text style={{ color: "#ffffff", fontSize: scale(15),fontFamily: "Jalnan" }}>
               로그아웃
             </Text>
           </TouchableOpacity>
