@@ -15,11 +15,13 @@ import {
   Platform,
 } from "react-native";
 import Swiper from "react-native-swiper";
+import Modal from "react-native-modal";
 
 const Width = Dimensions.get("window").width;
 
 export default function CarDetail() {
   const [drop, setDrop] = useState(false);
+  const [isvisible, setIsvisible] = useState(false);
 
   return (
     <>
@@ -749,7 +751,7 @@ export default function CarDetail() {
                 {"\n"}- 차종 : 니로 1.6 하이브리드 노블레스{"\n"}- 특이사항 :
                 무사고 A급 차량{"\n"}
                 {"\n"}* 전액 할부가능 (차대금+이전비+보험료 포함){"\n"}
-                {"\n"}오시는 길{"\n"}-> 수원시 권선구 권선로 341 오토컬렉션
+                {"\n"}오시는 길{"\n"}-{">"} 수원시 권선구 권선로 341 오토컬렉션
               </Text>
             </View>
             <Image
@@ -836,6 +838,49 @@ export default function CarDetail() {
             </View>
           </View>
         </ScrollView>
+        <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+          <View style={{ ...styles.modal }}>
+            <TouchableOpacity
+              delayPressIn={0}
+              style={{
+                paddingVertical: scale(16.2),
+                paddingHorizontal: scale(20),
+                borderStyle: "solid",
+                borderBottomWidth: 0.3,
+                borderColor: "rgba(112, 112, 112, 0.5)",
+              }}
+            >
+              <Text style={{ ...styles.modaltext }}>현금구매</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              delayPressIn={0}
+              style={{
+                paddingVertical: scale(16.2),
+                paddingHorizontal: scale(20),
+                borderStyle: "solid",
+                borderBottomWidth: 0.3,
+                borderColor: "rgba(112, 112, 112, 0.5)",
+              }}
+            >
+              <Text style={{ ...styles.modaltext }}>할부구매</Text>
+              <Text style={{ ...styles.modalsubtext }}>
+                ※ 이미 할부 승인 고객님이시라면 현금구매로 진행해주세요.
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              delayPressIn={0}
+              style={{
+                paddingVertical: scale(16.2),
+                paddingHorizontal: scale(20),
+                borderStyle: "solid",
+                borderBottomWidth: 0.3,
+                borderColor: "rgba(112, 112, 112, 0.5)",
+              }}
+            >
+              <Text style={{ ...styles.modaltext }}>리스구매</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </SafeAreaView>
     </>
   );
@@ -1145,5 +1190,28 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: "center",
     color: "#ffffff",
+  },
+  modal: {
+    width: scale(280),
+    backgroundColor: "#ffffff",
+    borderStyle: "solid",
+    borderWidth: 0.3,
+    borderColor: "#707070",
+  },
+  modaltext: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  modalsubtext: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(8),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#ff0000",
   },
 });
