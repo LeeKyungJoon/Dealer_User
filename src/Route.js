@@ -6,13 +6,16 @@ import Tabs from "./Tabs";
 import SearchCar from "./screens/Tabs/MyCarBuy/SearchCar";
 import CarDetail from "./screens/Tabs/MyCarBuy/CarDetail";
 import CarPerformanceCheck from "./screens/Tabs/MyCarBuy/CarPerformanceCheck";
+import InsuranceHistory from "./screens/Tabs/MyCarBuy/InsuranceHistory";
+import AllBuyPay from "./screens/Tabs/MyCarBuy/AllBuyPay";
+import DealerInfo from "./screens/Tabs/MyCarBuy/DealerInfo";
 
 const Stack = createStackNavigator();
 
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={"none"} initialRouteName={"Tabs"}>
+      <Stack.Navigator headerMode={"none"} initialRouteName={"DealerInfo"}>
         <Stack.Screen name={"Sign"} component={Sign} />
         <Stack.Screen name={"Tabs"} component={Tabs} />
         <Stack.Screen name={"SearchCar"} component={SearchCar} />
@@ -21,6 +24,9 @@ export default function Route() {
           name={"CarPerformanceCheck"}
           component={CarPerformanceCheck}
         />
+        <Stack.Screen name={"InsuranceHistory"} component={InsuranceHistory} />
+        <Stack.Screen name={"AllBuyPay"} component={AllBuyPay} />
+        <Stack.Screen name={"DealerInfo"} component={DealerInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );
