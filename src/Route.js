@@ -12,6 +12,12 @@ import AllBuyPay from "./screens/Tabs/MyCarBuy/AllBuyPay";
 import DealerInfo from "./screens/Tabs/MyCarBuy/DealerInfo";
 import BuyCash from "./screens/Tabs/MyCarBuy/BuyCash";
 import BuyCashComplete from "./screens/Tabs/MyCarBuy/BuyCashComplete";
+import BuyCar from "./screens/Tabs/MyCarBuy/BuyCar";
+import Terms from "./screens/Tabs/MyCarBuy/Terms";
+import Rules from "./screens/Tabs/MyCarBuy/Rules";
+import DepositAccount from "./screens/Tabs/MyCarBuy/DepositAccount";
+import ReceivePlace from "./screens/Tabs/MyCarBuy/ReceivePlace";
+import RefundAccount from "./screens/Tabs/MyCarBuy/RefundAccount";
 ///////
 //소비자용_내차판매
 ///////
@@ -31,7 +37,7 @@ const Stack = createStackNavigator();
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={"none"} initialRouteName={"BuyCashComplete"}>
+      <Stack.Navigator headerMode={"none"} initialRouteName={"RefundAccount"}>
         <Stack.Screen name={"Sign"} component={Sign} />
         <Stack.Screen name={"Tabs"} component={Tabs} />
         {/* 소비자용_내차구매 */}
@@ -46,6 +52,12 @@ export default function Route() {
         <Stack.Screen name={"DealerInfo"} component={DealerInfo} />
         <Stack.Screen name={"BuyCash"} component={BuyCash} />
         <Stack.Screen name={"BuyCashComplete"} component={BuyCashComplete} />
+        <Stack.Screen name={"BuyCar"} component={BuyCar} />
+        <Stack.Screen name={"Terms"} component={Terms} />
+        <Stack.Screen name={"Rules"} component={Rules} />
+        <Stack.Screen name={"DepositAccount"} component={DepositAccount} />
+        <Stack.Screen name={"ReceivePlace"} component={ReceivePlace} />
+        <Stack.Screen name={"RefundAccount"} component={RefundAccount} />
         {/*  */}
         {/* 소비자용_내차판매 */}
         {/*  */}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Header } from "react-native-elements";
 import scale from "../../../common/Scale";
 import {
@@ -15,9 +15,13 @@ import {
   Keyboard,
   ImageBackground,
 } from "react-native";
+import Modal from "react-native-modal";
 import Swiper from "react-native-swiper";
 
 export default function MyCarBuyMain() {
+  const [isvisible, setIsvisible] = useState(false);
+  const [isvisible1, setIsvisible1] = useState(false);
+
   return (
     <>
       <Header
@@ -424,6 +428,49 @@ export default function MyCarBuyMain() {
               </View>
             </View>
           </ScrollView>
+          <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+            <View
+              style={{
+                ...styles.modalview,
+                paddingHorizontal: scale(20),
+                paddingVertical: scale(16),
+              }}
+            >
+              <Text style={{ ...styles.modaltext }}>
+                주문 요청하신{"\n"}
+                <Text style={{ fontFamily: "Roboto-Bold" }}>
+                  12가3456, 기아, 더뉴 K7, 2017년식
+                </Text>{" "}
+                차량을 지금 바로 구매하실 수 있습니다.
+              </Text>
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{ marginTop: scale(20) }}
+              >
+                <Text style={{ ...styles.modalbutton }}>구매하러 가기</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+          <Modal isVisible={isvisible1} style={{ alignItems: "center" }}>
+            <View
+              style={{
+                ...styles.modalview,
+                paddingHorizontal: scale(20),
+                paddingVertical: scale(16),
+              }}
+            >
+              <Text style={{ ...styles.modaltext }}>
+                입금이 확인되었습니다. 구매하신 차량을 인수받을 장소와 일정을
+                필히 입력해주세요.
+              </Text>
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{ marginTop: scale(20) }}
+              >
+                <Text style={{ ...styles.modalbutton }}>입력하러 가기</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
         </View>
       </SafeAreaView>
     </>
@@ -563,5 +610,30 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: "left",
     color: "#000000",
+  },
+  modalview: {
+    width: scale(280),
+    backgroundColor: "#ffffff",
+    borderStyle: "solid",
+    borderWidth: 0.3,
+    borderColor: "#707070",
+  },
+  modaltext: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    lineHeight: scale(18),
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  modalbutton: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    lineHeight: scale(25),
+    letterSpacing: 0,
+    textAlign: "right",
+    color: "#459bfe",
   },
 });
