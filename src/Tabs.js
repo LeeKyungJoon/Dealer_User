@@ -47,7 +47,7 @@ export default function Tabs() {
   return (
     <Tab.Navigator
       backBehavior="initialRoute"
-      initialRouteName={"내차구매"}
+      initialRouteName={"내차판매"}
       tabBarOptions={{
         activeTintColor: "#459bfe",
         inactiveTintColor: "#bababa",

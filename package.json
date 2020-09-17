@@ -62,6 +62,7 @@
     "react-native-progress-circle": "^2.1.0",
     "react-native-push-notification": "^4.0.0",
     "react-native-qrcode-scanner": "^1.4.1",
+    "react-native-rating": "^2.0.4",
     "react-native-ratings": "^7.3.0",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^0.6.4",

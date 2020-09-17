@@ -20,6 +20,8 @@ import ReceivePlace from "./screens/Tabs/MyCarBuy/ReceivePlace";
 import RefundAccount from "./screens/Tabs/MyCarBuy/RefundAccount";
 import DeliverySchedule from "./screens/Tabs/MyCarBuy/DeliverySchedule";
 import CarConfirmation from "./screens/Tabs/MyCarBuy/CarConfirmation";
+import ReviewRegist from "./screens/Tabs/MyCarBuy/ReviewRegist";
+import TransferRefund from "./screens/Tabs/MyCarBuy/TransferRefund";
 ///////
 //소비자용_내차판매
 ///////
@@ -39,7 +41,7 @@ const Stack = createStackNavigator();
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={"none"} initialRouteName={"CarConfirmation"}>
+      <Stack.Navigator headerMode={"none"} initialRouteName={"Tabs"}>
         <Stack.Screen name={"Sign"} component={Sign} />
         <Stack.Screen name={"Tabs"} component={Tabs} />
         {/* 소비자용_내차구매 */}
@@ -62,6 +64,8 @@ export default function Route() {
         <Stack.Screen name={"RefundAccount"} component={RefundAccount} />
         <Stack.Screen name={"DeliverySchedule"} component={DeliverySchedule} />
         <Stack.Screen name={"CarConfirmation"} component={CarConfirmation} />
+        <Stack.Screen name={"ReviewRegist"} component={ReviewRegist} />
+        <Stack.Screen name={"TransferRefund"} component={TransferRefund} />
         {/*  */}
         {/* 소비자용_내차판매 */}
         {/*  */}

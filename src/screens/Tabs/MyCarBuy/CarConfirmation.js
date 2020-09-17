@@ -14,8 +14,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import Modal from "react-native-modal";
 
 export default function CarConfirmation() {
+  const [isvisible, setIsvisible] = useState(false);
+  const [isvisible1, setIsvisible1] = useState(false);
+  const [isvisible2, setIsvisible2] = useState(false);
+
   return (
     <>
       <Header
@@ -71,7 +76,7 @@ export default function CarConfirmation() {
             <Text
               style={{
                 ...styles.subtitile,
-                width: scale(240),
+                width: scale(260),
                 alignSelf: "center",
                 marginTop: -scale(5),
               }}
@@ -80,6 +85,9 @@ export default function CarConfirmation() {
               시 3일 내 환불이 불가합니다.
             </Text>
             <TouchableOpacity
+              onPress={() => {
+                setIsvisible(true);
+              }}
               delayPressIn={0}
               style={{
                 ...styles.buttonbox,
@@ -93,6 +101,9 @@ export default function CarConfirmation() {
               <Text style={{ ...styles.buttontext }}>인수 확정</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => {
+                setIsvisible1(true);
+              }}
               delayPressIn={0}
               style={{
                 ...styles.buttonbox,
@@ -105,6 +116,9 @@ export default function CarConfirmation() {
               <Text style={{ ...styles.buttontext }}>3일 보류</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => {
+                setIsvisible2(true);
+              }}
               delayPressIn={0}
               style={{
                 ...styles.buttonbox,
@@ -119,6 +133,70 @@ export default function CarConfirmation() {
           </View>
         </ScrollView>
       </SafeAreaView>
+      <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+        <View
+          style={{
+            ...styles.modalview,
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(16.2),
+          }}
+        >
+          <Text style={{ ...styles.modaltext }}>인수 확정이 되었습니다.</Text>
+          <TouchableOpacity
+            onPress={() => {
+              setIsvisible(false);
+            }}
+            delayPressIn={0}
+            style={{ marginTop: scale(38) }}
+          >
+            <Text style={{ ...styles.modalbutton }}>확인</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <Modal isVisible={isvisible1} style={{ alignItems: "center" }}>
+        <View
+          style={{
+            ...styles.modalview,
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(16.2),
+          }}
+        >
+          <Text style={{ ...styles.modaltext }}>
+            3일 보류 상태가 되었습니다.
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setIsvisible1(false);
+            }}
+            delayPressIn={0}
+            style={{ marginTop: scale(38) }}
+          >
+            <Text style={{ ...styles.modalbutton }}>확인</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <Modal isVisible={isvisible2} style={{ alignItems: "center" }}>
+        <View
+          style={{
+            ...styles.modalview,
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(16.2),
+          }}
+        >
+          <Text style={{ ...styles.modaltext }}>
+            환불 요청이 접수되었습니다.
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setIsvisible2(false);
+            }}
+            delayPressIn={0}
+            style={{ marginTop: scale(38) }}
+          >
+            <Text style={{ ...styles.modalbutton }}>확인</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -176,5 +254,28 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: "left",
     color: "#001740",
+  },
+  modalview: {
+    width: scale(280),
+    backgroundColor: "#ffffff",
+    borderStyle: "solid",
+    borderWidth: 0.3,
+    borderColor: "#707070",
+  },
+  modaltext: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  modalbutton: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "right",
+    color: "#459bfe",
   },
 });
