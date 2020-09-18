@@ -24,6 +24,15 @@ import ReviewRegist from "./screens/Tabs/MyCarBuy/ReviewRegist";
 import TransferRefund from "./screens/Tabs/MyCarBuy/TransferRefund";
 ///////
 //소비자용_내차판매
+import QuoteRequest from "./screens/Tabs/MyCarSell/QuoteRequest";
+import EnterSellsPrice from "./screens/Tabs/MyCarSell/EnterSellsPrice";
+import DefaultInfo from "./screens/Tabs/MyCarSell/DefaultInfo";
+import DefaultInfoConfirm from "./screens/Tabs/MyCarSell/DefaultInfoConfirm";
+import SelectTransmission from "./screens/Tabs/MyCarSell/SelectTransmission";
+import DistanceDriven from "./screens/Tabs/MyCarSell/DistanceDriven";
+import Options from "./screens/Tabs/MyCarSell/Options";
+import CarStatus from "./screens/Tabs/MyCarSell/CarStatus";
+import DealAddress from "./screens/Tabs/MyCarSell/DealAddress";
 ///////
 //소비자용_상담요청
 ///////
@@ -41,7 +50,7 @@ const Stack = createStackNavigator();
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={"none"} initialRouteName={"Tabs"}>
+      <Stack.Navigator headerMode={"none"} initialRouteName={"DealAddress"}>
         <Stack.Screen name={"Sign"} component={Sign} />
         <Stack.Screen name={"Tabs"} component={Tabs} />
         {/* 소비자용_내차구매 */}
@@ -68,6 +77,21 @@ export default function Route() {
         <Stack.Screen name={"TransferRefund"} component={TransferRefund} />
         {/*  */}
         {/* 소비자용_내차판매 */}
+        <Stack.Screen name={"QuoteRequest"} component={QuoteRequest} />
+        <Stack.Screen name={"EnterSellsPrice"} component={EnterSellsPrice} />
+        <Stack.Screen name={"DefaultInfo"} component={DefaultInfo} />
+        <Stack.Screen
+          name={"DefaultInfoConfirm"}
+          component={DefaultInfoConfirm}
+        />
+        <Stack.Screen
+          name={"SelectTransmission"}
+          component={SelectTransmission}
+        />
+        <Stack.Screen name={"DistanceDriven"} component={DistanceDriven} />
+        <Stack.Screen name={"Options"} component={Options} />
+        <Stack.Screen name={"CarStatus"} component={CarStatus} />
+        <Stack.Screen name={"DealAddress"} component={DealAddress} />
         {/*  */}
         {/* 소비자용_상담요청 */}
         {/*  */}
