@@ -50,7 +50,7 @@ const Stack = createStackNavigator();
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={"none"} initialRouteName={"DealAddress"}>
+      <Stack.Navigator headerMode={"none"} initialRouteName={"Sign"}>
         <Stack.Screen name={"Sign"} component={Sign} />
         <Stack.Screen name={"Tabs"} component={Tabs} />
         {/* 소비자용_내차구매 */}

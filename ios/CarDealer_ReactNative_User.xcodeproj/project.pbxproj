@@ -18,6 +18,7 @@
 		416707B12668A1296FD2FD80 /* libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6097DC210800B0D576F696DC /* libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a */; };
 		5001CDB1BBC0AC73CE2E538A /* libPods-CarDealer_ReactNative_User.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C48322862CD4EFF4FDF855 /* libPods-CarDealer_ReactNative_User.a */; };
 		655DAD3B24FE18DA009DCB1E /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 655DAD3A24FE18DA009DCB1E /* Fonts */; };
+		659C7BC325186E780035456F /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659C7BC225186E780035456F /* File.swift */; };
 		65E3703424FDD04300733C89 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65E3703324FDD04300733C89 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		932EBA063B1AC3452D3B7550 /* libPods-CarDealer_ReactNative_User-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C023FA0F660E55CF196FCCB /* libPods-CarDealer_ReactNative_User-tvOSTests.a */; };
@@ -60,6 +61,8 @@
 		5C023FA0F660E55CF196FCCB /* libPods-CarDealer_ReactNative_User-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CarDealer_ReactNative_User-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6097DC210800B0D576F696DC /* libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		655DAD3A24FE18DA009DCB1E /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
+		659C7BC125186E770035456F /* CarDealer_ReactNative_User-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CarDealer_ReactNative_User-Bridging-Header.h"; sourceTree = "<group>"; };
+		659C7BC225186E780035456F /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		65E3703324FDD04300733C89 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7513DE0B6AD1BC7A41A77429 /* Pods-CarDealer_ReactNative_User-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarDealer_ReactNative_User-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-CarDealer_ReactNative_User-tvOSTests/Pods-CarDealer_ReactNative_User-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CarDealer_ReactNative_User/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -164,6 +167,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				659C7BC225186E780035456F /* File.swift */,
 				655DAD3A24FE18DA009DCB1E /* Fonts */,
 				13B07FAE1A68108700A75B9A /* CarDealer_ReactNative_User */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -171,6 +175,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BF922DC4EDF18EA8DA42ADE9 /* Pods */,
+				659C7BC125186E770035456F /* CarDealer_ReactNative_User-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -300,7 +305,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1200;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -671,6 +676,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				659C7BC325186E780035456F /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -712,6 +718,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 12290D6941F606E1E2E47F01 /* Pods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -735,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B0F0865448C287B5F470231 /* Pods-CarDealer_ReactNative_User-CarDealer_ReactNative_UserTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = CarDealer_ReactNative_UserTests/Info.plist;
@@ -758,8 +766,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = CarDealer_ReactNative_User/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -768,6 +778,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cardealeruser.kr;
 				PRODUCT_NAME = CarDealer_ReactNative_User;
+				SWIFT_OBJC_BRIDGING_HEADER = "CarDealer_ReactNative_User-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -781,7 +792,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = CarDealer_ReactNative_User/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -790,6 +803,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cardealeruser.kr;
 				PRODUCT_NAME = CarDealer_ReactNative_User;
+				SWIFT_OBJC_BRIDGING_HEADER = "CarDealer_ReactNative_User-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -740,16 +740,16 @@ PODS:
     - React
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBApp (8.4.2):
+  - RNFBApp (8.4.3):
     - Firebase/CoreOnly (~> 6.30.0)
-    - React
-  - RNFBAuth (9.2.2):
+    - React-Core
+  - RNFBAuth (9.2.3):
     - Firebase/Auth (~> 6.30.0)
-    - React
+    - React-Core
     - RNFBApp
-  - RNFBFirestore (7.8.1):
+  - RNFBFirestore (7.8.2):
     - Firebase/Firestore (~> 6.30.0)
-    - React
+    - React-Core
     - RNFBApp
   - RNFBMessaging (7.8.6):
     - Firebase/Messaging (~> 6.30.0)
@@ -1122,9 +1122,9 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 3422306266e1743914cf9ce78d7dc4add3fad0e1
   RNDeviceInfo: c5f8f3a456adcbba405ace475254b08febc4c095
   RNFastImage: e19ba191922e7dab9d932a4d59d62d76660aa222
-  RNFBApp: 373cce42559cc7a9a42afc876746e3946de3e32e
-  RNFBAuth: 701b29df3f364ef7b36992ad5e25628ce333ed89
-  RNFBFirestore: 75c8fb40f3414f7b8158a260eec47dc3bbc0cfd0
+  RNFBApp: a74d8259d827c8bf55100e759cffa2e50ba6fe30
+  RNFBAuth: ccae9605207f4a3bc6e03cd0adb5433872ef4418
+  RNFBFirestore: f2d9ff58a4a2d91f9084c1ac0662054a10766a66
   RNFBMessaging: c69238917a8672f5aed2c8a6ee124efa8f962677
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39

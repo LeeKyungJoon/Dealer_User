@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Image,
@@ -15,75 +15,88 @@ const Width = Dimensions.get("window").width;
 
 const Height = Dimensions.get("window").height;
 
-// 
-import {AccessToken, GraphRequest, GraphRequestManager, LoginManager} from 'react-native-fbsdk';
-// 
+//
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginManager,
+} from "react-native-fbsdk";
+//
 
-// 
-import InstagramLogin from 'react-native-instagram-login'
-// 
+//
+import InstagramLogin from "react-native-instagram-login";
+//
 
-export default function MainScreen() {
+export default function MainScreen({ route, navigation }) {
+  const instagramLogin = useRef(null);
+  const [token, setToken] = useState({ igToken: "", igUserId: "" });
 
   // 페이스북 콜백
   const _responseInfoCallback = async (error, result) => {
     //페북전용
     if (error) {
-      console.log('Error fetching data 1 : ' + JSON.stringify(error));
+      console.log("Error fetching data 1 : " + JSON.stringify(error));
     } else {
-      console.log('Result : ' + JSON.stringify(result));
-      console.log('Result Name: ' + result.name || '');
-      const names = (result.name || '').split(' ');
+      console.log("Result : " + JSON.stringify(result));
+      console.log("Result Name: " + result.name || "");
+      const names = (result.name || "").split(" ");
       let firstName = names[1];
       let lastName = names[0];
-      console.log('firstName : ' + firstName);
-      console.log('lastName : ' + lastName);
-      if (result.name || ('' === lastName && !firstName)) {
+      console.log("firstName : " + firstName);
+      console.log("lastName : " + lastName);
+      if (result.name || ("" === lastName && !firstName)) {
         firstName = result.last_name;
         lastName = result.first_name;
       }
       const email = result.email;
-      const user_img_url = result.picture.data.url ?? '';
+      const user_img_url = result.picture.data.url ?? "";
     }
   };
 
   const FaceBook = async () => {
     let result;
     try {
-      LoginManager.setLoginBehavior('NATIVE_ONLY');
-      result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      LoginManager.setLoginBehavior("NATIVE_ONLY");
+      result = await LoginManager.logInWithPermissions([
+        "public_profile",
+        "email",
+      ]);
     } catch (error) {
-      LoginManager.setLoginBehavior('WEB_ONLY');
-      result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      LoginManager.setLoginBehavior("WEB_ONLY");
+      result = await LoginManager.logInWithPermissions([
+        "public_profile",
+        "email",
+      ]);
     }
-    console.log('@@@@@@@@@@@@@@@@@ result : ' + JSON.stringify(result));
+    console.log("@@@@@@@@@@@@@@@@@ result : " + JSON.stringify(result));
     if (result.isCancelled) {
     } else {
-      AccessToken.getCurrentAccessToken().then(data => {
+      AccessToken.getCurrentAccessToken().then((data) => {
         // console.log(data.accessToken.toString())
         const infoRequest = new GraphRequest(
-          '/me?fields=name,picture,email,last_name,first_name',
+          "/me?fields=name,picture,email,last_name,first_name",
           null,
           _responseInfoCallback
         );
         new GraphRequestManager().addRequest(infoRequest).start();
       });
     }
-  }
+  };
 
   // 인스타그램 콜백
   const setIgToken = async (data) => {
-    await store.save('igToken', data.access_token)
-    await store.save('igUserId', data.user_id)
-    this.setState({ igToken: data.access_token, igUserId: data.user_id})
-  }
+    await store.save("igToken", data.access_token);
+    await store.save("igUserId", data.user_id);
+    setToken({ igToken: data.access_token, igUserId: data.user_id });
+  };
 
   return (
     <>
       <Header
         backgroundColor={"#459bfe"}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: "transparent" }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(0),
@@ -105,6 +118,9 @@ export default function MainScreen() {
             source={require("../../images/logo_600.png")}
           />
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("SignUp");
+            }}
             style={{
               ...styles.button,
               alignItems: "center",
@@ -123,6 +139,9 @@ export default function MainScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("SignIn");
+            }}
             style={{
               ...styles.button,
               alignItems: "center",
@@ -159,7 +178,7 @@ export default function MainScreen() {
               style={{ flexDirection: "row", alignItems: "center" }}
               delayPressIn={0}
               onPress={() => {
-                this.instagramLogin.show()
+                instagramLogin.show();
               }}
             >
               <Image
@@ -174,7 +193,7 @@ export default function MainScreen() {
               style={{ flexDirection: "row", alignItems: "center" }}
               delayPressIn={0}
               onPress={() => {
-                FaceBook()
+                FaceBook();
               }}
             >
               <Image
@@ -199,13 +218,13 @@ export default function MainScreen() {
             </TouchableOpacity>
           </View>
           <InstagramLogin
-              ref={ref => (this.instagramLogin = ref)}
-              appId='1660689697418817'
-              appSecret='a7d6dbe15f7f2139b12f3d87eb79fd8d'
-              // redirectUrl='your-redirect-Url'
-              scopes={['user_profile', 'user_media']}
-              onLoginSuccess={ setIgToken }
-              onLoginFailure={(data) => console.log(data)}
+            ref={instagramLogin}
+            appId="1660689697418817"
+            appSecret="a7d6dbe15f7f2139b12f3d87eb79fd8d"
+            // redirectUrl='your-redirect-Url'
+            scopes={["user_profile", "user_media"]}
+            onLoginSuccess={setIgToken}
+            onLoginFailure={(data) => console.log(data)}
           />
         </View>
       </SafeAreaView>

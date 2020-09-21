@@ -84,23 +84,39 @@ export default function DealAddress() {
               }}
             >
               <Text style={{ ...styles.subtitle }}>지역</Text>
+              <TouchableOpacity
+                delayPressIn={0}
+                style={{
+                  ...styles.searchbutton,
+                  justifyContent: "center",
+                  alignSelf: "flex-end",
+                }}
+              >
+                <Text style={{ ...styles.searchbuttontext }}>주소검색</Text>
+              </TouchableOpacity>
               <TextInput
                 style={{
-                  ...styles.distanceinput,
-                  paddingLeft: scale(10),
+                  ...styles.searchaddressinput,
+                  width: "100%",
+                  paddingLeft: scale(6),
+                  paddingBottom: 0,
+                  paddingTop: 0,
+                  marginTop: scale(8),
                 }}
-                placeholder="직접입력"
-                placeholderTextColor="rgba(29, 29, 29, 0.3)"
+                placeholder={"주소를 입력하세요."}
+                placeholderTextColor={"rgba(0, 0, 0, 0.3)"}
               />
               <TextInput
                 style={{
-                  ...styles.distanceinput,
+                  ...styles.searchaddressinput,
+                  width: "100%",
+                  paddingLeft: scale(6),
                   paddingBottom: 0,
                   paddingTop: 0,
-                  paddingLeft: scale(10),
+                  marginTop: scale(5),
                 }}
-                placeholder="직접입력"
-                placeholderTextColor="rgba(29, 29, 29, 0.3)"
+                placeholder={"나머지 주소 입력"}
+                placeholderTextColor={"rgba(0, 0, 0, 0.3)"}
               />
 
               <TouchableOpacity
@@ -109,7 +125,7 @@ export default function DealAddress() {
                   ...styles.button,
                   alignItems: "center",
                   justifyContent: "center",
-                  marginTop: scale(131.5),
+                  marginTop: scale(150.5),
                 }}
               >
                 <Text style={{ ...styles.buttontext }}>확인</Text>
@@ -224,17 +240,28 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#1d1d1d",
   },
-  distanceinput: {
-    width: "100%",
-
+  searchaddressinput: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
     fontStyle: "normal",
+    letterSpacing: 0,
     textAlign: "left",
     color: "#000000",
-    borderColor: "rgba(0, 0, 0, 0.1)",
-    padding: 0,
-    paddingBottom: 0,
-    paddingTop: 0,
-    margin: 0,
-    backgroundColor: "red",
+    borderStyle: "solid",
+    borderWidth: 0.3,
+    borderColor: "rgba(0, 0, 0, 0.3)",
+  },
+  searchbutton: {
+    width: scale(59),
+    height: scale(25),
+    backgroundColor: "#bbbbbb",
+  },
+  searchbuttontext: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#ffffff",
   },
 });

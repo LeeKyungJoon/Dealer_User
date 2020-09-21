@@ -15,9 +15,7 @@ import {
   Keyboard,
 } from "react-native";
 
-
-export default function SingIn() {
-
+export default function SingIn({ route, navigation }) {
   return (
     <>
       <Header
@@ -31,6 +29,9 @@ export default function SingIn() {
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}

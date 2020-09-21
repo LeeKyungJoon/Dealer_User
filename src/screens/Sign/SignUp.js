@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Header } from "react-native-elements";
 import scale from "../../common/Scale";
 import {
@@ -14,8 +14,26 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import AppServer from "../../common/AppServer";
 
 export default function SignUp() {
+  const [email, setEmail] = useState("");
+
+  const _email = (emailtext) => {
+    let regExp = /@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    setEmail(emailtext);
+    if (regExp.test(emailtext)) {
+      console.log("1");
+    } else {
+      console.log("2");
+    }
+  };
+
+  const _emailcheck = async () => {
+    let data = await AppServer.CARDEALER_API_00007(email);
+    console.log("----->>", data);
+  };
+
   return (
     <>
       <Header
@@ -59,11 +77,19 @@ export default function SignUp() {
               </Text>
               <View style={{ ...styles.righton, marginTop: scale(12) }}>
                 <TextInput
+                  autoCapitalize="none"
                   style={{ ...styles.rightoninput, marginLeft: scale(10) }}
                   placeholder={"이메일 주소를 입력하세요."}
                   placeholderTextColor={"#bababa"}
+                  value={email}
+                  onChangeText={(text) => {
+                    _email(text);
+                  }}
                 />
                 <TouchableOpacity
+                  onPress={() => {
+                    _emailcheck();
+                  }}
                   delayPressIn={0}
                   style={{
                     width: scale(59),
