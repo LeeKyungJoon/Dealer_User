@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import AppServer from "../../common/AppServer";
 
-export default function SignUp() {
+export default function SignUp({ route, navigation }) {
   const [email, setEmail] = useState("");
 
   const _email = (emailtext) => {
@@ -47,6 +47,9 @@ export default function SignUp() {
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}

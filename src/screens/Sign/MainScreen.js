@@ -119,7 +119,7 @@ export default function MainScreen({ route, navigation }) {
           />
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignUp");
+              navigation.navigate("SignTerms");
             }}
             style={{
               ...styles.button,
