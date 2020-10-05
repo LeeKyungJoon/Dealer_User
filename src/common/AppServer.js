@@ -16,8 +16,10 @@ export default class AppServer {
         { "Access-Control-Allow-Origin": "*" }
       );
       console.log("이메일 중복체크 확인", response.data);
+      return response.data;
     } catch (error) {
       console.log("CARDEALER_API_00007", error);
+      return error;
     }
   };
 }
