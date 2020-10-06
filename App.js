@@ -8,9 +8,14 @@
 
 import React from "react";
 import Route from "./src/Route";
+import InfoProvider from "./src/provider/InfoProvider";
 
 const App = () => {
-  return <Route />;
+  return (
+    <InfoProvider>
+      <Route />
+    </InfoProvider>
+  );
 };
 
 export default App;

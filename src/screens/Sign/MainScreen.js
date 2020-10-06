@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   Image,
@@ -7,9 +7,12 @@ import {
   Text,
   SafeAreaView,
   Dimensions,
+  Platform,
 } from "react-native";
 import { Header } from "react-native-elements";
 import scale from "../../common/Scale";
+import messaging from "@react-native-firebase/messaging";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const Width = Dimensions.get("window").width;
 
@@ -31,6 +34,7 @@ import InstagramLogin from "react-native-instagram-login";
 export default function MainScreen({ route, navigation }) {
   const instagramLogin = useRef(null);
   const [token, setToken] = useState({ igToken: "", igUserId: "" });
+  const [push, setPush] = useState("");
 
   // 페이스북 콜백
   const _responseInfoCallback = async (error, result) => {
@@ -91,6 +95,45 @@ export default function MainScreen({ route, navigation }) {
     setToken({ igToken: data.access_token, igUserId: data.user_id });
   };
 
+  const firebasePushSetup = async () => {
+    const token = await messaging().getToken();
+    setPush(token);
+    console.log("TOKEN =", token);
+
+    const granted = await messaging().requestPermission();
+    console.log("GRANTED =", granted);
+
+    // if(granted == 1){
+    let fcm_token = await AsyncStorage.getItem("pushtoken");
+    if (fcm_token !== "NONE" && !fcm_token) {
+      await AsyncStorage.setItem("pushtoken", token);
+    }
+    // }else{
+    // Step1();
+    // }
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      navigation.navigate("NotiModal", remoteMessage);
+      console.log("Message handled in the background1!", remoteMessage);
+      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      navigation.navigate("NotiModal", remoteMessage);
+      console.log("FCM Message Data:", remoteMessage.data);
+      // Alert.alert('A new FCM message arrived2!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  };
+
+  useEffect(() => {
+    const focus = navigation.addListener("focus", async () => {
+      firebasePushSetup();
+    });
+    return focus;
+  }, [navigation]);
+
   return (
     <>
       <Header
@@ -119,7 +162,7 @@ export default function MainScreen({ route, navigation }) {
           />
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignTerms");
+              navigation.navigate("SignTerms", { push_key: push });
             }}
             style={{
               ...styles.button,
@@ -140,7 +183,7 @@ export default function MainScreen({ route, navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignIn");
+              navigation.navigate("SignIn", { push_key: push });
             }}
             style={{
               ...styles.button,
@@ -204,18 +247,20 @@ export default function MainScreen({ route, navigation }) {
                 Facebook
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
-              delayPressIn={0}
-            >
-              <Image
-                style={{ ...styles.bottomicon }}
-                source={require("../../images/Left_Black_Logo.png")}
-              />
-              <Text style={{ ...styles.bottomtext, marginLeft: scale(5) }}>
-                Apple
-              </Text>
-            </TouchableOpacity>
+            {Platform.OS === "ios" ? (
+              <TouchableOpacity
+                style={{ flexDirection: "row", alignItems: "center" }}
+                delayPressIn={0}
+              >
+                <Image
+                  style={{ ...styles.bottomicon }}
+                  source={require("../../images/Left_Black_Logo.png")}
+                />
+                <Text style={{ ...styles.bottomtext, marginLeft: scale(5) }}>
+                  Apple
+                </Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
           <InstagramLogin
             ref={instagramLogin}

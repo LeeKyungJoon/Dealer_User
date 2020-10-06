@@ -17,12 +17,15 @@ import {
 import AppServer from "../../common/AppServer";
 
 export default function SignUp({ route, navigation }) {
+  const { push_key } = route.params;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [verify, setVerify] = useState("");
   const [able1, setAble1] = useState(false);
+  const [able2, setAble2] = useState(false);
   const [able3, setAble3] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
   const [checkPassword, setCheckPassword] = useState(false);
@@ -30,6 +33,7 @@ export default function SignUp({ route, navigation }) {
   const [checkVerify, setCheckVerify] = useState(false);
   const [errorMsg1, setErrorMsg1] = useState({ msg: "", color: "transparent" });
   const [errorMsg2, setErrorMsg2] = useState({ msg: "", color: "transparent" });
+  const [errorMsg3, setErrorMsg3] = useState({ msg: "", color: "transparent" });
   const [paused, setPaused] = useState(false);
   const [over, setOver] = useState(false);
   const [time, setTime] = useState({
@@ -84,6 +88,7 @@ export default function SignUp({ route, navigation }) {
     } else if (regExp.test(emailtext)) {
       console.log("이메일 형식 ok");
       setAble1(true);
+      setErrorMsg1({ msg: "", color: "transparent" });
       setCheckEmail(false);
     } else {
       console.log("이메일 형식 no");
@@ -93,25 +98,35 @@ export default function SignUp({ route, navigation }) {
   };
 
   const _emailcheck = async () => {
-    let data = await AppServer.CARDEALER_API_00007(email);
-    console.log("_emailcheck>>", data);
-    if (!able1) {
-      setCheckEmail(false);
-      setErrorMsg1({ msg: "이메일 형식이 맞지 않습니다.", color: "#ff5454" });
-    } else if (data.success_yn && data.msg === "success") {
-      setCheckEmail(true);
-      setErrorMsg1({ msg: "사용 가능한 이메일 주소입니다.", color: "#459bfe" });
-    } else {
-      setCheckEmail(false);
-      setErrorMsg1({
-        msg: "이미 사용중인 이메일 주소입니다.",
-        color: "#ff5454",
-      });
+    try {
+      let data = await AppServer.CARDEALER_API_00007(email);
+      console.log("_emailcheck>>", data);
+      if (!able1) {
+        setCheckEmail(false);
+        setErrorMsg1({ msg: "이메일 형식이 맞지 않습니다.", color: "#ff5454" });
+      } else if (data.success_yn && data.msg === "success") {
+        setCheckEmail(true);
+        setErrorMsg1({
+          msg: "사용 가능한 이메일 주소입니다.",
+          color: "#459bfe",
+        });
+      } else if (!data.success_yn && data.msg === "bad parameter") {
+        setCheckEmail(false);
+        setErrorMsg1({ msg: "이메일 형식이 맞지 않습니다.", color: "#ff5454" });
+      } else {
+        setCheckEmail(false);
+        setErrorMsg1({
+          msg: "이미 사용중인 이메일 주소입니다.",
+          color: "#ff5454",
+        });
+      }
+    } catch (error) {
+      console.log("_emailcheck_NO", error);
     }
   };
 
   const _password = (passwordtext) => {
-    let regExp = /^[a-zA-Z0-9]{8,16}$/;
+    let regExp = /^[a-zA-Z0-9]{8,20}$/;
     setPassword(passwordtext);
     if (passwordtext === "") {
       setErrorMsg2({ msg: "", color: "transparent" });
@@ -153,13 +168,101 @@ export default function SignUp({ route, navigation }) {
 
   const _phone = (phonetext) => {
     let regExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+([0-9]{4}))/;
-    if (regExp.test(phonetext)) {
+    setPhone(phonetext);
+    if (phonetext === "") {
+      setAble2(false);
+      setErrorMsg3({ msg: "", color: "transparent" });
+    } else if (regExp.test(phonetext)) {
+      console.log("폰 체크 ok");
+      setAble2(true);
+      setErrorMsg3({ msg: "", color: "transparent" });
+    } else {
+      console.log("폰 체크 no");
+      setAble2(false);
+      setErrorMsg3({ msg: "휴대전화가 맞지 않습니다.", color: "#ff5454" });
     }
   };
 
-  const _verifyStart = () => {
+  const _verifyStart = async () => {
     reset();
     setCountAble(true);
+    try {
+      let data = await AppServer.CARDEALER_API_00006({
+        user_phone: phone,
+        phone_gb: "join",
+        user_type: "user",
+      });
+      console.log("_verifyStart", data);
+      if (!data.success_yn && data.msg === "bad parameter") {
+        setErrorMsg3({ msg: "휴대전화가 맞지 않습니다.", color: "#ff5454" });
+      } else if (data.success_yn && data.msg === "success") {
+        setErrorMsg3({ msg: "", color: "transparent" });
+      } else {
+        setErrorMsg3({
+          msg: "이미 사용중인 휴대전화입니다.",
+          color: "#ff5454",
+        });
+      }
+    } catch (error) {
+      console.log("_verifyStart_NO", error);
+    }
+  };
+
+  const _verify = (verifytext) => {
+    setVerify(verifytext);
+    if (verifytext === "") {
+      setCheckVerify(false);
+      setErrorMsg3({ msg: "", color: "transparent" });
+    } else if (verifytext.length >= 4) {
+      setCheckVerify(true);
+      setErrorMsg3({ msg: "", color: "transparent" });
+    } else {
+      setCheckVerify(false);
+      setErrorMsg3({ msg: "인증번호가 맞지 않습니다.", color: "#ff5454" });
+    }
+  };
+
+  const _signUp = async () => {
+    let data = await AppServer.CARDEALER_API_00006_2({
+      user_phone: phone,
+      phone_conf_number: verify,
+    });
+    console.log("_signUp", data);
+    if (
+      !data.success_yn &&
+      data.msg === "휴대폰 인증코드가 일치하지 않습니다"
+    ) {
+      setErrorMsg3({ msg: data.msg, color: "#ff5454" });
+    } else if (data.success_yn && data.msg === "success")
+      setErrorMsg3({ msg: "", color: "transparent" });
+    _complete();
+  };
+
+  const _complete = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00005({
+        user_nm: name,
+        user_email: email,
+        user_phone: phone,
+        phone_conf_number: verify,
+        user_pass: password,
+        social_yn: false,
+        social_type: "",
+        push_key: push_key,
+        update_page_yn: false,
+      });
+      console.log("_complete", data);
+      if (data.success_yn && data.msg === "success") {
+        navigation.reset({
+          routes: [{ name: "MainScreen" }],
+        });
+      }
+      //else if(!data.success_yn && data.msg === "사용자가 존재합니다") {
+
+      //}
+    } catch (error) {
+      console.log("_complete_NO", error);
+    }
   };
 
   useEffect(() => {
@@ -320,7 +423,7 @@ export default function SignUp({ route, navigation }) {
                 <Text style={{ ...styles.subtitle }}>
                   휴대전화를 입력해주세요
                 </Text>
-                {countAble ? (
+                {countAble && able2 ? (
                   <Text style={{ ...styles.count }}>
                     (
                     {`${time.minutes.toString()}:${time.seconds
@@ -343,7 +446,7 @@ export default function SignUp({ route, navigation }) {
                 />
                 <TouchableOpacity
                   onPress={() => {
-                    _doubleClick();
+                    //_doubleClick();
                     _verifyStart();
                     setResetButton(true);
                   }}
@@ -358,7 +461,7 @@ export default function SignUp({ route, navigation }) {
                     marginRight: scale(15),
                   }}
                 >
-                  {resetButton ? (
+                  {resetButton && able2 ? (
                     <Text style={{ ...styles.rightbutton }}>인증재요청</Text>
                   ) : (
                     <Text style={{ ...styles.rightbutton }}>인증요청</Text>
@@ -366,23 +469,65 @@ export default function SignUp({ route, navigation }) {
                 </TouchableOpacity>
               </View>
               <TextInput
+                keyboardType={"number-pad"}
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
                 placeholder={"인증번호를 입력하세요."}
                 placeholderTextColor={"#bababa"}
+                value={verify}
+                onChangeText={(text) => {
+                  _verify(text);
+                }}
               />
+              <Text
+                style={{
+                  ...styles.error,
+                  color: errorMsg3.color,
+                  marginLeft: scale(10),
+                  marginTop: scale(3),
+                }}
+              >
+                {errorMsg3.msg}
+              </Text>
             </View>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {
+                _signUp();
+              }}
+              disabled={
+                email &&
+                password &&
+                passwordCheck &&
+                name &&
+                phone &&
+                verify &&
+                checkEmail
+                  ? false
+                  : true
+              }
               style={{
                 ...styles.bottombutton,
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: Platform.OS === "ios" ? 0 : scale(30),
                 marginTop: scale(60),
+                backgroundColor:
+                  email &&
+                  checkEmail &&
+                  password &&
+                  passwordCheck &&
+                  checkPassword &&
+                  name &&
+                  checkName &&
+                  phone &&
+                  verify &&
+                  checkVerify &&
+                  checkEmail
+                    ? "#459bfe"
+                    : "#dddddd",
               }}
               delayPressIn={0}
             >
-              <Text style={{ ...styles.bottomtext }}>다음</Text>
+              <Text style={{ ...styles.bottomtext }}>완료</Text>
             </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
@@ -469,7 +614,6 @@ const styles = StyleSheet.create({
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "#dddddd",
   },
   bottomtext: {
     fontFamily: "Jalnan",

@@ -20,6 +20,7 @@ export default function SignUp({ route, navigation }) {
   const [check3, setCheck3] = useState(false);
   const [check4, setCheck4] = useState(false);
   const [check5, setCheck5] = useState(false);
+  const { push_key } = route.params;
 
   return (
     <>
@@ -280,7 +281,7 @@ export default function SignUp({ route, navigation }) {
             </View>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("SignUp");
+                navigation.navigate("SignUp", { push_key: push_key });
               }}
               disabled={check1 && check2 && check3 && check4 ? false : true}
               style={{
