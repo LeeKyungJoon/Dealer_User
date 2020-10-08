@@ -1,26 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Header } from "react-native-elements";
+import scale from "../../../common/Scale";
 import {
-  View,
-  Text,
-  SafeAreaView,
   TouchableOpacity,
   Image,
-  TextInput,
   StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  SafeAreaView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import scale from "../../../common/Scale";
-import { Header } from "react-native-elements";
-import { ScrollView } from "react-native";
+import AppServer from "../../../common/AppServer";
 
-export default function MyInfoMain(props) {
-  const [error, setError] = useState(false);
-  const [cur_pwd, set_cur_pwd] = useState("");
-  const [new_pwd, set_new_pwd] = useState("");
-  const [new_pwd_confirm, set_new_pwd_confirm] = useState("");
+export default function SignUp({ route, navigation }) {
+  let regExp = /^[a-zA-Z0-9]{8,20}$/;
+  const [current, setCurrent] = useState("");
+  const [change, setChange] = useState("");
+  const [changeCheck, setChangeCheck] = useState("");
+  const [checkCurrent, setCheckCurrent] = useState(false);
+  const [resultCheck, setResultCheck] = useState(false);
+  const [checkChange, setCheckChange] = useState(false);
+  const [errorMsg1, setErrorMsg1] = useState({ msg: "", color: "transparent" });
+  const [errorMsg2, setErrorMsg2] = useState({ msg: "", color: "transparent" });
+
+  const _current = (currenttext) => {
+    setCurrent(currenttext);
+    if (current === "") {
+      setErrorMsg1({ msg: "", color: "transparent" });
+      setCheckCurrent(false);
+    } else if (regExp.test(currenttext)) {
+      console.log("비밀번호 형식 ok");
+      setErrorMsg1({ msg: "", color: "transparent" });
+      setCheckCurrent(true);
+    } else {
+      console.log("비밀번호 형식 no");
+      setErrorMsg1({ msg: "비밀번호 형식이 맞지 않습니다.", color: "#ff0000" });
+      setCheckCurrent(false);
+    }
+  };
+
+  const _changeComplete = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00009({
+        user_pass: current,
+        user_pass_new: changeCheck,
+      });
+      console.log("_changeComplete", data);
+    } catch (error) {}
+  };
 
   return (
     <>
       <Header
+        placement="left"
         backgroundColor={"#459bfe"}
         barStyle="light-content"
         statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
@@ -28,300 +64,212 @@ export default function MyInfoMain(props) {
           borderBottomWidth: 0,
           height: scale(80),
         }}
-        placement="left"
         leftComponent={
           <TouchableOpacity
             onPress={() => {
-              props.navigation.goBack();
+              navigation.goBack();
             }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
-              style={{ width: scale(20), height: scale(20) }}
+              style={{ ...styles.back }}
               source={require("../../../images/back_ic_80.png")}
             />
           </TouchableOpacity>
         }
-        centerComponent={
-          <Text
-            style={{
-              fontSize: scale(16),
-              color: "#ffffff",
-              fontFamily: "Jalnan",
-            }}
-          >
-            내 정보
-          </Text>
-        }
+        centerComponent={<Text style={{ ...styles.title }}>내정보</Text>}
       />
-      <SafeAreaView style={{ flex: 1, padding: scale(15) }}>
-        <ScrollView style={{ flex: 1 }}>
-          <Text style={{ fontSize: scale(15), fontWeight: "bold" }}>
-            비밀번호 재설정
-          </Text>
-          <Text
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={{ ...styles.container }}>
+          <ScrollView
             style={{
-              marginTop: scale(25),
-              fontSize: scale(13),
-              color: "#1d1d1d",
+              paddingHorizontal: scale(15),
             }}
-          >
-            현재 비밀번호
-          </Text>
-          <View
-            style={{
-              position: "relative",
-              marginTop: scale(9),
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: "space-between",
             }}
+            keyboardShouldPersistTaps="always"
           >
-            <TextInput
-              style={
-                error
-                  ? {
-                      borderColor: "#ff0000",
-                      borderWidth: 1,
-                      borderRadius: 5,
-                      paddingHorizontal: scale(15),
-                      fontSize: scale(13),
-                    }
-                  : {
-                      borderColor: "#707070",
-                      borderWidth: 0.3,
-                      borderRadius: 5,
-                      paddingHorizontal: scale(15),
-                      fontSize: scale(13),
-                    }
-              }
-              placeholder={"비밀번호를 입력하세요. (영문, 숫자 포함)"}
-              placeholderTextColor={"#bababa"}
-              secureTextEntry={true}
-              value={cur_pwd}
-              onChangeText={(text) => set_cur_pwd(text)}
-            />
-            {error ? (
-              <TouchableOpacity
-                onPress={() => {
-                  set_cur_pwd("");
-                  setError(false);
-                }}
+            <View style={{ marginTop: scale(15) }}>
+              <Text style={{ ...styles.subtitle }}>비밀번호 재설정</Text>
+              <Text style={{ ...styles.subsubtitle, marginTop: scale(25) }}>
+                현재 비밀번호
+              </Text>
+              <View
                 style={{
-                  width: scale(20),
-                  borderRadius: 100,
-                  height: scale(20),
-                  position: "absolute",
-                  top: scale(13),
-                  right: scale(10),
-                  zIndex: 999,
-                  backgroundColor: "#b9b9b9",
+                  ...styles.righton,
+                  marginTop: scale(9),
+                  paddingHorizontal: scale(10),
+                  borderColor:
+                    current.length > 0 && resultCheck === true
+                      ? "#ff0000"
+                      : "#dddddd",
                 }}
+              >
+                <TextInput
+                  autoCapitalize={"none"}
+                  style={{ ...styles.rightoninput }}
+                  placeholder={
+                    "비밀번호를 입력하세요. (영문, 숫자 포함 8자리 이상)"
+                  }
+                  placeholderTextColor={"#bababa"}
+                  secureTextEntry={true}
+                  value={current}
+                  onChangeText={(text) => {
+                    _current(text);
+                  }}
+                />
+                {current.length > 0 && resultCheck === true ? (
+                  <TouchableOpacity
+                    hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
+                    style={{ position: "absolute", right: 8 }}
+                    onPress={() => {
+                      setCurrent("");
+                      resultCheck(false);
+                    }}
+                    delayPressIn={0}
+                  >
+                    <Image
+                      style={{ width: scale(20), height: scale(20) }}
+                      source={require("../../../images/close_icon_80.png")}
+                    />
+                  </TouchableOpacity>
+                ) : null}
+              </View>
+              <Text style={{ ...styles.subsubtitle, marginTop: scale(50) }}>
+                변경할 비밀번호
+              </Text>
+              <TextInput
+                autoCapitalize={"none"}
+                style={{ ...styles.inputstyle, marginTop: scale(9) }}
+                placeholder={
+                  "비밀번호를 입력하세요. (영문, 숫자 포함 8자리 이상)"
+                }
+                placeholderTextColor={"#bababa"}
+                secureTextEntry={true}
               />
-            ) : null}
-          </View>
-          {error ? (
-            <Text
-              style={{
-                fontSize: scale(10),
-                color: "#ff0000",
-                marginTop: scale(7),
+
+              <TextInput
+                autoCapitalize={"none"}
+                style={{ ...styles.inputstyle, marginTop: scale(10) }}
+                placeholder={"비밀번호를 확인하세요."}
+                placeholderTextColor={"#bababa"}
+              />
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                _changeComplete();
               }}
+              style={{
+                ...styles.bottombutton,
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: Platform.OS === "ios" ? 0 : scale(30),
+                marginTop: scale(60),
+                backgroundColor: "#b9b9b9",
+              }}
+              delayPressIn={0}
             >
-              비밀번호가 맞지 않습니다.
-            </Text>
-          ) : null}
-          <Text
-            style={{
-              marginTop: scale(50),
-              fontSize: scale(13),
-              color: "#1d1d1d",
-            }}
-          >
-            변경할 비밀번호
-          </Text>
-          <TextInput
-            style={{
-              marginTop: scale(9),
-              borderColor: "#707070",
-              borderWidth: 0.3,
-              borderRadius: 5,
-              paddingHorizontal: scale(15),
-            }}
-            placeholder={"비밀번호를 입력하세요. (영문, 숫자 포함)"}
-            placeholderTextColor={"#bababa"}
-            secureTextEntry={true}
-            value={new_pwd}
-            onChangeText={(text) => set_new_pwd(text)}
-          />
-          <TextInput
-            style={{
-              marginTop: scale(9),
-              borderColor: "#707070",
-              borderWidth: 0.3,
-              borderRadius: 5,
-              paddingHorizontal: scale(15),
-            }}
-            placeholder={"비밀번호를 확인하세요."}
-            placeholderTextColor={"#bababa"}
-            secureTextEntry={true}
-            value={new_pwd_confirm}
-            onChangeText={(text) => set_new_pwd_confirm(text)}
-          />
-        </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            setError(true);
-          }}
-          style={{
-            backgroundColor: "#001740",
-            padding: scale(12.5),
-            justifyContent: "center",
-            borderRadius: 10,
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{ fontFamily: "Jalnan", fontSize: 15, color: "#ffffff" }}
-          >
-            변경하기
-          </Text>
-        </TouchableOpacity>
-      </SafeAreaView>
+              <Text style={{ ...styles.bottomtext }}>변경하기</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  search: {
-    width: scale(18),
-    height: scale(18),
+  back: {
+    width: scale(20),
+    height: scale(20),
   },
-  mainlogo: {
-    width: scale(140),
-    height: scale(22),
-  },
-  alert: {
-    width: scale(18),
-    height: scale(18),
+  title: {
+    fontFamily: "Jalnan",
+    fontSize: scale(16),
+    fontWeight: "normal",
+    fontStyle: "normal",
+    lineHeight: scale(25),
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#ffffff",
   },
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
   },
-  topimage: {
-    width: scale(330),
-    height: scale(130),
-    borderRadius: 10,
-    alignSelf: "center",
-  },
-  wrapper: {
-    flex: 0.32,
-    paddingTop: scale(20),
-  },
-  categorytitle: {
+  subtitle: {
     fontFamily: "Roboto-Bold",
     fontSize: scale(16),
     fontStyle: "normal",
+    lineHeight: scale(25),
     letterSpacing: 0,
     textAlign: "left",
-    color: "#1d1d1d",
+    color: "#222222",
   },
-  carlist: {
+  inputstyle: {
     width: scale(330),
-    height: scale(250),
+    height: scale(40),
     backgroundColor: "#ffffff",
-  },
-  carimage: {
-    width: scale(330),
-    height: scale(182.5),
-  },
-  premark: {
-    width: scale(59),
-    height: scale(59),
-  },
-  like: {
-    width: scale(24),
-    height: scale(24),
-  },
-  avator: {
-    width: scale(50),
-    height: scale(50),
-  },
-  price: {
-    fontFamily: "NotoSans-Bold",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#dddddd",
+    borderRadius: 10,
+    fontFamily: "Roboto-Regular",
     fontSize: scale(13),
     fontStyle: "normal",
+    letterSpacing: -0.39,
+    textAlign: "left",
+    color: "#000000",
+    paddingHorizontal: scale(10),
+  },
+  bottombutton: {
+    width: scale(330),
+    height: scale(40),
+    borderRadius: 10,
+    backgroundColor: "#001740",
+    borderStyle: "solid",
+    borderWidth: 0.3,
+    borderColor: "#707070",
+  },
+  bottomtext: {
+    fontFamily: "Jalnan",
+    fontSize: scale(15),
+    fontWeight: "normal",
+    fontStyle: "normal",
+    lineHeight: scale(25),
     letterSpacing: 0,
     textAlign: "center",
     color: "#ffffff",
   },
-  carname: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(14),
+  subsubtitle: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(13),
     fontStyle: "normal",
-    letterSpacing: 0,
     textAlign: "left",
     color: "#1d1d1d",
   },
-  carhistory: {
+  righton: {
+    width: scale(330),
+    height: scale(40),
+    borderRadius: 10,
+    backgroundColor: "#ffffff",
+    borderStyle: "solid",
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  rightoninput: {
+    width: scale(300),
+    backgroundColor: "#ffffff",
     fontFamily: "Roboto-Regular",
-    fontSize: scale(10),
+    fontSize: scale(13),
     fontStyle: "normal",
-    letterSpacing: -0.3,
-    textAlign: "left",
-    color: "#999999",
-  },
-  daypeople: {
-    fontFamily: "Roboto-Regular",
-    fontSize: scale(8),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "right",
-    color: "#bebebe",
-  },
-  preicon: {
-    width: scale(20),
-    height: scale(20),
-  },
-  pretext: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(10),
-    fontStyle: "normal",
-    lineHeight: scale(25),
-    letterSpacing: 0,
-    textAlign: "right",
-    color: "#1d1d1d",
-  },
-  onofficon: {
-    width: scale(9),
-    height: scale(9),
-  },
-  real: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(15),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "left",
-    color: "#459bfe",
-  },
-  realcar: {
-    width: scale(157.5),
-    height: scale(130),
-  },
-  smallcarname: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(8),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "left",
-    color: "#459bfe",
-  },
-  review: {
-    fontFamily: "Roboto-Regular",
-    fontSize: scale(8),
-    fontStyle: "normal",
-    lineHeight: 10,
-    letterSpacing: 0,
+    letterSpacing: -0.39,
     textAlign: "left",
     color: "#000000",
   },

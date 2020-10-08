@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,10 @@ import {
 import scale from "../../../common/Scale";
 import { Header } from "react-native-elements";
 import Modal from "react-native-modal";
+import InfoContext from "../../../context/InfoContext";
 
 export default function MyInfoMain(props) {
+  const { state } = useContext(InfoContext);
   const [logoutModal, setLogoutModal] = useState(false);
   const [profiletModal, setProfileModal] = useState(false);
 
@@ -26,18 +28,6 @@ export default function MyInfoMain(props) {
           borderBottomWidth: 0,
           height: scale(80),
         }}
-        // leftComponent={
-        //   <TouchableOpacity
-        //     style={{ marginLeft: scale(5) }}
-        //     delayPressIn={0}
-        //     hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-        //   >
-        //     <Image
-        //       style={{ ...styles.back }}
-        //       source={require("../../../images/back_ic_80.png")}
-        //     />
-        //   </TouchableOpacity>
-        // }
         centerComponent={
           <Image
             style={{ ...styles.mainlogo }}
@@ -49,60 +39,45 @@ export default function MyInfoMain(props) {
         <View style={{ ...styles.view, paddingTop: scale(15) }}>
           <Text
             style={{
-              fontSize: scale(15),
-              color: "#1d1d1d",
-              marginBottom: scale(15),
+              ...styles.subtitle,
             }}
           >
             내 정보
           </Text>
-          <View style={{ alignItems: "center" }}>
-            {/* <Image source={require('')}/> */}
-            <View
-              style={{
-                width: scale(90),
-                position: "relative",
-                height: scale(90),
-                borderRadius: 10,
-                backgroundColor: "#001740",
-              }}
+          <View style={{ alignSelf: "center" }}>
+            <Image
+              style={{ width: scale(90), height: scale(90) }}
+              source={{ uri: state.info.profile_img_url }}
+            />
+            <TouchableOpacity
+              style={{ position: "absolute", right: -17, bottom: 0 }}
+              delayPressIn={0}
             >
-              <TouchableOpacity
-                onPress={() => {
-                  setProfileModal(true);
-                }}
+              <Image
                 style={{
-                  position: "absolute",
                   width: scale(30),
                   height: scale(30),
-                  borderRadius: 100,
-                  backgroundColor: "#b2b2b2",
-                  right: -scale(15),
-                  bottom: 0,
                 }}
+                source={require("../../../images/camera_icon_120.png")}
               />
-            </View>
+            </TouchableOpacity>
           </View>
           <Text
             style={{
+              ...styles.name,
               marginTop: scale(15),
-              fontSize: scale(15),
-              color: "#1d1d1d",
-              textAlign: "center",
             }}
           >
-            홍길동
+            {state.info.user_nm}
           </Text>
           <Text
             style={{
+              ...styles.email,
               marginTop: scale(5),
               marginBottom: scale(15),
-              fontSize: scale(13),
-              color: "#bfbfbf",
-              textAlign: "center",
             }}
           >
-            dealer_app@gmail.com
+            {state.info.user_email}
           </Text>
           <View style={{ ...styles.boundary }} />
         </View>
@@ -186,7 +161,13 @@ export default function MyInfoMain(props) {
               setLogoutModal(true);
             }}
           >
-            <Text style={{ color: "#ffffff", fontSize: scale(15),fontFamily: "Jalnan" }}>
+            <Text
+              style={{
+                color: "#ffffff",
+                fontSize: scale(15),
+                fontFamily: "Jalnan",
+              }}
+            >
               로그아웃
             </Text>
           </TouchableOpacity>
@@ -328,7 +309,11 @@ const styles = StyleSheet.create({
     paddingVertical: scale(7.5),
     backgroundColor: "#ffffff",
   },
-  boundary: { borderBottomWidth: 0.15, borderBottomColor: "#707070" },
+  boundary: {
+    borderWidth: 0.5,
+    borderColor: "rgba(0, 0, 0, 0.2)",
+    borderStyle: "solid",
+  },
   search: {
     width: scale(18),
     height: scale(18),
@@ -489,5 +474,26 @@ const styles = StyleSheet.create({
   back: {
     width: scale(20),
     height: scale(20),
+  },
+  subtitle: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(15),
+    fontStyle: "normal",
+    textAlign: "left",
+    color: "#1d1d1d",
+  },
+  name: {
+    fontFamily: "Roboto-Bold",
+    fontSize: scale(15),
+    fontStyle: "normal",
+    textAlign: "center",
+    color: "#1d1d1d",
+  },
+  email: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(13),
+    fontStyle: "normal",
+    textAlign: "center",
+    color: "#bfbfbf",
   },
 });

@@ -90,10 +90,16 @@ export default function SingIn({ route, navigation }) {
       console.log("_signIn", data);
       if (data.success_yn) {
         setUserState(data);
-        let fcm_token = await AsyncStorage.getItem("pushtoken");
-        if (fcm_token !== "NONE" && !fcm_token) {
-          await AsyncStorage.setItem("pushtoken", data.token);
-        }
+
+        await AsyncStorage.setItem("_token");
+        //if (fcm_token !== "NONE" && !fcm_token) {
+        //  console.log("3333");
+        //  await AsyncStorage.setItem("_token", data.token);
+        //  console.log("4444");
+        //}
+        navigation.reset({
+          routes: [{ name: "Tabs" }],
+        });
       } else if (!data.success_yn) {
         _open();
       }

@@ -1,5 +1,6 @@
 import Http from "./Http";
 import { sha256 } from "react-native-sha256";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class AppServer {
   //이메일 중복체크
@@ -76,6 +77,9 @@ export default class AppServer {
     push_key,
     update_page_yn,
   }) => {
+    let hash = await sha256(user_pass);
+
+    console.log(">>>>>>>>>>>>>>>>>>> hash : " + hash);
     console.log("회원가입 응답");
     try {
       let response = await Http.post(
@@ -85,7 +89,7 @@ export default class AppServer {
           user_email: user_email,
           user_phone: user_phone,
           phone_conf_number: phone_conf_number,
-          user_pass: user_pass,
+          user_pass: hash,
           social_yn: social_yn,
           social_type: social_type,
           push_key: push_key,
@@ -144,6 +148,37 @@ export default class AppServer {
       return response.data;
     } catch (error) {
       console.log("CARDEALER_API_GET_TOKEN", error);
+      return error.response.data;
+    }
+  };
+
+  //비밀번호 변경
+  static CARDEALER_API_00009 = async ({ user_pass, user_pass_new }) => {
+    console.log("1");
+    const _token = await AsyncStorage.getItem("_token");
+    console.log("2", _token);
+    if (_.isNull(_token) || _.isUndefined(_token)) {
+      throw new Error("Token Error");
+    }
+    console.log("3");
+    HTTP.defaults.headers.common["Authorization"] = _token;
+
+    console.log(">>>>>>>>>>>_token", _token);
+
+    console.log("비밀번호 변경 응답");
+    try {
+      let response = await Http.post(
+        "/cardealer/CARDEALER_API_00009",
+        {
+          user_pass: user_pass,
+          user_pass_new: user_pass_new,
+        },
+        { "Access-Control-Allow-Origin": "*" }
+      );
+      console.log("비밀번호 변경 확인", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("CARDEALER_API_00009", error);
       return error.response.data;
     }
   };
