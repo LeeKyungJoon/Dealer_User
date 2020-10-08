@@ -150,7 +150,7 @@ export default function SignUp({ route, navigation }) {
       setCheckPassword(true);
     } else {
       console.log("비밀번호 체크 no");
-      setErrorMsg2({ msg: "비밀번호가 맞지 않습니다.", color: "#ff5454" });
+      setErrorMsg2({ msg: "비밀번호가 일치하지 않습니다.", color: "#ff5454" });
       setCheckPassword(false);
     }
   };

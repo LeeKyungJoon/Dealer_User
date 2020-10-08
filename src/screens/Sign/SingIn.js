@@ -30,6 +30,7 @@ export default function SingIn({ route, navigation }) {
   const [checkPassword, setCheckPassword] = useState(false);
   const [errorMsg1, setErrorMsg1] = useState({ msg: "", color: "transparent" });
   const [errorMsg2, setErrorMsg2] = useState({ msg: "", color: "transparent" });
+  const [errorMsg3, setErrorMsg3] = useState("");
   const { push_key } = route.params;
 
   const _open = () => {
@@ -91,7 +92,10 @@ export default function SingIn({ route, navigation }) {
       if (data.success_yn) {
         setUserState(data);
 
-        await AsyncStorage.setItem("_token");
+        //await AsyncStorage.clear();
+        //let a = await AsyncStorage.getAllKeys();
+        //console.log(a);
+        await AsyncStorage.setItem("_token", data.token);
         //if (fcm_token !== "NONE" && !fcm_token) {
         //  console.log("3333");
         //  await AsyncStorage.setItem("_token", data.token);
@@ -100,7 +104,14 @@ export default function SingIn({ route, navigation }) {
         navigation.reset({
           routes: [{ name: "Tabs" }],
         });
-      } else if (!data.success_yn) {
+      } else if (
+        !data.success_yn &&
+        data.msg === "타 기기로 접속중인 사용자가 존재합니다"
+      ) {
+        setErrorMsg3(data.msg);
+        _open();
+      } else {
+        setErrorMsg3("이메일 또는 비밀번호가 맞지 않습니다.");
         _open();
       }
     } catch (error) {
@@ -253,9 +264,7 @@ export default function SingIn({ route, navigation }) {
             justifyContent: "space-between",
           }}
         >
-          <Text style={{ ...styles.modaltitle }}>
-            이메일 또는 비밀번호가 맞지 않습니다.
-          </Text>
+          <Text style={{ ...styles.modaltitle }}>{errorMsg3}</Text>
           <TouchableOpacity
             delayPressIn={0}
             onPress={() => {

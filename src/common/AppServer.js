@@ -1,6 +1,7 @@
 import Http from "./Http";
 import { sha256 } from "react-native-sha256";
 import AsyncStorage from "@react-native-community/async-storage";
+import _ from "underscore";
 
 export default class AppServer {
   //이메일 중복체크
@@ -133,11 +134,12 @@ export default class AppServer {
     push_key,
   }) => {
     console.log("로그인 응답");
+    let hash = await sha256(user_pass);
     try {
       let response = await Http.post(
         "/cardealer/CARDEALER_API_GET_TOKEN",
         {
-          user_pass: user_pass,
+          user_pass: hash,
           user_email: user_email,
           uuid: uuid,
           push_key: push_key,
@@ -154,31 +156,128 @@ export default class AppServer {
 
   //비밀번호 변경
   static CARDEALER_API_00009 = async ({ user_pass, user_pass_new }) => {
-    console.log("1");
     const _token = await AsyncStorage.getItem("_token");
-    console.log("2", _token);
-    if (_.isNull(_token) || _.isUndefined(_token)) {
-      throw new Error("Token Error");
-    }
-    console.log("3");
-    HTTP.defaults.headers.common["Authorization"] = _token;
+    Http.defaults.headers.common["Authorization"] = _token;
 
     console.log(">>>>>>>>>>>_token", _token);
 
     console.log("비밀번호 변경 응답");
+    let hash = await sha256(user_pass);
+    let hash1 = await sha256(user_pass_new);
     try {
       let response = await Http.post(
         "/cardealer/CARDEALER_API_00009",
         {
-          user_pass: user_pass,
-          user_pass_new: user_pass_new,
+          user_pass: hash,
+          user_pass_new: hash1,
         },
-        { "Access-Control-Allow-Origin": "*" }
+        { "Access-Control-Allow-Origin": "*", authorization: _token }
       );
       console.log("비밀번호 변경 확인", response.data);
       return response.data;
     } catch (error) {
       console.log("CARDEALER_API_00009", error);
+      return error.response.data;
+    }
+  };
+
+  //휴대전화 변경
+  static CARDEALER_API_00010 = async ({ user_phone, phone_conf_number }) => {
+    const _token = await AsyncStorage.getItem("_token");
+    Http.defaults.headers.common["Authorization"] = _token;
+
+    console.log(">>>>>>>>>>>_token", _token);
+
+    console.log("휴대전화 변경 응답");
+
+    try {
+      let response = await Http.post(
+        "/cardealer/CARDEALER_API_00010",
+        {
+          user_phone: user_phone,
+          phone_conf_number: phone_conf_number,
+        },
+        { "Access-Control-Allow-Origin": "*", authorization: _token }
+      );
+      console.log("휴대전화 변경 확인", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("CARDEALER_API_00010", error);
+      return error.response.data;
+    }
+  };
+
+  //로그아웃
+  static CARDEALER_API_00003 = async () => {
+    const _token = await AsyncStorage.getItem("_token");
+    Http.defaults.headers.common["Authorization"] = _token;
+
+    console.log(">>>>>>>>>>>_token", _token);
+
+    console.log("로그아웃 응답");
+
+    try {
+      let response = await Http.post(
+        "/cardealer/CARDEALER_API_00003",
+        {},
+        { "Access-Control-Allow-Origin": "*", authorization: _token }
+      );
+      console.log("로그아웃 확인", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("CARDEALER_API_00003", error);
+      return error.response.data;
+    }
+  };
+
+  //알림 변경
+  static CARDEALER_API_00011 = async ({ push_agree_yn }) => {
+    const _token = await AsyncStorage.getItem("_token");
+    Http.defaults.headers.common["Authorization"] = _token;
+
+    console.log(">>>>>>>>>>>_token", _token);
+
+    console.log("알림 변경 응답");
+
+    try {
+      let response = await Http.post(
+        "/cardealer/CARDEALER_API_00011",
+        {
+          push_agree_yn: push_agree_yn,
+        },
+        { "Access-Control-Allow-Origin": "*", authorization: _token }
+      );
+      console.log("알림 변경 확인", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("CARDEALER_API_00011", error);
+      return error.response.data;
+    }
+  };
+
+  //공지사항 목록
+  static CARDEALER_API_00013 = async ({ page, range }) => {
+    const _token = await AsyncStorage.getItem("_token");
+    Http.defaults.headers.common["Authorization"] = _token;
+
+    console.log(">>>>>>>>>>>_token", _token);
+
+    console.log("공지사항 목록 응답");
+    try {
+      let response = await Http.get(
+        "/cardealer/CARDEALER_API_00013",
+        {
+          params: {
+            page: page,
+            range: range,
+          },
+        },
+        { "Access-Control-Allow-Origin": "*", authorization: _token }
+      );
+      console.log("공지사항 목록 확인", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("CARDEALER_API_00013", error);
       return error.response.data;
     }
   };

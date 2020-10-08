@@ -12,11 +12,29 @@ import scale from "../../../common/Scale";
 import { Header } from "react-native-elements";
 import Modal from "react-native-modal";
 import InfoContext from "../../../context/InfoContext";
+import AppServer from "../../../common/AppServer";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function MyInfoMain(props) {
   const { state } = useContext(InfoContext);
   const [logoutModal, setLogoutModal] = useState(false);
   const [profiletModal, setProfileModal] = useState(false);
+
+  console.log(state);
+
+  const _logout = async () => {
+    setLogoutModal(false);
+    try {
+      let data = await AppServer.CARDEALER_API_00003();
+      console.log("_logout", data);
+      if (data.success_yn) {
+        await AsyncStorage.clear();
+        props.navigation.reset({ routes: [{ name: "Sign" }] });
+      }
+    } catch (error) {
+      console.log("_logout", error);
+    }
+  };
 
   return (
     <>
@@ -217,7 +235,7 @@ export default function MyInfoMain(props) {
             <TouchableOpacity
               delayPressIn={0}
               onPress={() => {
-                setLogoutModal(false);
+                _logout();
               }}
             >
               <Text style={{ ...styles.modalconfirm }}>확인</Text>

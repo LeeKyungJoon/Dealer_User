@@ -1,12 +1,43 @@
-import React from "react";
-import { View, Text, SafeAreaView,TouchableOpacity,Image ,StyleSheet} from "react-native";
-import scale from "../../../common/Scale";
+import React, { useState, useEffect, useContext } from "react";
 import { Header } from "react-native-elements";
+import scale from "../../../common/Scale";
+import {
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  SafeAreaView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Switch,
+} from "react-native";
+import AppServer from "../../../common/AppServer";
+import InfoContext from "../../../context/InfoContext";
 
-export default function MyInfoMain(props) {
+export default function Noti_Setting({ route, navigation }) {
+  const { state, setUserState } = useContext(InfoContext);
+  const [isEnabled, setIsEnabled] = useState(state.info.push_agree_yn);
+
+  const _toggleSwitch = async () => {
+    setIsEnabled((previousState) => !previousState);
+    console.log(!isEnabled);
+    let data = await AppServer.CARDEALER_API_00011({
+      push_agree_yn: !isEnabled,
+    });
+    console.log("_toggleSwitch", data);
+    if (data.success_yn && data.msg === "success") {
+      setUserState({ ...state.info, push_agree_yn: !isEnabled });
+    }
+  };
+
   return (
     <>
       <Header
+        placement="left"
         backgroundColor={"#459bfe"}
         barStyle="light-content"
         statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
@@ -16,180 +47,101 @@ export default function MyInfoMain(props) {
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
-              style={{ ...styles.search }}
-              source={require("../../../images/search_ic_72.png")}
+              style={{ ...styles.back }}
+              source={require("../../../images/back_ic_80.png")}
             />
           </TouchableOpacity>
         }
-        centerComponent={
-          <Image
-            style={{ ...styles.mainlogo }}
-            source={require("../../../images/logo.png")}
-          />
-        }
-        rightComponent={
-          <TouchableOpacity
-            style={{ marginRight: scale(5) }}
-            delayPressIn={0}
-            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-          >
-            <Image
-              style={{ ...styles.alert }}
-              source={require("../../../images/alert_ic_72.png")}
-            />
-          </TouchableOpacity>
-        }
+        centerComponent={<Text style={{ ...styles.title }}>알림 설정</Text>}
       />
-      <SafeAreaView style={{ flex: 1 }}>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-        <Text>공지사항</Text>
-      </SafeAreaView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={{ ...styles.container }}>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: "space-between",
+            }}
+            keyboardShouldPersistTaps="always"
+          >
+            <View
+              style={{
+                backgroundColor: "#ffffff",
+                paddingBottom: scale(30),
+                paddingTop: scale(15),
+                paddingHorizontal: scale(15),
+                borderBottomColor: "rgba(0, 0, 0, 0.1)",
+                borderBottomWidth: 0.7,
+              }}
+            >
+              <Text style={{ ...styles.subtitle }}>매물알림 설정</Text>
+              <View
+                style={{
+                  marginTop: scale(18.8),
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ ...styles.subsubtitle }}>
+                  앱의 매물 알림을 사용합니다.
+                </Text>
+                <Switch
+                  trackColor={{ false: "#d4d4d4", true: "#459bfe" }}
+                  thumbColor={isEnabled ? "#ffffff" : "#a5a5a5"}
+                  ios_backgroundColor="#d4d4d4"
+                  onValueChange={_toggleSwitch}
+                  value={isEnabled}
+                />
+              </View>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  search: {
-    width: scale(18),
-    height: scale(18),
-  },
-  mainlogo: {
-    width: scale(140),
-    height: scale(22),
-  },
-  alert: {
-    width: scale(18),
-    height: scale(18),
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
-  topimage: {
-    width: scale(330),
-    height: scale(130),
-    borderRadius: 10,
-    alignSelf: "center",
-  },
-  wrapper: {
-    flex: 0.32,
-    paddingTop: scale(20),
-  },
-  categorytitle: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(16),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
-  },
-  carlist: {
-    width: scale(330),
-    height: scale(250),
-    backgroundColor: "#ffffff",
-  },
-  carimage: {
-    width: scale(330),
-    height: scale(182.5),
-  },
-  premark: {
-    width: scale(59),
-    height: scale(59),
-  },
-  like: {
-    width: scale(24),
-    height: scale(24),
-  },
-  avator: {
-    width: scale(50),
-    height: scale(50),
-  },
-  price: {
-    fontFamily: "NotoSans-Bold",
-    fontSize: scale(13),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
-  },
-  carname: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(14),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
-  },
-  carhistory: {
-    fontFamily: "Roboto-Regular",
-    fontSize: scale(10),
-    fontStyle: "normal",
-    letterSpacing: -0.3,
-    textAlign: "left",
-    color: "#999999",
-  },
-  daypeople: {
-    fontFamily: "Roboto-Regular",
-    fontSize: scale(8),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "right",
-    color: "#bebebe",
-  },
-  preicon: {
+  back: {
     width: scale(20),
     height: scale(20),
   },
-  pretext: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(10),
+  title: {
+    fontFamily: "Jalnan",
+    fontSize: scale(16),
+    fontWeight: "normal",
     fontStyle: "normal",
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#1d1d1d",
+    textAlign: "left",
+    color: "#ffffff",
   },
-  onofficon: {
-    width: scale(9),
-    height: scale(9),
+  container: {
+    flex: 1,
+    backgroundColor: "#f6f6f6",
   },
-  real: {
+  subtitle: {
     fontFamily: "Roboto-Bold",
-    fontSize: scale(15),
+    fontSize: scale(16),
     fontStyle: "normal",
+    lineHeight: scale(25),
     letterSpacing: 0,
     textAlign: "left",
-    color: "#459bfe",
+    color: "#222222",
   },
-  realcar: {
-    width: scale(157.5),
-    height: scale(130),
-  },
-  smallcarname: {
-    fontFamily: "Roboto-Bold",
-    fontSize: scale(8),
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "left",
-    color: "#459bfe",
-  },
-  review: {
+  subsubtitle: {
     fontFamily: "Roboto-Regular",
-    fontSize: scale(8),
+    fontSize: scale(13),
     fontStyle: "normal",
-    lineHeight: 10,
-    letterSpacing: 0,
     textAlign: "left",
-    color: "#000000",
+    color: "#1d1d1d",
   },
 });

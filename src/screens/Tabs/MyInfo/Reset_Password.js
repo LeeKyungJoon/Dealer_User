@@ -23,15 +23,17 @@ export default function SignUp({ route, navigation }) {
   const [changeCheck, setChangeCheck] = useState("");
   const [checkCurrent, setCheckCurrent] = useState(false);
   const [resultCheck, setResultCheck] = useState(false);
+  const [checkChange1, setCheckChange1] = useState(false);
   const [checkChange, setCheckChange] = useState(false);
   const [errorMsg1, setErrorMsg1] = useState({ msg: "", color: "transparent" });
   const [errorMsg2, setErrorMsg2] = useState({ msg: "", color: "transparent" });
 
   const _current = (currenttext) => {
     setCurrent(currenttext);
-    if (current === "") {
+    if (currenttext === "") {
       setErrorMsg1({ msg: "", color: "transparent" });
       setCheckCurrent(false);
+      setResultCheck(false);
     } else if (regExp.test(currenttext)) {
       console.log("비밀번호 형식 ok");
       setErrorMsg1({ msg: "", color: "transparent" });
@@ -43,6 +45,39 @@ export default function SignUp({ route, navigation }) {
     }
   };
 
+  const _change = (passwordtext) => {
+    let regExp = /^[a-zA-Z0-9]{8,20}$/;
+    setChange(passwordtext);
+    if (passwordtext === "") {
+      setErrorMsg2({ msg: "", color: "transparent" });
+      setCheckChange1(false);
+    } else if (regExp.test(passwordtext)) {
+      console.log("비밀번호 형식 ok");
+      setErrorMsg2({ msg: "", color: "transparent" });
+      setCheckChange1(true);
+    } else {
+      console.log("비밀번호 형식 no");
+      setErrorMsg2({ msg: "비밀번호 형식이 맞지 않습니다.", color: "#ff5454" });
+      setCheckChange1(false);
+    }
+  };
+
+  const _changeCheck = (passwordtext) => {
+    setChangeCheck(passwordtext);
+    if (passwordtext === "") {
+      setCheckChange(false);
+      setErrorMsg2({ msg: "", color: "transparent" });
+    } else if (change === passwordtext) {
+      console.log("비밀번호 체크 ok");
+      setErrorMsg2({ msg: "", color: "transparent" });
+      setCheckChange(true);
+    } else {
+      console.log("비밀번호 체크 no");
+      setErrorMsg2({ msg: "비밀번호가 일치하지 않습니다.", color: "#ff5454" });
+      setCheckChange(false);
+    }
+  };
+
   const _changeComplete = async () => {
     try {
       let data = await AppServer.CARDEALER_API_00009({
@@ -50,7 +85,18 @@ export default function SignUp({ route, navigation }) {
         user_pass_new: changeCheck,
       });
       console.log("_changeComplete", data);
-    } catch (error) {}
+
+      if (!data.success_yn && data.msg === "비밀번호가 일치하지 않습니다") {
+        setResultCheck(true);
+        setErrorMsg1({ msg: "비밀번호가 맞지 않습니다.", color: "#ff0000" });
+      } else if (data.success_yn && data.msg === "success") {
+        setResultCheck(false);
+        setErrorMsg1({ msg: "", color: "transparent" });
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.log("_changeComplete", error);
+    }
   };
 
   return (
@@ -104,9 +150,7 @@ export default function SignUp({ route, navigation }) {
                   marginTop: scale(9),
                   paddingHorizontal: scale(10),
                   borderColor:
-                    current.length > 0 && resultCheck === true
-                      ? "#ff0000"
-                      : "#dddddd",
+                    current.length > 0 && resultCheck ? "#ff0000" : "#dddddd",
                 }}
               >
                 <TextInput
@@ -139,6 +183,16 @@ export default function SignUp({ route, navigation }) {
                   </TouchableOpacity>
                 ) : null}
               </View>
+              <Text
+                style={{
+                  ...styles.error,
+                  color: errorMsg1.color,
+                  marginLeft: scale(10),
+                  marginTop: scale(3),
+                }}
+              >
+                {errorMsg1.msg}
+              </Text>
               <Text style={{ ...styles.subsubtitle, marginTop: scale(50) }}>
                 변경할 비밀번호
               </Text>
@@ -150,6 +204,10 @@ export default function SignUp({ route, navigation }) {
                 }
                 placeholderTextColor={"#bababa"}
                 secureTextEntry={true}
+                value={change}
+                onChangeText={(text) => {
+                  _change(text);
+                }}
               />
 
               <TextInput
@@ -157,9 +215,27 @@ export default function SignUp({ route, navigation }) {
                 style={{ ...styles.inputstyle, marginTop: scale(10) }}
                 placeholder={"비밀번호를 확인하세요."}
                 placeholderTextColor={"#bababa"}
+                secureTextEntry={true}
+                value={changeCheck}
+                onChangeText={(text) => {
+                  _changeCheck(text);
+                }}
               />
+              <Text
+                style={{
+                  ...styles.error,
+                  color: errorMsg2.color,
+                  marginLeft: scale(10),
+                  marginTop: scale(3),
+                }}
+              >
+                {errorMsg2.msg}
+              </Text>
             </View>
             <TouchableOpacity
+              disabled={
+                checkCurrent && checkChange1 && checkChange ? false : true
+              }
               onPress={() => {
                 _changeComplete();
               }}
@@ -169,7 +245,10 @@ export default function SignUp({ route, navigation }) {
                 justifyContent: "center",
                 marginBottom: Platform.OS === "ios" ? 0 : scale(30),
                 marginTop: scale(60),
-                backgroundColor: "#b9b9b9",
+                backgroundColor:
+                  checkCurrent && checkChange1 && checkChange
+                    ? "#001740"
+                    : "#b9b9b9",
               }}
               delayPressIn={0}
             >
@@ -272,5 +351,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.39,
     textAlign: "left",
     color: "#000000",
+  },
+  error: {
+    fontFamily: "Roboto-Regular",
+    fontSize: scale(10),
+    fontStyle: "normal",
+    letterSpacing: -0.3,
+    textAlign: "left",
   },
 });
