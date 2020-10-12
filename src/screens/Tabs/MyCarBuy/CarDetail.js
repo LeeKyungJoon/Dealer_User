@@ -838,7 +838,7 @@ export default function CarDetail() {
             </View>
           </View>
         </ScrollView>
-        <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+        <Modal isVisible={isvisible} style={{ alignItems: "center" }} useNativeDriver={true}>
           <View style={{ ...styles.modal }}>
             <TouchableOpacity
               delayPressIn={0}

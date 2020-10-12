@@ -200,7 +200,7 @@ export default function MyInfoMain(props) {
           </Text>
         </View>
       </View>
-      <Modal isVisible={logoutModal} style={{ alignItems: "center" }}>
+      <Modal isVisible={logoutModal} style={{ alignItems: "center" }} useNativeDriver={true}>
         <View
           style={{
             ...styles.modalbox,
@@ -243,7 +243,7 @@ export default function MyInfoMain(props) {
           </View>
         </View>
       </Modal>
-      <Modal isVisible={profiletModal} style={{ alignItems: "center" }}>
+      <Modal isVisible={profiletModal} style={{ alignItems: "center" }} useNativeDriver={true}>
         <View
           style={{
             ...styles.modalbox,

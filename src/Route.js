@@ -37,6 +37,7 @@ import DealAddress from "./screens/Tabs/MyCarSell/DealAddress";
 //소비자용_상담요청
 ///////
 //소비자용_공지사항
+import NoticDetail from './screens/Tabs/Notic/NoticDetail'
 ///////
 //소비자용_내정보
 import Head_Question from "./screens/Tabs/MyInfo/Head_Question";
@@ -96,6 +97,7 @@ export default function Route() {
         {/* 소비자용_상담요청 */}
         {/*  */}
         {/* 소비자용_공지사항 */}
+        <Stack.Screen name={"NoticDetail"} component={NoticDetail} />
         {/*  */}
         {/* 소비자용_내정보 */}
         <Stack.Screen name="Head_Question" component={Head_Question} />

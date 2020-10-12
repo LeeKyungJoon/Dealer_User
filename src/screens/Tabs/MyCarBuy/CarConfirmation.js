@@ -133,7 +133,7 @@ export default function CarConfirmation() {
           </View>
         </ScrollView>
       </SafeAreaView>
-      <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+      <Modal isVisible={isvisible} style={{ alignItems: "center" }} useNativeDriver={true}>
         <View
           style={{
             ...styles.modalview,
@@ -153,7 +153,7 @@ export default function CarConfirmation() {
           </TouchableOpacity>
         </View>
       </Modal>
-      <Modal isVisible={isvisible1} style={{ alignItems: "center" }}>
+      <Modal isVisible={isvisible1} style={{ alignItems: "center" }} useNativeDriver={true}>
         <View
           style={{
             ...styles.modalview,
@@ -175,7 +175,7 @@ export default function CarConfirmation() {
           </TouchableOpacity>
         </View>
       </Modal>
-      <Modal isVisible={isvisible2} style={{ alignItems: "center" }}>
+      <Modal isVisible={isvisible2} style={{ alignItems: "center" }} useNativeDriver={true}>
         <View
           style={{
             ...styles.modalview,

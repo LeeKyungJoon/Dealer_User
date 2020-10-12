@@ -265,7 +265,7 @@ export default function DepositAccount() {
           {/*<Text style={{ ...styles.bottombuttontext }}>입금계좌요청</Text>*/}
           <Text style={{ ...styles.bottombuttontext }}>입금완료</Text>
         </TouchableOpacity>
-        <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+        <Modal isVisible={isvisible} style={{ alignItems: "center" }} useNativeDriver={true}>
           <View
             style={{
               ...styles.modalview,

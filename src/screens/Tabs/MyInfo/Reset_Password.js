@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import AppServer from "../../../common/AppServer";
 
-export default function SignUp({ route, navigation }) {
+export default function Reset_Password({ route, navigation }) {
   let regExp = /^[a-zA-Z0-9]{8,20}$/;
   const [current, setCurrent] = useState("");
   const [change, setChange] = useState("");

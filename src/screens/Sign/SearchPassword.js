@@ -301,7 +301,7 @@ export default function SearchPassword({ route, navigation }) {
           </ScrollView>
         </SafeAreaView>
       </TouchableWithoutFeedback>
-      <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+      <Modal isVisible={isvisible} style={{ alignItems: "center" }} useNativeDriver={true}>
         <View
           style={{
             ...styles.modalbox,

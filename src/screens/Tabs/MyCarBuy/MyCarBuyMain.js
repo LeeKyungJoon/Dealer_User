@@ -428,7 +428,7 @@ export default function MyCarBuyMain() {
               </View>
             </View>
           </ScrollView>
-          <Modal isVisible={isvisible} style={{ alignItems: "center" }}>
+          <Modal isVisible={isvisible} style={{ alignItems: "center" }} useNativeDriver={true}>
             <View
               style={{
                 ...styles.modalview,
@@ -451,7 +451,7 @@ export default function MyCarBuyMain() {
               </TouchableOpacity>
             </View>
           </Modal>
-          <Modal isVisible={isvisible1} style={{ alignItems: "center" }}>
+          <Modal isVisible={isvisible1} style={{ alignItems: "center" }} useNativeDriver={true}>
             <View
               style={{
                 ...styles.modalview,

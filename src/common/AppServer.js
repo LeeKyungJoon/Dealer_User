@@ -281,4 +281,30 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //공지사항 상세내용
+  static CARDEALER_API_00014 = async ({ notice_no }) => {
+    const _token = await AsyncStorage.getItem("_token");
+    Http.defaults.headers.common["Authorization"] = _token;
+
+    console.log(">>>>>>>>>>>_token", _token);
+
+    console.log("공지사항 상세내용 응답");
+    try {
+      let response = await Http.get(
+        "/cardealer/CARDEALER_API_00014",
+        {
+          params: {
+            notice_no: notice_no
+          },
+        },
+        { "Access-Control-Allow-Origin": "*", authorization: _token }
+      );
+      console.log("공지사항 상세내용 확인", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("CARDEALER_API_00014", error);
+      return error.response.data;
+    }
+  };
 }
