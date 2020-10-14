@@ -5,6 +5,8 @@ import _ from 'underscore';
 import fs from 'react-native-fs';
 import ImgToBase64 from 'react-native-image-base64';
 import FormData from 'form-data';
+import Constants from './Constants';
+import axios from 'axios';
 
 export default class AppServer {
   //이메일 중복체크
@@ -352,4 +354,34 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  static FILE_UPLOAD = async (path) => {
+    const _token = await AsyncStorage.getItem('_token');
+    const formData = new FormData();
+    formData.append('files', {
+      uri: Platform.OS === 'android' ? `file:///${path}` : path,
+      type: 'image/jpeg',
+      name: 'image.jpg',
+    });
+    axios({
+      url: Constants.SERVER_API+"/cardealer/CARDEALER_API_00012",
+      method: 'POST',
+      data: formData,
+      headers: {
+        Accept: 'application/json',
+        authorization: _token,
+        'Content-Type': 'multipart/form-data'
+      },
+    })
+      .then(function (response) {
+        console.log('*****handle success******');
+        console.log(response.data);
+
+      })
+      .catch(function (response) {
+        console.log('*****handle failure******');
+        console.log(response);
+      });
+  };
+
 }
