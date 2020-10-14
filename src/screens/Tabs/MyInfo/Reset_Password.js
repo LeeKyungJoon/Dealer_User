@@ -17,7 +17,7 @@ import {
 import AppServer from "../../../common/AppServer";
 
 export default function Reset_Password({ route, navigation }) {
-  let regExp = /^[a-zA-Z0-9]{8,20}$/;
+  let regExp = /^[a-zA-Z0-9]{7,20}$/;
   const [current, setCurrent] = useState("");
   const [change, setChange] = useState("");
   const [changeCheck, setChangeCheck] = useState("");
@@ -46,7 +46,7 @@ export default function Reset_Password({ route, navigation }) {
   };
 
   const _change = (passwordtext) => {
-    let regExp = /^[a-zA-Z0-9]{8,20}$/;
+    let regExp = /^[a-zA-Z0-9]{7,20}$/;
     setChange(passwordtext);
     if (passwordtext === "") {
       setErrorMsg2({ msg: "", color: "transparent" });
@@ -157,7 +157,7 @@ export default function Reset_Password({ route, navigation }) {
                   autoCapitalize={"none"}
                   style={{ ...styles.rightoninput }}
                   placeholder={
-                    "비밀번호를 입력하세요. (영문, 숫자 포함 8자리 이상)"
+                    "비밀번호를 입력하세요. (영문, 숫자 포함 7자리 이상)"
                   }
                   placeholderTextColor={"#bababa"}
                   secureTextEntry={true}
@@ -200,7 +200,7 @@ export default function Reset_Password({ route, navigation }) {
                 autoCapitalize={"none"}
                 style={{ ...styles.inputstyle, marginTop: scale(9) }}
                 placeholder={
-                  "비밀번호를 입력하세요. (영문, 숫자 포함 8자리 이상)"
+                  "비밀번호를 입력하세요. (영문, 숫자 포함 7자리 이상)"
                 }
                 placeholderTextColor={"#bababa"}
                 secureTextEntry={true}

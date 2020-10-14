@@ -64,7 +64,7 @@ export default function SingIn({ route, navigation }) {
   };
 
   const _password = (passwordtext) => {
-    let regExp = /^[a-zA-Z0-9]{8,20}$/;
+    let regExp = /^[a-zA-Z0-9]{7,20}$/;
     setPassword(passwordtext);
     if (passwordtext === "") {
       setCheckPassword(false);
@@ -198,7 +198,7 @@ export default function SingIn({ route, navigation }) {
                 autoCapitalize={"none"}
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
                 placeholder={
-                  "비밀번호를 입력하세요. (영문, 숫자 포함 8자리 이상)"
+                  "비밀번호를 입력하세요. (영문, 숫자 포함 7자리 이상)"
                 }
                 placeholderTextColor={"#bababa"}
                 secureTextEntry={true}

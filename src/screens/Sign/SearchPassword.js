@@ -310,7 +310,7 @@ export default function SearchPassword({ route, navigation }) {
           }}
         >
           <Text style={{ ...styles.modaltitle }}>
-            이메일로 임시 비밀번호가 전송됐습니다.
+            문자로 임시 비밀번호가 전송됐습니다.
           </Text>
           <TouchableOpacity
             delayPressIn={0}
