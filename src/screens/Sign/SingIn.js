@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../common/Scale";
+import React, { useState, useEffect, useContext } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -13,24 +13,24 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import Modal from "react-native-modal";
-import AppServer from "../../common/AppServer";
-import DeviceInfo from "react-native-device-info";
-import InfoContext from "../../context/InfoContext";
-import AsyncStorage from "@react-native-community/async-storage";
+} from 'react-native';
+import Modal from 'react-native-modal';
+import AppServer from '../../common/AppServer';
+import DeviceInfo from 'react-native-device-info';
+import InfoContext from '../../context/InfoContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function SingIn({ route, navigation }) {
   const { setUserState, state } = useContext(InfoContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [uuid, setUuid] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [uuid, setUuid] = useState('');
   const [isvisible, setIsvisible] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
   const [checkPassword, setCheckPassword] = useState(false);
-  const [errorMsg1, setErrorMsg1] = useState({ msg: "", color: "transparent" });
-  const [errorMsg2, setErrorMsg2] = useState({ msg: "", color: "transparent" });
-  const [errorMsg3, setErrorMsg3] = useState("");
+  const [errorMsg1, setErrorMsg1] = useState({ msg: '', color: 'transparent' });
+  const [errorMsg2, setErrorMsg2] = useState({ msg: '', color: 'transparent' });
+  const [errorMsg3, setErrorMsg3] = useState('');
   const { push_key } = route.params;
 
   const _open = () => {
@@ -49,16 +49,16 @@ export default function SingIn({ route, navigation }) {
   const _email = (emailtext) => {
     let regExp = /@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     setEmail(emailtext);
-    if (emailtext === "") {
+    if (emailtext === '') {
       setCheckEmail(false);
-      setErrorMsg1({ msg: "", color: "transparent" });
+      setErrorMsg1({ msg: '', color: 'transparent' });
     } else if (regExp.test(emailtext)) {
-      console.log("이메일 형식 ok");
-      setErrorMsg1({ msg: "", color: "transparent" });
+      console.log('이메일 형식 ok');
+      setErrorMsg1({ msg: '', color: 'transparent' });
       setCheckEmail(true);
     } else {
-      console.log("이메일 형식 no");
-      setErrorMsg1({ msg: "이메일 형식이 맞지 않습니다.", color: "#ff5454" });
+      console.log('이메일 형식 no');
+      setErrorMsg1({ msg: '이메일 형식이 맞지 않습니다.', color: '#ff5454' });
       setCheckEmail(false);
     }
   };
@@ -66,17 +66,17 @@ export default function SingIn({ route, navigation }) {
   const _password = (passwordtext) => {
     let regExp = /^[a-zA-Z0-9]{7,20}$/;
     setPassword(passwordtext);
-    if (passwordtext === "") {
+    if (passwordtext === '') {
       setCheckPassword(false);
-      setErrorMsg2({ msg: "", color: "transparent" });
+      setErrorMsg2({ msg: '', color: 'transparent' });
     } else if (regExp.test(passwordtext)) {
-      console.log("비밀번호 형식 ok");
+      console.log('비밀번호 형식 ok');
       setCheckPassword(true);
-      setErrorMsg2({ msg: "", color: "transparent" });
+      setErrorMsg2({ msg: '', color: 'transparent' });
     } else {
-      console.log("비밀번호 형식 no");
+      console.log('비밀번호 형식 no');
       setCheckPassword(false);
-      setErrorMsg2({ msg: "비밀번호 형식이 맞지 않습니다.", color: "#ff5454" });
+      setErrorMsg2({ msg: '비밀번호 형식이 맞지 않습니다.', color: '#ff5454' });
     }
   };
 
@@ -88,39 +88,39 @@ export default function SingIn({ route, navigation }) {
         uuid: uuid,
         push_key: push_key,
       });
-      console.log("_signIn", data);
+      console.log('_signIn', data);
       if (data.success_yn) {
         setUserState(data);
 
         //await AsyncStorage.clear();
         //let a = await AsyncStorage.getAllKeys();
         //console.log(a);
-        await AsyncStorage.setItem("_token", data.token);
+        await AsyncStorage.setItem('_token', data.token);
         //if (fcm_token !== "NONE" && !fcm_token) {
         //  console.log("3333");
         //  await AsyncStorage.setItem("_token", data.token);
         //  console.log("4444");
         //}
         navigation.reset({
-          routes: [{ name: "Tabs" }],
+          routes: [{ name: 'Tabs' }],
         });
       } else if (
         !data.success_yn &&
-        data.msg === "타 기기로 접속중인 사용자가 존재합니다"
+        data.msg === '타 기기로 접속중인 사용자가 존재합니다'
       ) {
         setErrorMsg3(data.msg);
         _open();
       } else {
-        setErrorMsg3("이메일 또는 비밀번호가 맞지 않습니다.");
+        setErrorMsg3('이메일 또는 비밀번호가 맞지 않습니다.');
         _open();
       }
     } catch (error) {
-      console.log("_singIn", error);
+      console.log('_singIn', error);
     }
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", async () => {
+    const unsubscribe = navigation.addListener('focus', async () => {
       //setPaused(!paused);
       _getUUID();
     });
@@ -131,9 +131,9 @@ export default function SingIn({ route, navigation }) {
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
@@ -149,7 +149,7 @@ export default function SingIn({ route, navigation }) {
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../images/back_ic_80.png")}
+              source={require('../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
@@ -163,7 +163,7 @@ export default function SingIn({ route, navigation }) {
             }}
             contentContainerStyle={{
               flexGrow: 1,
-              justifyContent: "space-between",
+              justifyContent: 'space-between',
             }}
             keyboardShouldPersistTaps="always"
           >
@@ -172,10 +172,10 @@ export default function SingIn({ route, navigation }) {
                 이메일 주소를 입력해주세요
               </Text>
               <TextInput
-                autoCapitalize={"none"}
+                autoCapitalize={'none'}
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"이메일 주소를 입력하세요."}
-                placeholderTextColor={"#bababa"}
+                placeholder={'이메일 주소를 입력하세요.'}
+                placeholderTextColor={'#bababa'}
                 value={email}
                 onChangeText={(text) => {
                   _email(text);
@@ -195,12 +195,12 @@ export default function SingIn({ route, navigation }) {
                 비밀번호를 입력해주세요
               </Text>
               <TextInput
-                autoCapitalize={"none"}
+                autoCapitalize={'none'}
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
                 placeholder={
-                  "비밀번호를 입력하세요. (영문, 숫자 포함 7자리 이상)"
+                  '비밀번호를 입력하세요. (영문, 숫자 포함 7자리 이상)'
                 }
-                placeholderTextColor={"#bababa"}
+                placeholderTextColor={'#bababa'}
                 secureTextEntry={true}
                 value={password}
                 onChangeText={(text) => {
@@ -219,34 +219,45 @@ export default function SingIn({ route, navigation }) {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("SearchPassword");
+                  navigation.navigate('SearchPassword');
                 }}
                 delayPressIn={0}
                 style={{
-                  alignItems: "center",
-                  flexDirection: "row",
+                  alignItems: 'center',
+                  flexDirection: 'row',
                   marginTop: scale(5),
                 }}
               >
                 <Text style={{ ...styles.search }}>비밀번호 찾기</Text>
                 <Image
                   style={{ ...styles.more }}
-                  source={require("../../images/more_ic_40.png")}
+                  source={require('../../images/more_ic_40.png')}
                 />
               </TouchableOpacity>
             </View>
             <TouchableOpacity
               onPress={() => {
-                _signIn();
+                //_signIn();
+                navigation.reset({
+                  routes: [{ name: 'Tabs' }],
+                });
               }}
-              disabled={checkEmail && checkPassword ? false : true}
+              //disabled={checkEmail && checkPassword ? false : true}
+              //style={{
+              //  ...styles.bottombutton,
+              //  backgroundColor:
+              //    checkEmail && checkPassword ? '#459bfe' : '#dddddd',
+              //  alignItems: 'center',
+              //  justifyContent: 'center',
+              //  marginBottom: Platform.OS === 'ios' ? 0 : scale(30),
+              //  marginTop: scale(60),
+              //}}
               style={{
                 ...styles.bottombutton,
-                backgroundColor:
-                  checkEmail && checkPassword ? "#459bfe" : "#dddddd",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: Platform.OS === "ios" ? 0 : scale(30),
+                backgroundColor: '#459bfe',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: Platform.OS === 'ios' ? 0 : scale(30),
                 marginTop: scale(60),
               }}
               delayPressIn={0}
@@ -256,12 +267,16 @@ export default function SingIn({ route, navigation }) {
           </ScrollView>
         </SafeAreaView>
       </TouchableWithoutFeedback>
-      <Modal isVisible={isvisible} style={{ alignItems: "center" }} useNativeDriver={true}>
+      <Modal
+        isVisible={isvisible}
+        style={{ alignItems: 'center' }}
+        useNativeDriver={true}
+      >
         <View
           style={{
             ...styles.modalbox,
             padding: scale(20),
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           <Text style={{ ...styles.modaltitle }}>{errorMsg3}</Text>
@@ -285,42 +300,42 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
   subtitle: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(16),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#222222",
+    textAlign: 'left',
+    color: '#222222',
   },
   inputstyle: {
     width: scale(330),
     height: scale(40),
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: "#dddddd",
+    borderColor: '#dddddd',
     borderRadius: 10,
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.39,
-    textAlign: "left",
-    color: "#000000",
+    textAlign: 'left',
+    color: '#000000',
     paddingHorizontal: scale(10),
   },
   more: {
@@ -328,13 +343,13 @@ const styles = StyleSheet.create({
     height: scale(10),
   },
   search: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(12),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: -scale(0.36),
-    textAlign: "left",
-    color: "#459bfe",
+    textAlign: 'left',
+    color: '#459bfe',
   },
   bottombutton: {
     width: scale(330),
@@ -342,44 +357,44 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   bottomtext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(15),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
   modalbox: {
     width: scale(280),
     height: scale(100),
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 0.3,
-    borderColor: "#707070",
+    borderColor: '#707070',
   },
   modaltitle: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   modalconfirm: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#459bfe",
+    textAlign: 'right',
+    color: '#459bfe',
   },
   error: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.3,
-    textAlign: "left",
+    textAlign: 'left',
   },
 });

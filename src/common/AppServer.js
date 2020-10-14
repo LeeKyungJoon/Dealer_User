@@ -2,7 +2,7 @@ import Http from './Http';
 import { sha256 } from 'react-native-sha256';
 import AsyncStorage from '@react-native-community/async-storage';
 import _ from 'underscore';
-//import fs from 'react-native-fs';
+import fs from 'react-native-fs';
 import ImgToBase64 from 'react-native-image-base64';
 import FormData from 'form-data';
 
@@ -321,31 +321,13 @@ export default class AppServer {
     console.log('프로필 이미지 변경 응답', responsedata.uri);
 
     const formdata = new FormData();
-    //formdata.append('file', 'data:image/jpeg;base64,' + uri);
-    //formdata.append('file', {
-    //  uri: response.uri,
-    //  type: response.type,
-    //  name: response.fileName,
-    //});
 
-    //formdata.append(
-    //  'files',
-    //  await ImgToBase64.getBase64String(responsedata.uri),
-    //);
-    formdata.append('file', {
+    formdata.append('files[file]', {
       data: responsedata.data,
       type: responsedata.type,
       name: responsedata.fileName,
     });
     console.log('3');
-    //const data = [
-    //  {
-    //    name: 'file_review',
-    //    filename: new Date().getTime() + `.${responsedata.type}`,
-    //    files: await ImgToBase64.getBase64String(responsedata.uri),
-    //    type: responsedata.type,
-    //  },
-    //];
 
     try {
       console.log('1');

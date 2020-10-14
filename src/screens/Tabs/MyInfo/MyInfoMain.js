@@ -104,7 +104,7 @@ export default function MyInfoMain(props) {
             <TouchableOpacity
               onPress={() => {
                 //setProfileModal(true);
-                _selectPhoto();
+                //_selectPhoto();
               }}
               style={{ position: 'absolute', right: -17, bottom: 0 }}
               delayPressIn={0}

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../../common/Scale";
+import React, { useState } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -14,121 +14,157 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ImageBackground,
-} from "react-native";
-import Modal from "react-native-modal";
-import Swiper from "react-native-swiper";
+} from 'react-native';
+import Modal from 'react-native-modal';
+import Swiper from 'react-native-swiper';
 
-export default function MyCarBuyMain() {
+export default function MyCarBuyMain({ route, navigation }) {
   const [isvisible, setIsvisible] = useState(false);
   const [isvisible1, setIsvisible1] = useState(false);
+  const [premiumCheck, setPremiumCheck] = useState(false);
+  const [likeCheck, setLikeCheck] = useState(false);
 
   return (
     <>
       <Header
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SearchCar');
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
               style={{ ...styles.search }}
-              source={require("../../../images/search_ic_72.png")}
+              source={require('../../../images/search_ic_72.png')}
             />
           </TouchableOpacity>
         }
         centerComponent={
           <Image
             style={{ ...styles.mainlogo }}
-            source={require("../../../images/logo.png")}
+            source={require('../../../images/logo.png')}
           />
         }
-        rightComponent={
-          <TouchableOpacity
-            style={{ marginRight: scale(5) }}
-            delayPressIn={0}
-            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-          >
-            <Image
-              style={{ ...styles.alert }}
-              source={require("../../../images/alert_ic_72.png")}
-            />
-          </TouchableOpacity>
-        }
+        //rightComponent={
+        //  <TouchableOpacity
+        //    style={{ marginRight: scale(5) }}
+        //    delayPressIn={0}
+        //    hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
+        //  >
+        //    <Image
+        //      style={{ ...styles.alert }}
+        //      source={require('../../../images/alert_ic_72.png')}
+        //    />
+        //  </TouchableOpacity>
+        //}
       />
       <SafeAreaView style={{ ...styles.container }}>
-        <Swiper
-          containerStyle={styles.wrapper}
-          paginationStyle={{ marginBottom: scale(10) }}
-          activeDotColor={"#001740"}
-          loop={false}
+        <ScrollView
+          style={{
+            backgroundColor: '#ffffff',
+          }}
+          contentContainerStyle={{ paddingBottom: scale(15) }}
         >
-          <Image
-            style={{ ...styles.topimage }}
-            source={require("../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png")}
-          />
-          <Image
-            style={{ ...styles.topimage }}
-            source={require("../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png")}
-          />
-          <Image
-            style={{ ...styles.topimage }}
-            source={require("../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png")}
-          />
-        </Swiper>
-        <View style={{ flex: 1 }}>
-          <ScrollView
+          <View
             style={{
-              paddingHorizontal: scale(15),
-              paddingTop: scale(20),
-              backgroundColor: "#f9f9f9",
+              width: '100%',
+              paddingVertical: scale(20),
             }}
-            contentContainerStyle={{ paddingBottom: scale(15) }}
+          >
+            <Swiper
+              loop={false}
+              height={scale(130)}
+              style={{ height: scale(200), flex: 0 }}
+              containerStyle={{
+                height: scale(130),
+                flex: 0,
+              }}
+              activeDotColor={'#001740'}
+              dotColor={'#e9e9e9'}
+              paginationStyle={{ bottom: 10 }}
+            >
+              <Image
+                style={{ ...styles.topimage }}
+                source={require('../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png')}
+              />
+              <Image
+                style={{ ...styles.topimage }}
+                source={require('../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png')}
+              />
+              <Image
+                style={{ ...styles.topimage }}
+                source={require('../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png')}
+              />
+            </Swiper>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: scale(15),
+              backgroundColor: '#f9f9f9',
+            }}
           >
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 marginBottom: scale(12),
+                marginTop: scale(15),
               }}
             >
               <Text style={{ ...styles.categorytitle }}>
-                인기 매물 <Text style={{ color: "#459bfe" }}>#국산차</Text>
+                인기 매물 <Text style={{ color: '#459bfe' }}>#국산차</Text>
               </Text>
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  premiumCheck ? setPremiumCheck(false) : setPremiumCheck(true);
+                }}
+                delayPressIn={0}
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 <Image
                   style={{ ...styles.preicon }}
-                  source={require("../../../images/premium_on.png")}
+                  source={require('../../../images/premium_on.png')}
                 />
                 <Text style={{ ...styles.pretext, marginRight: scale(3) }}>
                   프리미엄 매물 모아보기
                 </Text>
-                <TouchableOpacity delayPressIn={0}>
+                {premiumCheck ? (
                   <Image
                     style={{ ...styles.onofficon }}
-                    source={require("../../../images/check_off_ic_40.png")}
+                    source={require('../../../images/check_on_ic_40.png')}
                   />
-                </TouchableOpacity>
-              </View>
+                ) : (
+                  <Image
+                    style={{ ...styles.onofficon }}
+                    source={require('../../../images/check_off_ic_40.png')}
+                  />
+                )}
+              </TouchableOpacity>
             </View>
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('CarDetail');
+              }}
+              delayPressIn={0}
               style={{
                 ...styles.carlist,
                 elevation: 1.5,
-                shadowColor: "#000",
+                shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
                   height: 1,
@@ -139,53 +175,65 @@ export default function MyCarBuyMain() {
             >
               <ImageBackground
                 style={{ ...styles.carimage }}
-                source={require("../../../images/k_7_02.png")}
+                source={require('../../../images/k_7_02.png')}
               >
                 <View
                   style={{
                     width: scale(90),
                     height: scale(30),
-                    backgroundColor: "#001740",
-                    position: "absolute",
+                    backgroundColor: '#001740',
+                    position: 'absolute',
                     bottom: 0,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Text style={{ ...styles.price }}>2,000만원</Text>
                 </View>
                 <Image
-                  style={{ ...styles.premark, position: "absolute" }}
-                  source={require("../../../images/premium.png")}
+                  style={{ ...styles.premark, position: 'absolute' }}
+                  source={require('../../../images/premium.png')}
                 />
                 <TouchableOpacity
+                  onPress={() => {
+                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
+                  }}
                   delayPressIn={0}
-                  style={{ position: "absolute", right: 5, top: 5 }}
+                  style={{ position: 'absolute', right: 5, top: 5 }}
                 >
-                  <Image
-                    style={{
-                      ...styles.like,
-                    }}
-                    source={require("../../../images/likes_off.png")}
-                  />
+                  {likeCheck ? (
+                    <Image
+                      style={{
+                        ...styles.like,
+                      }}
+                      source={require('../../../images/likes_on.png')}
+                    />
+                  ) : (
+                    <Image
+                      style={{
+                        ...styles.like,
+                      }}
+                      source={require('../../../images/likes_off.png')}
+                    />
+                  )}
                 </TouchableOpacity>
               </ImageBackground>
 
               <Image
                 style={{
                   ...styles.avator,
-                  position: "absolute",
+                  position: 'absolute',
                   right: 10,
                   bottom: 50,
                 }}
-                source={require("../../../images/shutterstock_682551649.png")}
+                source={require('../../../images/shutterstock_682551649.png')}
               />
               <View style={{ padding: scale(10) }}>
                 <Text style={{ ...styles.carname }}>기아 더뉴 K7</Text>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     marginTop: scale(3),
                   }}
                 >
@@ -195,7 +243,7 @@ export default function MyCarBuyMain() {
                   <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
 
             <Text
               style={{
@@ -204,13 +252,17 @@ export default function MyCarBuyMain() {
                 marginTop: scale(25),
               }}
             >
-              인기 매물 <Text style={{ color: "#459bfe" }}>#수입차</Text>
+              인기 매물 <Text style={{ color: '#459bfe' }}>#수입차</Text>
             </Text>
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('CarDetail');
+              }}
+              delayPressIn={0}
               style={{
                 ...styles.carlist,
                 elevation: 1.5,
-                shadowColor: "#000",
+                shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
                   height: 1,
@@ -221,49 +273,61 @@ export default function MyCarBuyMain() {
             >
               <ImageBackground
                 style={{ ...styles.carimage }}
-                source={require("../../../images/1.png")}
+                source={require('../../../images/1.png')}
               >
                 <View
                   style={{
                     width: scale(90),
                     height: scale(30),
-                    backgroundColor: "#001740",
-                    position: "absolute",
+                    backgroundColor: '#001740',
+                    position: 'absolute',
                     bottom: 0,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Text style={{ ...styles.price }}>5,000만원</Text>
                 </View>
                 <TouchableOpacity
+                  onPress={() => {
+                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
+                  }}
                   delayPressIn={0}
-                  style={{ position: "absolute", right: 5, top: 5 }}
+                  style={{ position: 'absolute', right: 5, top: 5 }}
                 >
-                  <Image
-                    style={{
-                      ...styles.like,
-                    }}
-                    source={require("../../../images/likes_on.png")}
-                  />
+                  {likeCheck ? (
+                    <Image
+                      style={{
+                        ...styles.like,
+                      }}
+                      source={require('../../../images/likes_on.png')}
+                    />
+                  ) : (
+                    <Image
+                      style={{
+                        ...styles.like,
+                      }}
+                      source={require('../../../images/likes_off.png')}
+                    />
+                  )}
                 </TouchableOpacity>
               </ImageBackground>
 
               <Image
                 style={{
                   ...styles.avator,
-                  position: "absolute",
+                  position: 'absolute',
                   right: 10,
                   bottom: 50,
                 }}
-                source={require("../../../images/shutterstock_682551649.png")}
+                source={require('../../../images/shutterstock_682551649.png')}
               />
               <View style={{ padding: scale(10) }}>
                 <Text style={{ ...styles.carname }}>BMW 528i</Text>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     marginTop: scale(3),
                   }}
                 >
@@ -273,26 +337,30 @@ export default function MyCarBuyMain() {
                   <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={{ marginTop: scale(25) }}>
-              <Text style={{ ...styles.real }}>
-                #리얼 후기 <Text style={{ color: "#1d1d1d" }}>확인하기</Text>
+              <Text style={{ ...styles.real, marginBottom: scale(10) }}>
+                #리얼 후기 <Text style={{ color: '#1d1d1d' }}>확인하기</Text>
               </Text>
               <View
                 style={{
                   marginBottom: scale(15),
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  flexWrap: "wrap",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('RealReviewDetail');
+                  }}
+                  delayPressIn={0}
                   style={{
                     width: scale(157.5),
                     height: scale(180),
-                    backgroundColor: "#ffffff",
+                    backgroundColor: '#ffffff',
                     elevation: 1.5,
-                    shadowColor: "#000",
+                    shadowColor: '#000',
                     shadowOffset: {
                       width: 0,
                       height: 1,
@@ -303,25 +371,25 @@ export default function MyCarBuyMain() {
                 >
                   <ImageBackground
                     style={{ ...styles.realcar }}
-                    source={require("../../../images/g_703.png")}
+                    source={require('../../../images/g_703.png')}
                   >
                     <Image
                       style={{
                         ...styles.premark,
-                        position: "absolute",
+                        position: 'absolute',
                       }}
-                      source={require("../../../images/premium.png")}
+                      source={require('../../../images/premium.png')}
                     />
                   </ImageBackground>
                   <Image
                     style={{
                       width: scale(30),
                       height: scale(30),
-                      position: "absolute",
+                      position: 'absolute',
                       right: 4,
                       bottom: 40,
                     }}
-                    source={require("../../../images/shutterstock_682551649.png")}
+                    source={require('../../../images/shutterstock_682551649.png')}
                   />
                   <View
                     style={{
@@ -336,14 +404,18 @@ export default function MyCarBuyMain() {
                       기도합니다. 제발제발 좋게 써주세요.
                     </Text>
                   </View>
-                </View>
-                <View
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('RealReviewDetail');
+                  }}
+                  delayPressIn={0}
                   style={{
                     width: scale(157.5),
                     height: scale(180),
-                    backgroundColor: "#ffffff",
+                    backgroundColor: '#ffffff',
                     elevation: 1.5,
-                    shadowColor: "#000",
+                    shadowColor: '#000',
                     shadowOffset: {
                       width: 0,
                       height: 1,
@@ -355,17 +427,17 @@ export default function MyCarBuyMain() {
                 >
                   <ImageBackground
                     style={{ ...styles.realcar }}
-                    source={require("../../../images/g_703.png")}
+                    source={require('../../../images/g_703.png')}
                   ></ImageBackground>
                   <Image
                     style={{
                       width: scale(30),
                       height: scale(30),
-                      position: "absolute",
+                      position: 'absolute',
                       right: 4,
                       bottom: 40,
                     }}
-                    source={require("../../../images/shutterstock_682551649.png")}
+                    source={require('../../../images/shutterstock_682551649.png')}
                   />
                   <View
                     style={{
@@ -380,14 +452,18 @@ export default function MyCarBuyMain() {
                       기도합니다. 제발제발 좋게 써주세요.
                     </Text>
                   </View>
-                </View>
-                <View
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('RealReviewDetail');
+                  }}
+                  delayPressIn={0}
                   style={{
                     width: scale(157.5),
                     height: scale(180),
-                    backgroundColor: "#ffffff",
+                    backgroundColor: '#ffffff',
                     elevation: 1.5,
-                    shadowColor: "#000",
+                    shadowColor: '#000',
                     shadowOffset: {
                       width: 0,
                       height: 1,
@@ -399,17 +475,17 @@ export default function MyCarBuyMain() {
                 >
                   <ImageBackground
                     style={{ ...styles.realcar }}
-                    source={require("../../../images/g_703.png")}
+                    source={require('../../../images/g_703.png')}
                   ></ImageBackground>
                   <Image
                     style={{
                       width: scale(30),
                       height: scale(30),
-                      position: "absolute",
+                      position: 'absolute',
                       right: 4,
                       bottom: 40,
                     }}
-                    source={require("../../../images/shutterstock_682551649.png")}
+                    source={require('../../../images/shutterstock_682551649.png')}
                   />
                   <View
                     style={{
@@ -424,54 +500,56 @@ export default function MyCarBuyMain() {
                       기도합니다. 제발제발 좋게 써주세요.
                     </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
-          <Modal isVisible={isvisible} style={{ alignItems: "center" }} useNativeDriver={true}>
-            <View
-              style={{
-                ...styles.modalview,
-                paddingHorizontal: scale(20),
-                paddingVertical: scale(16),
-              }}
-            >
-              <Text style={{ ...styles.modaltext }}>
-                주문 요청하신{"\n"}
-                <Text style={{ fontFamily: "Roboto-Bold" }}>
-                  12가3456, 기아, 더뉴 K7, 2017년식
-                </Text>{" "}
-                차량을 지금 바로 구매하실 수 있습니다.
-              </Text>
-              <TouchableOpacity
-                delayPressIn={0}
-                style={{ marginTop: scale(20) }}
-              >
-                <Text style={{ ...styles.modalbutton }}>구매하러 가기</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-          <Modal isVisible={isvisible1} style={{ alignItems: "center" }} useNativeDriver={true}>
-            <View
-              style={{
-                ...styles.modalview,
-                paddingHorizontal: scale(20),
-                paddingVertical: scale(16),
-              }}
-            >
-              <Text style={{ ...styles.modaltext }}>
-                입금이 확인되었습니다. 구매하신 차량을 인수받을 장소와 일정을
-                필히 입력해주세요.
-              </Text>
-              <TouchableOpacity
-                delayPressIn={0}
-                style={{ marginTop: scale(20) }}
-              >
-                <Text style={{ ...styles.modalbutton }}>입력하러 가기</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
+          </View>
+        </ScrollView>
+        <Modal
+          isVisible={isvisible}
+          style={{ alignItems: 'center' }}
+          useNativeDriver={true}
+        >
+          <View
+            style={{
+              ...styles.modalview,
+              paddingHorizontal: scale(20),
+              paddingVertical: scale(16),
+            }}
+          >
+            <Text style={{ ...styles.modaltext }}>
+              주문 요청하신{'\n'}
+              <Text style={{ fontFamily: 'Roboto-Bold' }}>
+                12가3456, 기아, 더뉴 K7, 2017년식
+              </Text>{' '}
+              차량을 지금 바로 구매하실 수 있습니다.
+            </Text>
+            <TouchableOpacity delayPressIn={0} style={{ marginTop: scale(20) }}>
+              <Text style={{ ...styles.modalbutton }}>구매하러 가기</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+        <Modal
+          isVisible={isvisible1}
+          style={{ alignItems: 'center' }}
+          useNativeDriver={true}
+        >
+          <View
+            style={{
+              ...styles.modalview,
+              paddingHorizontal: scale(20),
+              paddingVertical: scale(16),
+            }}
+          >
+            <Text style={{ ...styles.modaltext }}>
+              입금이 확인되었습니다. 구매하신 차량을 인수받을 장소와 일정을 필히
+              입력해주세요.
+            </Text>
+            <TouchableOpacity delayPressIn={0} style={{ marginTop: scale(20) }}>
+              <Text style={{ ...styles.modalbutton }}>입력하러 가기</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </SafeAreaView>
     </>
   );
@@ -492,30 +570,26 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
   topimage: {
     width: scale(330),
     height: scale(130),
     borderRadius: 10,
-    alignSelf: "center",
-  },
-  wrapper: {
-    flex: 0.32,
-    paddingTop: scale(20),
+    alignSelf: 'center',
   },
   categorytitle: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(16),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   carlist: {
     width: scale(330),
     height: scale(250),
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
   carimage: {
     width: scale(330),
@@ -534,106 +608,106 @@ const styles = StyleSheet.create({
     height: scale(50),
   },
   price: {
-    fontFamily: "NotoSans-Bold",
+    fontFamily: 'NotoSans-Bold',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
   carname: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(14),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   carhistory: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.3,
-    textAlign: "left",
-    color: "#999999",
+    textAlign: 'left',
+    color: '#999999',
   },
   daypeople: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(8),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#bebebe",
+    textAlign: 'right',
+    color: '#bebebe',
   },
   preicon: {
     width: scale(20),
     height: scale(20),
   },
   pretext: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#1d1d1d",
+    textAlign: 'right',
+    color: '#1d1d1d',
   },
   onofficon: {
     width: scale(9),
     height: scale(9),
   },
   real: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#459bfe",
+    textAlign: 'left',
+    color: '#459bfe',
   },
   realcar: {
     width: scale(157.5),
     height: scale(130),
   },
   smallcarname: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(8),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#459bfe",
+    textAlign: 'left',
+    color: '#459bfe',
   },
   review: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(8),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: 10,
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#000000",
+    textAlign: 'left',
+    color: '#000000',
   },
   modalview: {
     width: scale(280),
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 0.3,
-    borderColor: "#707070",
+    borderColor: '#707070',
   },
   modaltext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(18),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   modalbutton: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#459bfe",
+    textAlign: 'right',
+    color: '#459bfe',
   },
 });
