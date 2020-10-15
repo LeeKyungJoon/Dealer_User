@@ -5,6 +5,8 @@ import _ from 'underscore';
 import fs from 'react-native-fs';
 import ImgToBase64 from 'react-native-image-base64';
 import FormData from 'form-data';
+import Constants from './Constants';
+import axios from 'axios';
 
 export default class AppServer {
   //이메일 중복체크
