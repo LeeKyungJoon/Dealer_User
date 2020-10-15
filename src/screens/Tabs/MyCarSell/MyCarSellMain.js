@@ -15,7 +15,10 @@ import {
   Keyboard,
   ImageBackground,
 } from 'react-native';
-export default function MyCarSellMain() {
+//import LinearGradient from 'react-native-linear-gradient';
+import Swiper from 'react-native-swiper';
+
+export default function MyCarSellMain({ route, navigation }) {
   return (
     <>
       <Header
@@ -61,63 +64,112 @@ export default function MyCarSellMain() {
         <View style={{ flex: 1 }}>
           <View
             style={{
-              paddingHorizontal: scale(15),
               paddingBottom: scale(30),
               paddingTop: scale(20),
             }}
           >
-            <Image
-              style={{ width: scale(330), height: scale(130) }}
-              source={require('../../../images/banner.png')}
-            />
+            <Swiper
+              loop={false}
+              height={scale(130)}
+              style={{ height: scale(130), flex: 0 }}
+              containerStyle={{
+                height: scale(130),
+                flex: 0,
+              }}
+              activeDotColor={'#ffbe26'}
+              dotColor={'#e9e9e9'}
+              paginationStyle={{ bottom: 10 }}
+            >
+              <Image
+                style={{ ...styles.topimage }}
+                source={require('../../../images/banner.png')}
+              />
+              <Image
+                style={{ ...styles.topimage }}
+                source={require('../../../images/banner.png')}
+              />
+              <Image
+                style={{ ...styles.topimage }}
+                source={require('../../../images/banner.png')}
+              />
+            </Swiper>
+
             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('QuoteRequest');
+              }}
               delayPressIn={0}
               style={{
                 ...styles.topbox,
                 justifyContent: 'center',
                 marginTop: scale(5),
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 0.22,
+                shadowRadius: 2.22,
+                elevation: 3,
+                alignSelf: 'center',
               }}
             >
               <Text style={{ ...styles.topboxtext }}>견적 요청하기</Text>
             </TouchableOpacity>
           </View>
-          <View
-            style={{
-              backgroundColor: '#ffffff',
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: -0.5,
-              },
-              shadowOpacity: 0.2,
-              shadowRadius: 2,
-              elevation: 2.5,
+
+          <ScrollView
+            contentContainerStyle={{
+              paddingBottom: scale(15),
+              marginTop: scale(5),
             }}
           >
-            <Text
-              style={{
-                ...styles.real,
-                paddingVertical: scale(9.2),
-                paddingHorizontal: scale(15),
-              }}
-            >
-              #내차팔기 <Text style={{ color: '#1d1d1d' }}>후기 보기</Text>
-            </Text>
-          </View>
-          <ScrollView
-            style={{ paddingHorizontal: scale(15) }}
-            contentContainerStyle={{ paddingBottom: scale(15) }}
-          >
-            <View style={{ marginTop: scale(5) }}>
+            <View>
               <View
                 style={{
+                  backgroundColor: '#ffffff',
+                  paddingVertical: scale(1),
+                  shadowColor: '#a6a6a6',
+                  shadowOffset: {
+                    width: 0,
+                    height: -1,
+                  },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 2,
+                  elevation: 2.5,
+                  borderTopColor: '#e6e6e6',
+                  borderTopWidth: 0.5,
+                  borderBottomColor: '#e6e6e6',
+                  borderBottomWidth: 0.5,
+                }}
+              >
+                <Text
+                  style={{
+                    ...styles.real,
+
+                    paddingVertical: scale(9.2),
+                    paddingHorizontal: scale(15),
+                    backgroundColor: '#ffffff',
+                  }}
+                >
+                  #내차팔기 <Text style={{ color: '#1d1d1d' }}>후기 보기</Text>
+                </Text>
+              </View>
+              <View
+                style={{
+                  paddingHorizontal: scale(15),
                   marginBottom: scale(15),
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   flexWrap: 'wrap',
+                  marginTop: scale(5),
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('RealReviewDetail');
+                  }}
+                  delayPressIn={0}
                   style={{
                     width: scale(157.5),
                     height: scale(180),
@@ -174,8 +226,12 @@ export default function MyCarSellMain() {
                       기도합니다. 제발제발 좋게 써주세요.
                     </Text>
                   </View>
-                </View>
-                <View
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('RealReviewDetail');
+                  }}
+                  delayPressIn={0}
                   style={{
                     width: scale(157.5),
                     height: scale(180),
@@ -189,10 +245,15 @@ export default function MyCarSellMain() {
                     shadowOpacity: 0.2,
                     shadowRadius: 1.41,
                     marginBottom: scale(20),
+                    borderRadius: 5,
                   }}
                 >
                   <ImageBackground
                     style={{ ...styles.realcar }}
+                    imageStyle={{
+                      borderTopLeftRadius: 5,
+                      borderTopRightRadius: 5,
+                    }}
                     source={require('../../../images/g_703.png')}
                   ></ImageBackground>
                   <Image
@@ -218,8 +279,12 @@ export default function MyCarSellMain() {
                       기도합니다. 제발제발 좋게 써주세요.
                     </Text>
                   </View>
-                </View>
-                <View
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('RealReviewDetail');
+                  }}
+                  delayPressIn={0}
                   style={{
                     width: scale(157.5),
                     height: scale(180),
@@ -233,10 +298,15 @@ export default function MyCarSellMain() {
                     shadowOpacity: 0.2,
                     shadowRadius: 1.41,
                     marginBottom: scale(20),
+                    borderRadius: 5,
                   }}
                 >
                   <ImageBackground
                     style={{ ...styles.realcar }}
+                    imageStyle={{
+                      borderTopLeftRadius: 5,
+                      borderTopRightRadius: 5,
+                    }}
                     source={require('../../../images/g_703.png')}
                   ></ImageBackground>
                   <Image
@@ -262,7 +332,7 @@ export default function MyCarSellMain() {
                       기도합니다. 제발제발 좋게 써주세요.
                     </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
           </ScrollView>
@@ -335,5 +405,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     color: '#ffffff',
+  },
+  topimage: {
+    width: scale(330),
+    height: scale(130),
+    borderRadius: 10,
+    alignSelf: 'center',
   },
 });

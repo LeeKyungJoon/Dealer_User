@@ -1,6 +1,6 @@
-import React from "react";
-import { Header } from "react-native-elements";
-import scale from "../../../common/Scale";
+import React from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -13,16 +13,16 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
+} from 'react-native';
 
-export default function BuyCashComplete() {
+export default function BuyCashComplete({ route, navigation }) {
   return (
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
@@ -35,7 +35,7 @@ export default function BuyCashComplete() {
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../../images/back_ic_80.png")}
+              source={require('../../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
@@ -46,12 +46,12 @@ export default function BuyCashComplete() {
           keyboardShouldPersistTaps="always"
           contentContainerStyle={{
             flexGrow: 1,
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'row',
               paddingLeft: scale(15),
               paddingRight: scale(80),
               marginTop: scale(30),
@@ -59,7 +59,7 @@ export default function BuyCashComplete() {
           >
             <Image
               style={{ width: scale(40), height: scale(40) }}
-              source={require("../../../images/dealer_icon_160.png")}
+              source={require('../../../images/dealer_icon_160.png')}
             />
             <Text
               style={{
@@ -69,21 +69,25 @@ export default function BuyCashComplete() {
               }}
             >
               12가3456, 기아, 더뉴 K7, 2017년식 차량이 딜러에게 주문
-              요청되었습니다!{"\n"}판매 여부에 대해 빠른 시간 내로 알림을
+              요청되었습니다!{'\n'}판매 여부에 대해 빠른 시간 내로 알림을
               보내드릴게요
             </Text>
           </View>
           <TouchableOpacity
+            onPress={() => {
+              //navigation.reset({ routes: [{ name: '' }] });
+              navigation.popToTop();
+            }}
             delayPressIn={0}
             style={{
               ...styles.bottombutton,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               marginBottom: scale(15),
               marginHorizontal: scale(15),
             }}
           >
-            <Text style={{ ...styles.bottombuttontext }}>주문하기</Text>
+            <Text style={{ ...styles.bottombuttontext }}>확인</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
@@ -97,40 +101,40 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
   },
   desc: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: 20,
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   bottombutton: {
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "#459bfe",
+    backgroundColor: '#459bfe',
   },
   bottombuttontext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
 });

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../../common/Scale";
+import React, { useState } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -13,36 +13,42 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
+} from 'react-native';
 
-export default function DefaultInfoConfirm() {
+export default function DefaultInfoConfirm({ route, navigation }) {
+  const { all, count } = route.params;
+  const [confirm, setConfirm] = useState(false);
+
   return (
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../../images/back_ic_80.png")}
+              source={require('../../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
         centerComponent={<Text style={{ ...styles.title }}>견적 요청</Text>}
         rightComponent={
           <Text style={{ ...styles.righttop, marginRight: scale(5) }}>
-            2 / 9
+            {count} / {all}
           </Text>
         }
       />
@@ -52,19 +58,19 @@ export default function DefaultInfoConfirm() {
           keyboardShouldPersistTaps="always"
           contentContainerStyle={{
             flexGrow: 1,
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           <View>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 marginTop: scale(30),
               }}
             >
               <Image
                 style={{ width: scale(40), height: scale(40) }}
-                source={require("../../../images/dealer_icon_160.png")}
+                source={require('../../../images/dealer_icon_160.png')}
               />
               <Text
                 style={{
@@ -73,11 +79,11 @@ export default function DefaultInfoConfirm() {
                   marginTop: scale(10),
                 }}
               >
-                78나9012 번호의 차량은{"\n"}
-                <Text style={{ color: "#459bfe" }}>
+                78나9012 번호의 차량은{'\n'}
+                <Text style={{ color: '#459bfe' }}>
                   토스카 2.0 DOHC 2010년식 회색
                 </Text>
-                {"\n"}
+                {'\n'}
                 차량이 맞나요?
               </Text>
             </View>
@@ -85,33 +91,37 @@ export default function DefaultInfoConfirm() {
               style={{
                 width: scale(240),
                 height: scale(150),
-                backgroundColor: "#ffffff",
-                alignSelf: "center",
+                backgroundColor: '#ffffff',
+                alignSelf: 'center',
                 marginTop: scale(10),
               }}
-              source={require("../../../images/kakao_talk_20200527_133512391.png")}
+              source={require('../../../images/kakao_talk_20200527_133512391.png')}
             />
             <TouchableOpacity
+              onPress={() => {
+                setConfirm(true);
+              }}
               delayPressIn={0}
               style={{
                 ...styles.bottombutton,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginTop: scale(10),
-                alignSelf: "center",
+                alignSelf: 'center',
+                backgroundColor: '#459bfe',
               }}
             >
               <Text style={{ ...styles.bottombuttontext }}>네, 맞습니다</Text>
             </TouchableOpacity>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 marginTop: scale(55),
               }}
             >
               <Image
                 style={{ width: scale(40), height: scale(40) }}
-                source={require("../../../images/dealer_icon_160.png")}
+                source={require('../../../images/dealer_icon_160.png')}
               />
               <Text
                 style={{
@@ -120,20 +130,30 @@ export default function DefaultInfoConfirm() {
                   marginTop: scale(10),
                 }}
               >
-                고객님은{"\n"}
-                <Text style={{ color: "#459bfe" }}>홍길동</Text>
-                {"\n"}
+                고객님은{'\n'}
+                <Text style={{ color: '#459bfe' }}>홍길동</Text>
+                {'\n'}
                 차주 본인이 맞나요?
               </Text>
             </View>
             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('SelectTransmission', {
+                  all: all,
+                  count: count + 1,
+                });
+              }}
+              disabled={confirm ? false : true}
               delayPressIn={0}
               style={{
                 ...styles.bottombutton,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginTop: scale(40),
-                alignSelf: "center",
+                alignSelf: 'center',
+                backgroundColor: confirm
+                  ? '#459bfe'
+                  : 'rgba(69, 155, 254, 0.3)',
               }}
             >
               <Text style={{ ...styles.bottombuttontext }}>네, 맞습니다</Text>
@@ -141,7 +161,7 @@ export default function DefaultInfoConfirm() {
             <Text
               style={{
                 ...styles.bottomtext,
-                alignSelf: "center",
+                alignSelf: 'center',
                 marginTop: scale(6.8),
               }}
             >
@@ -161,60 +181,59 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
   },
   logoicon: {
     width: scale(40),
     height: scale(40),
   },
   logotext: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(20),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   bottombutton: {
     width: scale(240),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "#459bfe",
   },
   bottombuttontext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
   bottomtext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(8),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#b2b2b2",
+    textAlign: 'left',
+    color: '#b2b2b2',
   },
   righttop: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#ffffff",
+    textAlign: 'right',
+    color: '#ffffff',
   },
 });

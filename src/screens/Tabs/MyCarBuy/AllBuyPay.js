@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../../common/Scale";
+import React, { useState } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../../common/Scale';
 import {
   Image,
   View,
@@ -11,19 +11,19 @@ import {
   Dimensions,
   SafeAreaView,
   Platform,
-} from "react-native";
+} from 'react-native';
 
-const Width = Dimensions.get("window").width;
+const Width = Dimensions.get('window').width;
 
-export default function AllBuyPay() {
+export default function AllBuyPay({ route, navigation }) {
   return (
     <>
       <Header
-        backgroundColor={"#ffffff"}
+        backgroundColor={'#ffffff'}
         barStyle="dark-content"
         statusBarProps={{
           translucent: true,
-          backgroundColor: "#ffffff",
+          backgroundColor: '#ffffff',
         }}
         containerStyle={{
           borderBottomWidth: 2,
@@ -31,10 +31,15 @@ export default function AllBuyPay() {
           paddingHorizontal: scale(15),
         }}
         leftComponent={
-          <TouchableOpacity delayPressIn={0}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+            delayPressIn={0}
+          >
             <Image
               style={{ ...styles.backicon }}
-              source={require("../../../images/back_ic_72.png")}
+              source={require('../../../images/back_ic_72.png')}
             />
           </TouchableOpacity>
         }
@@ -46,24 +51,24 @@ export default function AllBuyPay() {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View
             style={{
-              backgroundColor: "#ffffff",
+              backgroundColor: '#ffffff',
               paddingVertical: scale(21),
-              justifyContent: "center",
+              justifyContent: 'center',
             }}
           >
             <View
               style={{
                 marginHorizontal: scale(15),
-                borderStyle: "solid",
+                borderStyle: 'solid',
                 borderBottomWidth: 0.3,
-                borderColor: "#d2d2d2",
+                borderColor: '#d2d2d2',
               }}
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   paddingVertical: scale(4),
                 }}
               >
@@ -72,9 +77,9 @@ export default function AllBuyPay() {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   paddingVertical: scale(4),
                 }}
               >
@@ -83,9 +88,9 @@ export default function AllBuyPay() {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   paddingVertical: scale(4),
                 }}
               >
@@ -94,9 +99,9 @@ export default function AllBuyPay() {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   paddingVertical: scale(4),
                 }}
               >
@@ -105,9 +110,9 @@ export default function AllBuyPay() {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   paddingVertical: scale(4),
                   marginBottom: scale(16),
                 }}
@@ -120,17 +125,17 @@ export default function AllBuyPay() {
             </View>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 marginTop: scale(20),
                 paddingHorizontal: scale(15),
               }}
             >
               <View
                 style={{
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Text style={{ ...styles.allprice }}>총 구매비용</Text>
@@ -153,13 +158,13 @@ export default function AllBuyPay() {
               <TouchableOpacity
                 delayPressIn={0}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   padding: scale(15),
-                  borderStyle: "solid",
+                  borderStyle: 'solid',
                   borderBottomWidth: 0.3,
-                  borderColor: "#d2d2d2",
+                  borderColor: '#d2d2d2',
                 }}
               >
                 <View>
@@ -172,7 +177,7 @@ export default function AllBuyPay() {
                 </View>
                 <Image
                   style={{ ...styles.seeicon }}
-                  source={require("../../../images/see_more_icon_88.png")}
+                  source={require('../../../images/see_more_icon_881.png')}
                 />
               </TouchableOpacity>
             </View>
@@ -181,21 +186,21 @@ export default function AllBuyPay() {
             style={{
               paddingHorizontal: scale(15),
               marginTop: scale(20),
-              marginBottom: Platform.OS === "ios" ? scale(13) : scale(28),
+              marginBottom: Platform.OS === 'ios' ? scale(13) : scale(28),
             }}
           >
             <Text style={{ ...styles.desctext }}>
-              확인하세요!{"\n"}- 위 금액은 예상비용으로 실제 금액과 상이할 수
+              확인하세요!{'\n'}- 위 금액은 예상비용으로 실제 금액과 상이할 수
               있으며, 경우에 따라 매도비용, 알선수수료가 발생할 수 있습니다.
-              {"\n"}- 실제 거래신고 금액이 과세표준금액보다 적으면, 과세표준금액
-              기준으로 이전등록비가 부과됩니다.{"\n"}
-              {"\n"}친환경차 세금감면 안내{"\n"}- 전기차 : 취득세 최대 140만원
-              감면, 공채 매입 최대 250만원 면제{"\n"}- 하이브리드차 : 취득세
-              최대 140만원 감면, 공채 매입 최대 200만원 면제{"\n"}- 플러그인
+              {'\n'}- 실제 거래신고 금액이 과세표준금액보다 적으면, 과세표준금액
+              기준으로 이전등록비가 부과됩니다.{'\n'}
+              {'\n'}친환경차 세금감면 안내{'\n'}- 전기차 : 취득세 최대 140만원
+              감면, 공채 매입 최대 250만원 면제{'\n'}- 하이브리드차 : 취득세
+              최대 140만원 감면, 공채 매입 최대 200만원 면제{'\n'}- 플러그인
               하이브리드차 : 취득세 최대 140만원 감면, 공채 매입 최대 200만원
-              면제{"\n"}- 수소전기차 : 취득세 최대 140만원 감면, 공채 매입 최대
-              250만원 면제{"\n"}- 2019년 7월 23일 기준입니다.{"\n"}
-              {"\n"}경차 세금감면 안내{"\n"}- 취득세 50만원 이하 면세, 50만원
+              면제{'\n'}- 수소전기차 : 취득세 최대 140만원 감면, 공채 매입 최대
+              250만원 면제{'\n'}- 2019년 7월 23일 기준입니다.{'\n'}
+              {'\n'}경차 세금감면 안내{'\n'}- 취득세 50만원 이하 면세, 50만원
               초과 시 최대 50만원 공제
             </Text>
           </View>
@@ -211,63 +216,63 @@ const styles = StyleSheet.create({
     height: scale(18),
   },
   headercenter: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(16),
-    fontWeight: "bold",
-    fontStyle: "normal",
+    fontWeight: 'bold',
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#1d1d1d",
+    textAlign: 'center',
+    color: '#1d1d1d',
   },
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
   },
   lefttext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#999999",
+    textAlign: 'left',
+    color: '#999999',
   },
   righttext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#000000",
+    textAlign: 'right',
+    color: '#000000',
   },
   allprice: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(11),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.66,
-    textAlign: "left",
-    color: "#459bfe",
+    textAlign: 'left',
+    color: '#459bfe',
   },
   suballprice: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.6,
-    textAlign: "left",
-    color: "#459bfe",
+    textAlign: 'left',
+    color: '#459bfe',
   },
   price: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(25),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -1.5,
-    textAlign: "right",
-    color: "#459bfe",
+    textAlign: 'right',
+    color: '#459bfe',
   },
   sameview: {
     width: scale(330),
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     elevation: 1.5,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -276,41 +281,41 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
   },
   lefttext1: {
-    fontFamily: "Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: scale(11),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.66,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   lefttext2: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(11),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.66,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   seeicon: {
     width: scale(22),
     height: scale(22),
   },
   subtitle: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(11),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: 25,
     letterSpacing: -0.66,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   desctext: {
-    fontFamily: "Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: scale(9),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: 15,
     letterSpacing: -0.54,
-    textAlign: "left",
-    color: "#818181",
+    textAlign: 'left',
+    color: '#818181',
   },
 });

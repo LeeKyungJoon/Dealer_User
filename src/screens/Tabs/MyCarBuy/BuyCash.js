@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../../common/Scale";
+import React, { useState } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -13,32 +13,35 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
+} from 'react-native';
 
-export default function BuyCash() {
-  const [personList, setPersonList] = useState(["남성", "여성"]);
-  const [select, setSelect] = useState("");
+export default function BuyCash({ route, navigation }) {
+  const [personList, setPersonList] = useState(['남성', '여성']);
+  const [select, setSelect] = useState('');
 
   return (
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../../images/back_ic_80.png")}
+              source={require('../../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
@@ -51,22 +54,26 @@ export default function BuyCash() {
             keyboardShouldPersistTaps="always"
             contentContainerStyle={{
               flexGrow: 1,
-              justifyContent: "space-between",
+              justifyContent: 'space-between',
             }}
           >
             <View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginTop: scale(30),
                 }}
               >
                 <Image
-                  style={{ width: scale(40), height: scale(40) }}
-                  source={require("../../../images/dealer_icon_160.png")}
+                  style={{
+                    width: scale(40),
+                    height: scale(40),
+                    marginRight: scale(5),
+                  }}
+                  source={require('../../../images/dealer_icon_160.png')}
                 />
-                <Text style={{ ...styles.toptext, marginLeft: scale(5) }}>
+                <Text style={{ ...styles.toptext, width: scale(285) }}>
                   실구매자의 생년월일 6자리와 성별을 입력해주세요
                 </Text>
               </View>
@@ -76,14 +83,14 @@ export default function BuyCash() {
                   paddingLeft: scale(10),
                   marginTop: scale(50),
                 }}
-                placeholder={"ex) 930928"}
-                placeholderTextColor={"rgba(0, 0, 0, 0.3)"}
-                keyboardType={"number-pad"}
+                placeholder={'ex) 930928'}
+                placeholderTextColor={'rgba(0, 0, 0, 0.3)'}
+                keyboardType={'number-pad'}
               />
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginTop: scale(5),
                 }}
               >
@@ -97,16 +104,16 @@ export default function BuyCash() {
                       key={index}
                       style={{
                         ...styles.manwoman,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         backgroundColor:
-                          select === item ? "#459bfe" : "#ffffff",
+                          select === item ? '#459bfe' : '#ffffff',
                       }}
                     >
                       <Text
                         style={{
                           ...styles.manwomantext,
-                          color: select === item ? "#ffffff" : "#9b9b9b",
+                          color: select === item ? '#ffffff' : '#9b9b9b',
                         }}
                       >
                         {item}
@@ -117,11 +124,14 @@ export default function BuyCash() {
               </View>
             </View>
             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('BuyCashComplete');
+              }}
               delayPressIn={0}
               style={{
                 ...styles.bottombutton,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginBottom: scale(15),
               }}
             >
@@ -140,62 +150,62 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
   },
   inputstyle: {
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: "#dddddd",
+    borderColor: '#dddddd',
   },
   manwoman: {
     width: scale(165),
     height: scale(35),
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderWidth: 0.3,
-    borderColor: "#aaaaaa",
+    borderColor: '#aaaaaa',
   },
   manwomantext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(11),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.33,
-    textAlign: "left",
+    textAlign: 'left',
   },
   toptext: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   bottombutton: {
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "#459bfe",
+    backgroundColor: '#459bfe',
   },
   bottombuttontext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
 });

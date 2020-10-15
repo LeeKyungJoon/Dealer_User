@@ -352,4 +352,33 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //임시 이미지 업로드용
+  static FILE_UPLOAD = async (path) => {
+    const _token = await AsyncStorage.getItem('_token');
+    const formData = new FormData();
+    formData.append('files', {
+      uri: Platform.OS === 'android' ? `file:///${path}` : path,
+      type: 'image/jpeg',
+      name: 'image.jpg',
+    });
+    axios({
+      url: Constants.SERVER_API + '/cardealer/CARDEALER_API_00012',
+      method: 'POST',
+      data: formData,
+      headers: {
+        Accept: 'application/json',
+        authorization: _token,
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(function (response) {
+        console.log('*****handle success******');
+        console.log(response.data);
+      })
+      .catch(function (response) {
+        console.log('*****handle failure******');
+        console.log(response);
+      });
+  };
 }

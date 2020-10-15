@@ -84,7 +84,7 @@ export default function MyCarBuyMain({ route, navigation }) {
             <Swiper
               loop={false}
               height={scale(130)}
-              style={{ height: scale(200), flex: 0 }}
+              style={{ height: scale(130), flex: 0 }}
               containerStyle={{
                 height: scale(130),
                 flex: 0,

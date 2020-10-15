@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../../common/Scale";
+import React, { useState } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -13,38 +13,52 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
+} from 'react-native';
 
-export default function DealAddress() {
-  const [list, setList] = useState(["오토", "수동", "세미오토", "CVT", "기타"]);
+export default function DealAddress({ route, navigation }) {
+  const { all, count } = route.params;
+  const [list, setList] = useState(['오토', '수동', '세미오토', 'CVT', '기타']);
+  const [add, setAdd] = useState('');
+  const [anotherAdd, setAnotherAdd] = useState('');
+
+  const _add = (addtext) => {
+    setAdd(addtext);
+  };
+
+  const _anotherAdd = (anotheraddtext) => {
+    setAnotherAdd(anotheraddtext);
+  };
 
   return (
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../../images/back_ic_80.png")}
+              source={require('../../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
         centerComponent={<Text style={{ ...styles.title }}>견적 요청</Text>}
         rightComponent={
           <Text style={{ ...styles.righttop, marginRight: scale(5) }}>
-            7 / 9
+            {count} / {all}
           </Text>
         }
       />
@@ -54,20 +68,20 @@ export default function DealAddress() {
           keyboardShouldPersistTaps="always"
           contentContainerStyle={{
             flexGrow: 1,
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           <View>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginTop: scale(30),
               }}
             >
               <Image
                 style={{ ...styles.logoicon }}
-                source={require("../../../images/dealer_icon_160.png")}
+                source={require('../../../images/dealer_icon_160.png')}
               />
               <Text style={{ ...styles.logotext, marginLeft: scale(5) }}>
                 거래하실 지역을 선택해주세요
@@ -80,7 +94,7 @@ export default function DealAddress() {
                 paddingTop: scale(20),
                 paddingBottom: scale(30),
                 marginTop: scale(25),
-                alignSelf: "center",
+                alignSelf: 'center',
               }}
             >
               <Text style={{ ...styles.subtitle }}>지역</Text>
@@ -88,8 +102,8 @@ export default function DealAddress() {
                 delayPressIn={0}
                 style={{
                   ...styles.searchbutton,
-                  justifyContent: "center",
-                  alignSelf: "flex-end",
+                  justifyContent: 'center',
+                  alignSelf: 'flex-end',
                 }}
               >
                 <Text style={{ ...styles.searchbuttontext }}>주소검색</Text>
@@ -97,35 +111,53 @@ export default function DealAddress() {
               <TextInput
                 style={{
                   ...styles.searchaddressinput,
-                  width: "100%",
-                  paddingLeft: scale(6),
-                  paddingBottom: 0,
-                  paddingTop: 0,
-                  marginTop: scale(8),
+                  paddingLeft: scale(10),
+                  paddingVertical:
+                    Platform.OS === 'ios' ? scale(8.2) : scale(3.2),
+                  marginTop: scale(6),
                 }}
-                placeholder={"주소를 입력하세요."}
-                placeholderTextColor={"rgba(0, 0, 0, 0.3)"}
+                placeholder="주소를 입력하세요."
+                placeholderTextColor="rgba(29, 29, 29, 0.3)"
+                value={add}
+                onChangeText={(text) => {
+                  _add(text);
+                }}
+                autoCapitalize={'none'}
               />
               <TextInput
                 style={{
                   ...styles.searchaddressinput,
-                  width: "100%",
-                  paddingLeft: scale(6),
-                  paddingBottom: 0,
-                  paddingTop: 0,
-                  marginTop: scale(5),
+                  paddingLeft: scale(10),
+                  paddingVertical:
+                    Platform.OS === 'ios' ? scale(8.2) : scale(3.2),
+                  marginTop: scale(6),
                 }}
-                placeholder={"나머지 주소 입력"}
-                placeholderTextColor={"rgba(0, 0, 0, 0.3)"}
+                placeholder="나머지 주소를 입력하세요."
+                placeholderTextColor="rgba(29, 29, 29, 0.3)"
+                value={anotherAdd}
+                onChangeText={(text) => {
+                  _anotherAdd(text);
+                }}
+                autoCapitalize={'none'}
               />
 
               <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('');
+                }}
+                disabled={
+                  add.length > 0 && anotherAdd.length > 0 ? false : true
+                }
                 delayPressIn={0}
                 style={{
                   ...styles.button,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginTop: scale(150.5),
+                  backgroundColor:
+                    add.length > 0 && anotherAdd.length > 0
+                      ? '#459bfe'
+                      : 'rgba(69, 155, 254, 0.3)',
                 }}
               >
                 <Text style={{ ...styles.buttontext }}>확인</Text>
@@ -143,36 +175,36 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
   },
   logoicon: {
     width: scale(40),
     height: scale(40),
   },
   logotext: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   sameview: {
     width: scale(280),
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     elevation: 3,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -181,87 +213,86 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   subtitle: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(11),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   sellinput: {
-    width: "100%",
+    width: '100%',
     borderRadius: 5,
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 0.3,
-    borderColor: "#707070",
-    fontFamily: "Roboto-Regular",
+    borderColor: '#707070',
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#000000",
+    textAlign: 'left',
+    color: '#000000',
   },
   button: {
-    width: "100%",
+    width: '100%',
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "rgba(69, 155, 254, 0.3)",
   },
   buttontext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(15),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
   righttop: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "right",
-    color: "#ffffff",
+    textAlign: 'right',
+    color: '#ffffff',
   },
   listbox: {
     width: scale(90),
     height: scale(30),
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.1)",
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   listtext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#1d1d1d",
+    textAlign: 'center',
+    color: '#1d1d1d',
   },
   searchaddressinput: {
-    fontFamily: "Roboto-Regular",
+    width: '100%',
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#000000",
-    borderStyle: "solid",
-    borderWidth: 0.3,
-    borderColor: "rgba(0, 0, 0, 0.3)",
+    textAlign: 'left',
+    color: '#000000',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   searchbutton: {
     width: scale(59),
     height: scale(25),
-    backgroundColor: "#bbbbbb",
+    backgroundColor: '#bbbbbb',
   },
   searchbuttontext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
 });

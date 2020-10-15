@@ -24,6 +24,8 @@ export default function CarDetail({ route, navigation }) {
   const [drop, setDrop] = useState(false);
   const [isvisible, setIsvisible] = useState(false);
   const [isvisible1, setIsvisible1] = useState(false);
+  const [delivery, setDelivery] = useState(['로드탁송', '세이프티 로더']);
+  const [selectDe, setSelectDe] = useState('로드탁송');
 
   return (
     <>
@@ -243,6 +245,9 @@ export default function CarDetail({ route, navigation }) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('InsuranceHistory');
+                }}
                 delayPressIn={0}
                 style={{ alignItems: 'center' }}
               >
@@ -255,6 +260,9 @@ export default function CarDetail({ route, navigation }) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('AllBuyPay');
+                }}
                 delayPressIn={0}
                 style={{ alignItems: 'center' }}
               >
@@ -416,7 +424,7 @@ export default function CarDetail({ route, navigation }) {
                         justifyContent: 'center',
                       }}
                     >
-                      <Text>주소검색</Text>
+                      <Text style={{ ...styles.searchtext }}>주소검색</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -456,32 +464,42 @@ export default function CarDetail({ route, navigation }) {
                       width: scale(220),
                     }}
                   >
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Image
-                        style={{ ...styles.checkicon }}
-                        source={require('../../../images/check_off_60.png')}
-                      />
-                      <Text>로드탁송</Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Image
-                        style={{ ...styles.checkicon }}
-                        source={require('../../../images/check_on_60.png')}
-                      />
-                      <Text>세이프티 로더</Text>
-                    </View>
+                    {delivery.map((item, index) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSelectDe(item);
+                          }}
+                          key={index}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                          delayPressIn={0}
+                        >
+                          {selectDe === item ? (
+                            <Image
+                              style={{
+                                ...styles.checkicon,
+                                marginRight: scale(2),
+                              }}
+                              source={require('../../../images/check_on_60.png')}
+                            />
+                          ) : (
+                            <Image
+                              style={{
+                                ...styles.checkicon,
+                                marginRight: scale(2),
+                              }}
+                              source={require('../../../images/check_off_60.png')}
+                            />
+                          )}
+
+                          <Text style={{ ...styles.deliverytext }}>{item}</Text>
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
                 </View>
                 <View
@@ -763,10 +781,17 @@ export default function CarDetail({ route, navigation }) {
                   alignItems: 'center',
                 }}
               >
-                <Image
-                  style={{ ...styles.profile }}
-                  source={require('../../../images/shutterstock_682551649.png')}
-                />
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('DealerInfo');
+                  }}
+                  delayPressIn={0}
+                >
+                  <Image
+                    style={{ ...styles.profile }}
+                    source={require('../../../images/shutterstock_682551649.png')}
+                  />
+                </TouchableOpacity>
                 <Text style={{ ...styles.name, marginTop: scale(7) }}>
                   홍길동 인증딜러
                 </Text>
@@ -884,6 +909,9 @@ export default function CarDetail({ route, navigation }) {
               </TouchableOpacity>
 
               <TouchableOpacity
+                onPress={() => {
+                  setIsvisible(true);
+                }}
                 delayPressIn={0}
                 style={{
                   width: scale(200),
@@ -903,9 +931,19 @@ export default function CarDetail({ route, navigation }) {
           isVisible={isvisible}
           style={{ alignItems: 'center' }}
           useNativeDriver={true}
+          onBackButtonPress={() => {
+            setIsvisible(false);
+          }}
+          onBackdropPress={() => {
+            setIsvisible(false);
+          }}
         >
           <View style={{ ...styles.modal }}>
             <TouchableOpacity
+              onPress={() => {
+                setIsvisible(false);
+                navigation.navigate('BuyCash');
+              }}
               delayPressIn={0}
               style={{
                 paddingVertical: scale(16.2),
@@ -1316,5 +1354,21 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'left',
     color: '#ffffff',
+  },
+  searchtext: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(10),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#ffffff',
+  },
+  deliverytext: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(10),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#000000',
   },
 });
