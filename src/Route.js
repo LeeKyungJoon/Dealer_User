@@ -35,6 +35,11 @@ import DistanceDriven from './screens/Tabs/MyCarSell/DistanceDriven';
 import Options from './screens/Tabs/MyCarSell/Options';
 import CarStatus from './screens/Tabs/MyCarSell/CarStatus';
 import DealAddress from './screens/Tabs/MyCarSell/DealAddress';
+import VideoPicture from './screens/Tabs/MyCarSell/VideoPicture';
+import AddCarInfo from './screens/Tabs/MyCarSell/AddCarInfo';
+import AddAccident from './screens/Tabs/MyCarSell/AddAccident';
+import AddComment from './screens/Tabs/MyCarSell/AddComment';
+import QuoteComplete from './screens/Tabs/MyCarSell/QuoteComplete';
 ///////
 //소비자용_상담요청
 ///////
@@ -97,6 +102,11 @@ export default function Route() {
         <Stack.Screen name={'Options'} component={Options} />
         <Stack.Screen name={'CarStatus'} component={CarStatus} />
         <Stack.Screen name={'DealAddress'} component={DealAddress} />
+        <Stack.Screen name={'VideoPicture'} component={VideoPicture} />
+        <Stack.Screen name={'AddCarInfo'} component={AddCarInfo} />
+        <Stack.Screen name={'AddAccident'} component={AddAccident} />
+        <Stack.Screen name={'AddComment'} component={AddComment} />
+        <Stack.Screen name={'QuoteComplete'} component={QuoteComplete} />
         {/*  */}
         {/* 소비자용_상담요청 */}
         {/*  */}

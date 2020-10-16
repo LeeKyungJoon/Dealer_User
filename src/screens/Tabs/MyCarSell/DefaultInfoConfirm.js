@@ -81,7 +81,7 @@ export default function DefaultInfoConfirm({ route, navigation }) {
               >
                 78나9012 번호의 차량은{'\n'}
                 <Text style={{ color: '#459bfe' }}>
-                  토스카 2.0 DOHC 2010년식 회색
+                  토스카 2.0 DOHC 2010년식
                 </Text>
                 {'\n'}
                 차량이 맞나요?

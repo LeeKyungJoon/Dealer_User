@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import ImagePicker from 'react-native-image-picker';
 
 export default function MyInfoMain(props) {
-  const { state } = useContext(InfoContext);
+  const { state, setUserState } = useContext(InfoContext);
   const [logoutModal, setLogoutModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
 
@@ -66,8 +66,30 @@ export default function MyInfoMain(props) {
   };
 
   const _postPhoto = async (response) => {
-    let data = await AppServer.CARDEALER_API_00012({ responsedata: response });
-    console.log('_postPhoto', data);
+    let imgData = new FormData();
+    const result = await fetch(response.uri);
+    const blob = await result.blob();
+    let fileName = blob._data.name;
+    let extensionName = fileName.split('.')[1];
+    let now_timestamp = Math.floor(new Date().getTime() / 1000);
+    fileName = `${Math.random()}_${now_timestamp}.${extensionName}`;
+    imgData.append('file', {
+      uri: response.uri,
+      type: response.type,
+      name: fileName,
+    });
+
+    try {
+      let data = await AppServer.CARDEALER_API_00012({ responsedata: imgData });
+      console.log('_postPhoto', data);
+      if (data.success_yn && data.msg === 'success') {
+        setUserState({ ...state.info, profile_img_url: data.img_url });
+      } else {
+        console.log('_postPhoto_else>>>>>', data);
+      }
+    } catch (error) {
+      console.log('_postPhoto', error);
+    }
   };
 
   return (
@@ -96,15 +118,19 @@ export default function MyInfoMain(props) {
           >
             내 정보
           </Text>
-          <View style={{ alignSelf: 'center' }}>
+          <View style={{ alignSelf: 'center', borderRadius: scale(10) }}>
             <Image
-              style={{ width: scale(90), height: scale(90) }}
+              style={{
+                width: scale(90),
+                height: scale(90),
+                borderRadius: scale(10),
+              }}
               source={{ uri: state.info.profile_img_url }}
             />
             <TouchableOpacity
               onPress={() => {
                 //setProfileModal(true);
-                //_selectPhoto();
+                _selectPhoto();
               }}
               style={{ position: 'absolute', right: -17, bottom: 0 }}
               delayPressIn={0}

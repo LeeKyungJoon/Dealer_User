@@ -15,18 +15,12 @@ import {
   Keyboard,
 } from 'react-native';
 
-export default function DealAddress({ route, navigation }) {
+export default function AddComment({ route, navigation }) {
   const { all, count } = route.params;
-  const [list, setList] = useState(['오토', '수동', '세미오토', 'CVT', '기타']);
-  const [add, setAdd] = useState('');
-  const [anotherAdd, setAnotherAdd] = useState('');
+  const [comment, setComment] = useState('');
 
-  const _add = (addtext) => {
-    setAdd(addtext);
-  };
-
-  const _anotherAdd = (anotheraddtext) => {
-    setAnotherAdd(anotheraddtext);
+  const _comment = (commenttext) => {
+    setComment(commenttext);
   };
 
   return (
@@ -58,7 +52,7 @@ export default function DealAddress({ route, navigation }) {
         centerComponent={<Text style={{ ...styles.title }}>견적 요청</Text>}
         rightComponent={
           <Text style={{ ...styles.righttop, marginRight: scale(5) }}>
-            {count} / {all}
+            {count}
           </Text>
         }
       />
@@ -84,7 +78,7 @@ export default function DealAddress({ route, navigation }) {
                 source={require('../../../images/dealer_icon_160.png')}
               />
               <Text style={{ ...styles.logotext, marginLeft: scale(5) }}>
-                거래하실 지역을 선택해주세요
+                소개 한마디를 입력해주세요
               </Text>
             </View>
             <View
@@ -97,70 +91,39 @@ export default function DealAddress({ route, navigation }) {
                 alignSelf: 'center',
               }}
             >
-              <Text style={{ ...styles.subtitle }}>지역</Text>
-              <TouchableOpacity
-                delayPressIn={0}
-                style={{
-                  ...styles.searchbutton,
-                  justifyContent: 'center',
-                  alignSelf: 'flex-end',
-                }}
-              >
-                <Text style={{ ...styles.searchbuttontext }}>주소검색</Text>
-              </TouchableOpacity>
+              <Text style={{ ...styles.subtitle }}>소개글</Text>
               <TextInput
+                multiline={true}
                 style={{
                   ...styles.searchaddressinput,
-                  paddingLeft: scale(10),
-                  paddingVertical:
-                    Platform.OS === 'ios' ? scale(8.2) : scale(3.2),
+                  borderRadius: scale(5),
+                  height: scale(220),
+                  paddingHorizontal: scale(10),
                   marginTop: scale(6),
+                  textAlignVertical: 'top',
+                  paddingTop: scale(13),
                 }}
-                placeholder="주소를 입력하세요."
+                placeholder="소개글을 입력해주세요."
                 placeholderTextColor="rgba(29, 29, 29, 0.3)"
-                value={add}
-                onChangeText={(text) => {
-                  _add(text);
-                }}
                 autoCapitalize={'none'}
-              />
-              <TextInput
-                style={{
-                  ...styles.searchaddressinput,
-                  paddingLeft: scale(10),
-                  paddingVertical:
-                    Platform.OS === 'ios' ? scale(8.2) : scale(3.2),
-                  marginTop: scale(6),
-                }}
-                placeholder="나머지 주소를 입력하세요."
-                placeholderTextColor="rgba(29, 29, 29, 0.3)"
-                value={anotherAdd}
+                value={comment}
                 onChangeText={(text) => {
-                  _anotherAdd(text);
+                  _comment(text);
                 }}
-                autoCapitalize={'none'}
               />
-
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('VideoPicture', {
-                    all: all,
-                    count: count + 1,
-                  });
+                  navigation.navigate('QuoteComplete');
                 }}
-                disabled={
-                  add.length > 0 && anotherAdd.length > 0 ? false : true
-                }
+                disabled={comment.length > 0 ? false : true}
                 delayPressIn={0}
                 style={{
                   ...styles.button,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  marginTop: scale(150.5),
+                  marginTop: scale(22.5),
                   backgroundColor:
-                    add.length > 0 && anotherAdd.length > 0
-                      ? '#459bfe'
-                      : 'rgba(69, 155, 254, 0.3)',
+                    comment.length > 0 ? '#459bfe' : 'rgba(69, 155, 254, 0.3)',
                 }}
               >
                 <Text style={{ ...styles.buttontext }}>확인</Text>

@@ -322,26 +322,17 @@ export default class AppServer {
 
     console.log('프로필 이미지 변경 응답', responsedata.uri);
 
-    const formdata = new FormData();
-
-    formdata.append('files[file]', {
-      data: responsedata.data,
-      type: responsedata.type,
-      name: responsedata.fileName,
-    });
-    console.log('3');
-
     try {
       console.log('1');
       let response = await Http.post(
         '/cardealer/CARDEALER_API_00012',
-        { body: formdata },
+        responsedata,
         {
           headers: {
             'Access-Control-Allow-Origin': '*',
             authorization: _token,
             //'content-type': 'multipart/form-data',
-            Accept: 'application/json',
+            //Accept: 'application/json',
             'Content-Type': 'multipart/form-data;',
           },
         },
