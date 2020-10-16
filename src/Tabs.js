@@ -1,62 +1,62 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image } from "react-native";
-import scale from "./common/Scale";
-import MyCarBuy from "./screens/Tabs/MyCarBuyTab";
-import MyCarSell from "./screens/Tabs/MyCarSellTab";
-import Consult from "./screens/Tabs/ConsultTab";
-import Notic from "./screens/Tabs/NoticTab";
-import MyInfo from "./screens/Tabs/MyInfoTab";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Image } from 'react-native';
+import scale from './common/Scale';
+import MyCarBuy from './screens/Tabs/MyCarBuyTab';
+import MyCarSell from './screens/Tabs/MyCarSellTab';
+import Consult from './screens/Tabs/ConsultTab';
+import Notic from './screens/Tabs/NoticTab';
+import MyInfo from './screens/Tabs/MyInfoTab';
 
 const Tab = createBottomTabNavigator();
 
 export default function Tabs() {
   const mainRoutes = [
     {
-      name: "내차구매",
+      name: '내차구매',
       com: MyCarBuy,
-      inactiveIcon: require("./images/buy_ic_off_120.png"),
-      activeIcon: require("./images/buy_ic_on_120.png"),
+      inactiveIcon: require('./images/buy_ic_off_120.png'),
+      activeIcon: require('./images/buy_ic_on_120.png'),
     },
     {
-      name: "내차판매",
+      name: '내차판매',
       com: MyCarSell,
-      inactiveIcon: require("./images/sell_ic_off_120.png"),
-      activeIcon: require("./images/sell_ic_on_120.png"),
+      inactiveIcon: require('./images/sell_ic_off_120.png'),
+      activeIcon: require('./images/sell_ic_on_120.png'),
     },
     {
-      name: "상담요청",
+      name: '상담요청',
       com: Consult,
-      inactiveIcon: require("./images/consult_ic_off_120.png"),
-      activeIcon: require("./images/consult_ic_on_120.png"),
+      inactiveIcon: require('./images/consult_ic_off_120.png'),
+      activeIcon: require('./images/consult_ic_on_120.png'),
     },
     {
-      name: "공지사항",
+      name: '공지사항',
       com: Notic,
-      inactiveIcon: require("./images/guide_ic_off_120.png"),
-      activeIcon: require("./images/guide_ic_on_120.png"),
+      inactiveIcon: require('./images/guide_ic_off_120.png'),
+      activeIcon: require('./images/guide_ic_on_120.png'),
     },
     {
-      name: "내정보",
+      name: '내정보',
       com: MyInfo,
-      inactiveIcon: require("./images/mypage_ic_off_120.png"),
-      activeIcon: require("./images/mypage_ic_on_120.png"),
+      inactiveIcon: require('./images/mypage_ic_off_120.png'),
+      activeIcon: require('./images/mypage_ic_on_120.png'),
     },
   ];
 
   return (
     <Tab.Navigator
       backBehavior="initialRoute"
-      initialRouteName={"내차구매"}
+      initialRouteName={'내차구매'}
       tabBarOptions={{
-        activeTintColor: "#459bfe",
-        inactiveTintColor: "#bababa",
+        activeTintColor: '#459bfe',
+        inactiveTintColor: '#bababa',
         labelStyle: {
-          fontFamily: "Roboto-Regular",
+          fontFamily: 'Roboto-Regular',
           fontSize: scale(8),
-          fontStyle: "normal",
+          fontStyle: 'normal',
           letterSpacing: 0,
-          textAlign: "center",
+          textAlign: 'center',
         },
       }}
     >

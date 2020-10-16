@@ -63,8 +63,7 @@ export default function Route() {
         <Stack.Screen name={'Sign'} component={Sign} />
         <Stack.Screen name={'Tabs'} component={Tabs} />
         {/* 소비자용_내차구매 */}
-        <Stack.Screen name={'SearchCar'} component={SearchCar} />
-        <Stack.Screen name={'SearchCarDetail'} component={SearchCarDetail} />
+
         <Stack.Screen name={'CarDetail'} component={CarDetail} />
         <Stack.Screen
           name={'CarPerformanceCheck'}

@@ -39,34 +39,38 @@ export default function SearchCarDetail({ route, navigation }) {
           paddingVertical: scale(10),
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            like ? setLike(false) : setLike(true);
-          }}
-          delayPressIn={0}
-          style={{ flexDirection: 'row', alignItems: 'center', width: '60%' }}
-        >
-          {like ? (
-            <Image
-              style={{ ...styles.likes }}
-              source={require('../../../images/likes_on.png')}
-            />
-          ) : (
-            <Image
-              style={{ ...styles.likes }}
-              source={require('../../../images/likes_off.png')}
-            />
-          )}
-          <Text
-            style={{
-              ...styles.recentlytext,
-              marginLeft: scale(10),
-              marginTop: scale(2),
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity
+            onPress={() => {
+              like ? setLike(false) : setLike(true);
             }}
+            delayPressIn={0}
+            style={{ flexDirection: 'row', alignItems: 'center' }}
           >
-            {item.item.name}
-          </Text>
-        </TouchableOpacity>
+            {like ? (
+              <Image
+                style={{ ...styles.likes }}
+                source={require('../../../images/likes_on.png')}
+              />
+            ) : (
+              <Image
+                style={{ ...styles.likes }}
+                source={require('../../../images/likes_off.png')}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity delayPressIn={0} style={{ width: '70%' }}>
+            <Text
+              style={{
+                ...styles.recentlytext,
+                marginLeft: scale(10),
+                marginTop: scale(2),
+              }}
+            >
+              {item.item.name}
+            </Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
           delayPressIn={0}
           hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}

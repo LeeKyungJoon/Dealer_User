@@ -34,28 +34,7 @@ export default function MyCarBuyMain({ route, navigation }) {
           borderBottomWidth: 0,
           height: scale(80),
         }}
-        leftComponent={
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('SearchCar');
-            }}
-            style={{ marginLeft: scale(5) }}
-            delayPressIn={0}
-            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-          >
-            <Image
-              style={{ ...styles.search }}
-              source={require('../../../images/search_ic_72.png')}
-            />
-          </TouchableOpacity>
-        }
-        centerComponent={
-          <Image
-            style={{ ...styles.mainlogo }}
-            source={require('../../../images/logo.png')}
-          />
-        }
-        //rightComponent={
+        //leftComponent={
         //  <TouchableOpacity
         //    style={{ marginRight: scale(5) }}
         //    delayPressIn={0}
@@ -67,6 +46,27 @@ export default function MyCarBuyMain({ route, navigation }) {
         //    />
         //  </TouchableOpacity>
         //}
+        centerComponent={
+          <Image
+            style={{ ...styles.mainlogo }}
+            source={require('../../../images/logo.png')}
+          />
+        }
+        rightComponent={
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SearchCar');
+            }}
+            style={{ marginRight: scale(5) }}
+            delayPressIn={0}
+            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
+          >
+            <Image
+              style={{ ...styles.search }}
+              source={require('../../../images/search_ic_72.png')}
+            />
+          </TouchableOpacity>
+        }
       />
       <SafeAreaView style={{ ...styles.container }}>
         <ScrollView
@@ -114,12 +114,109 @@ export default function MyCarBuyMain({ route, navigation }) {
               backgroundColor: '#f9f9f9',
             }}
           >
+            <Text
+              style={{
+                ...styles.categorytitle,
+                marginBottom: scale(12),
+                marginTop: scale(15),
+              }}
+            >
+              구매 진행 중인 차량
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('CarDetail');
+              }}
+              delayPressIn={0}
+              style={{
+                ...styles.carlist,
+                elevation: 1.5,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 0.2,
+                shadowRadius: 1.41,
+              }}
+            >
+              <ImageBackground
+                style={{ ...styles.carimage }}
+                source={require('../../../images/k_7_02.png')}
+              >
+                <View
+                  style={{
+                    width: scale(90),
+                    height: scale(30),
+                    backgroundColor: '#001740',
+                    position: 'absolute',
+                    bottom: 0,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={{ ...styles.price }}>2,000만원</Text>
+                </View>
+                <Image
+                  style={{ ...styles.premark, position: 'absolute' }}
+                  source={require('../../../images/premium.png')}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
+                  }}
+                  delayPressIn={0}
+                  style={{ position: 'absolute', right: 5, top: 5 }}
+                >
+                  {likeCheck ? (
+                    <Image
+                      style={{
+                        ...styles.like,
+                      }}
+                      source={require('../../../images/likes_on.png')}
+                    />
+                  ) : (
+                    <Image
+                      style={{
+                        ...styles.like,
+                      }}
+                      source={require('../../../images/likes_off.png')}
+                    />
+                  )}
+                </TouchableOpacity>
+              </ImageBackground>
+
+              <Image
+                style={{
+                  ...styles.avator,
+                  position: 'absolute',
+                  right: 10,
+                  bottom: 50,
+                }}
+                source={require('../../../images/shutterstock_682551649.png')}
+              />
+              <View style={{ padding: scale(10) }}>
+                <Text style={{ ...styles.carname }}>기아 더뉴 K7</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: scale(3),
+                  }}
+                >
+                  <Text style={{ ...styles.carhistory }}>
+                    서울 / 18년 10월 / 8,859km
+                  </Text>
+                  <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginBottom: scale(12),
-                marginTop: scale(15),
+                marginTop: scale(25),
               }}
             >
               <Text style={{ ...styles.categorytitle }}>
@@ -372,15 +469,7 @@ export default function MyCarBuyMain({ route, navigation }) {
                   <ImageBackground
                     style={{ ...styles.realcar }}
                     source={require('../../../images/g_703.png')}
-                  >
-                    <Image
-                      style={{
-                        ...styles.premark,
-                        position: 'absolute',
-                      }}
-                      source={require('../../../images/premium.png')}
-                    />
-                  </ImageBackground>
+                  ></ImageBackground>
                   <Image
                     style={{
                       width: scale(30),

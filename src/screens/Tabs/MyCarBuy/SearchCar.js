@@ -15,7 +15,7 @@ import {
 
 const Width = Dimensions.get('window').width;
 
-export default function SearchCar({ route, navigation }) {
+export default function SearchResult({ route, navigation }) {
   const [brandList, setBrandList] = useState([
     { image: require('../../../images/hyundai.png'), name: '현대' },
     { image: require('../../../images/jenesis.png'), name: '제네시스' },
@@ -32,7 +32,11 @@ export default function SearchCar({ route, navigation }) {
 
   const _renderItem = (item) => {
     return (
-      <View
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('SearchResult');
+        }}
+        delayPressIn={0}
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -55,7 +59,7 @@ export default function SearchCar({ route, navigation }) {
           </Text>
         </View>
         <Text style={{ ...styles.count }}>27,954</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
