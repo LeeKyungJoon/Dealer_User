@@ -40,6 +40,7 @@ import AddCarInfo from './screens/Tabs/MyCarSell/AddCarInfo';
 import AddAccident from './screens/Tabs/MyCarSell/AddAccident';
 import AddComment from './screens/Tabs/MyCarSell/AddComment';
 import QuoteComplete from './screens/Tabs/MyCarSell/QuoteComplete';
+import DealerAuction from './screens/Tabs/MyCarSell/DealerAuction';
 ///////
 //소비자용_상담요청
 ///////
@@ -107,6 +108,7 @@ export default function Route() {
         <Stack.Screen name={'AddAccident'} component={AddAccident} />
         <Stack.Screen name={'AddComment'} component={AddComment} />
         <Stack.Screen name={'QuoteComplete'} component={QuoteComplete} />
+        <Stack.Screen name={'DealerAuction'} component={DealerAuction} />
         {/*  */}
         {/* 소비자용_상담요청 */}
         {/*  */}

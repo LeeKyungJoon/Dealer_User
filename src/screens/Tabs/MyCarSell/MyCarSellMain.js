@@ -68,7 +68,7 @@ export default function MyCarSellMain({ route, navigation }) {
               paddingTop: scale(20),
             }}
           >
-            <Swiper
+            {/*<Swiper
               loop={false}
               height={scale(130)}
               style={{ height: scale(130), flex: 0 }}
@@ -92,7 +92,73 @@ export default function MyCarSellMain({ route, navigation }) {
                 style={{ ...styles.topimage }}
                 source={require('../../../images/banner.png')}
               />
-            </Swiper>
+            </Swiper>*/}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('DealerAuction');
+              }}
+              activeOpacity={0.5}
+              delayPressIn={0}
+            >
+              <ImageBackground
+                style={{
+                  width: scale(330),
+                  height: scale(130),
+                  alignSelf: 'center',
+                  paddingLeft: scale(18),
+                  paddingRight: scale(10),
+                  paddingVertical: scale(11),
+                }}
+                source={require('../../../images/456456465465454.png')}
+              >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <View
+                    style={{
+                      ...styles.smallbox,
+                      backgroundColor: '#459bfe',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text style={{ ...styles.text1 }}>승인완료</Text>
+                  </View>
+                  <Text style={{ ...styles.text2 }}>0명 경매 참여 {'>'}</Text>
+                </View>
+                <Text style={{ ...styles.text3, marginTop: scale(14) }}>
+                  <Text style={{ color: '#459bfe' }}>12가3456</Text> 차량
+                  견적요청 완료!
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: scale(10),
+                  }}
+                >
+                  <Text style={{ ...styles.text4 }}>요청차량</Text>
+                  <Text style={{ ...styles.text5, marginLeft: scale(15) }}>
+                    5시리즈 528i 세단
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: scale(8),
+                  }}
+                >
+                  <Text style={{ ...styles.text4 }}>등록일시</Text>
+                  <Text style={{ ...styles.text5, marginLeft: scale(15) }}>
+                    2020-04-24 14:17:20
+                  </Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
@@ -411,5 +477,51 @@ const styles = StyleSheet.create({
     height: scale(130),
     borderRadius: 10,
     alignSelf: 'center',
+  },
+  smallbox: {
+    width: scale(88),
+    height: scale(20),
+    borderRadius: scale(25),
+  },
+  text1: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(12),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#ffffff',
+  },
+  text2: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(11),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'right',
+    color: '#ffffff',
+  },
+  text3: {
+    fontFamily: 'Jalnan',
+    fontSize: scale(16),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#ffffff',
+  },
+  text4: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(11),
+
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#9d9d9d',
+  },
+  text5: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(11),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#ffffff',
   },
 });
