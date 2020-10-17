@@ -20,6 +20,8 @@ export default function MyInfoMain(props) {
   const { state, setUserState } = useContext(InfoContext);
   const [logoutModal, setLogoutModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [modalic, setModalic] = useState(false);
 
   console.log(state);
 
@@ -92,6 +94,11 @@ export default function MyInfoMain(props) {
     }
   };
 
+  const _delete = () => {
+    setDeleteModal(false);
+    props.navigation.reset({ routes: [{ name: 'Sign' }] });
+  };
+
   return (
     <>
       <Header
@@ -118,14 +125,31 @@ export default function MyInfoMain(props) {
           >
             내 정보
           </Text>
-          <View style={{ alignSelf: 'center', borderRadius: scale(10) }}>
-            <Image
+          <View
+            style={{
+              alignSelf: 'center',
+              borderRadius: scale(10),
+              marginTop: scale(15),
+            }}
+          >
+            {/*<Image
               style={{
                 width: scale(90),
                 height: scale(90),
                 borderRadius: scale(10),
               }}
               source={{ uri: state.info.profile_img_url }}
+            />*/}
+            <View
+              style={{
+                width: scale(90),
+                height: scale(90),
+                borderRadius: scale(10),
+                backgroundColor: '#001740',
+                borderStyle: 'solid',
+                borderWidth: 0.3,
+                borderColor: '#707070',
+              }}
             />
             <TouchableOpacity
               onPress={() => {
@@ -150,7 +174,8 @@ export default function MyInfoMain(props) {
               marginTop: scale(15),
             }}
           >
-            {state.info.user_nm}
+            {/*{state.info.user_nm}*/}
+            홍길동
           </Text>
           <Text
             style={{
@@ -159,7 +184,8 @@ export default function MyInfoMain(props) {
               marginBottom: scale(15),
             }}
           >
-            {state.info.user_email}
+            {/*{state.info.user_email}*/}
+            dealer_app@gmail.com
           </Text>
           <View style={{ ...styles.boundary }} />
         </View>
@@ -253,15 +279,24 @@ export default function MyInfoMain(props) {
               로그아웃
             </Text>
           </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: scale(8),
-              color: '#dcdcdc',
-              marginTop: scale(10),
+          <TouchableOpacity
+            onPress={() => {
+              setDeleteModal(true);
             }}
+            delayPressIn={0}
           >
-            배달의딜러 회원 탈퇴를 원하시면 여기를 눌러주세요
-          </Text>
+            <Text
+              style={{
+                fontSize: scale(8),
+                color: '#dcdcdc',
+                marginTop: scale(10),
+              }}
+            >
+              배달의딜러 회원 탈퇴를 원하시면{' '}
+              <Text style={{ textDecorationLine: 'underline' }}>여기</Text>를
+              눌러주세요
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       <Modal
@@ -312,69 +347,95 @@ export default function MyInfoMain(props) {
         </View>
       </Modal>
       <Modal
-        isVisible={profileModal}
-        style={{ alignItems: 'center' }}
+        isVisible={deleteModal}
         useNativeDriver={true}
-        onBackButtonPress={() => {
-          setProfileModal(false);
-        }}
-        onBackdropPress={() => {
-          setProfileModal(false);
-        }}
+        style={{ alignItems: 'center' }}
       >
         <View
           style={{
-            ...styles.modalbox,
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            ...styles.modalbox1,
+            paddingTop: scale(15),
           }}
         >
-          <TouchableOpacity
+          <View style={{ paddingHorizontal: scale(20) }}>
+            <Text style={{ ...styles.modaltitle1 }}>탈퇴 전 확인하세요!</Text>
+            <Text style={{ ...styles.modaldesc, marginTop: scale(12.2) }}>
+              서비스 이용 중 느꼈던 불편사항은 고객만족센터로 문의 주시면 답변
+              드리겠습니다.{'\n'}
+              {'\n'}[회원탈퇴 안내사항]{'\n'}- 요청 즉시 탈퇴 처리됩니다.{'\n'}-
+              탈퇴 시 이용기록이 삭제되며, 탈퇴 후 복구되지 않습니다.{'\n'}-
+              회원전용 서비스 이용이 불가합니다.
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                modalic ? setModalic(false) : setModalic(true);
+              }}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: scale(20),
+              }}
+              delayPressIn={0}
+            >
+              {modalic ? (
+                <Image
+                  style={{ ...styles.modalic }}
+                  source={require('../../../images/check_on_ic_40.png')}
+                />
+              ) : (
+                <Image
+                  style={{ ...styles.modalic }}
+                  source={require('../../../images/check_off.png')}
+                />
+              )}
+              <Text style={{ ...styles.checktext, marginLeft: scale(3) }}>
+                안내사항을 모두 확인하였으며, 이에 동의합니다.
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
             style={{
-              flex: 1,
+              flexDirection: 'row',
               width: '100%',
-              justifyContent: 'center',
-              borderBottomColor: 'rgba(0, 0, 0, 0.2)',
-              borderBottomWidth: 0.5,
-            }}
-            delayPressIn={0}
-            onPress={() => {
-              setProfileModal(false);
+              borderStyle: 'solid',
+              borderTopWidth: 0.3,
+              borderTopColor: '#c9c9c9',
             }}
           >
-            <Text
-              style={{
-                ...styles.modalconfirm,
-                textAlign: 'left',
-                marginLeft: scale(20),
-                color: '#1d1d1d',
+            <TouchableOpacity
+              onPress={() => {
+                setDeleteModal(false);
               }}
-            >
-              사진찍기
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              width: '100%',
-              justifyContent: 'center',
-            }}
-            delayPressIn={0}
-            onPress={() => {
-              setProfileModal(false);
-            }}
-          >
-            <Text
               style={{
-                ...styles.modalconfirm,
-                textAlign: 'left',
-                marginLeft: scale(20),
-                color: '#1d1d1d',
+                justifyContent: 'center',
+                width: '50%',
+                paddingVertical: scale(11.5),
+                borderStyle: 'solid',
+                borderRightWidth: 0.3,
+                borderRightColor: '#c9c9c9',
               }}
+              delayPressIn={0}
             >
-              갤러리
-            </Text>
-          </TouchableOpacity>
+              <Text style={{ ...styles.modalcancel }}>취소</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={modalic ? false : true}
+              onPress={() => {
+                _delete();
+              }}
+              style={{
+                justifyContent: 'center',
+                width: '50%',
+                paddingVertical: scale(11.5),
+                borderStyle: 'solid',
+                borderLeftWidth: 0.3,
+                borderLeftColor: '#c9c9c9',
+              }}
+              delayPressIn={0}
+            >
+              <Text style={{ ...styles.modalconfirm1 }}>확인</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </>
@@ -591,5 +652,55 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'center',
     color: '#bfbfbf',
+  },
+  modalbox1: {
+    width: scale(280),
+    backgroundColor: '#ffffff',
+  },
+  modalic: {
+    width: scale(12),
+    height: scale(12),
+  },
+  modaltitle1: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    lineHeight: 25,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#1d1d1d',
+  },
+  modaldesc: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(11),
+    fontStyle: 'normal',
+    lineHeight: 16,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#1d1d1d',
+  },
+  checktext: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(9),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#1d1d1d',
+  },
+  modalcancel: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#1d1d1d',
+  },
+  modalconfirm1: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#459bfe',
   },
 });

@@ -90,6 +90,7 @@ export default function SignUp({ route, navigation }) {
                       onPress={() => {
                         navigation.navigate('EachTerms', {
                           title: '위치 기반 서비스 약관 동의',
+                          uri: 'http://13.125.211.100:3001/cardealer/location',
                         });
                       }}
                       delayPressIn={0}
@@ -132,6 +133,7 @@ export default function SignUp({ route, navigation }) {
                       onPress={() => {
                         navigation.navigate('EachTerms', {
                           title: '배달의딜러 이용약관 동의',
+                          uri: 'http://13.125.211.100:3001/cardealer/terms',
                         });
                       }}
                       delayPressIn={0}
@@ -174,6 +176,7 @@ export default function SignUp({ route, navigation }) {
                       onPress={() => {
                         navigation.navigate('EachTerms', {
                           title: '배달의딜러 환불약관 동의',
+                          uri: 'http://13.125.211.100:3001/cardealer/refund',
                         });
                       }}
                       delayPressIn={0}
@@ -216,6 +219,7 @@ export default function SignUp({ route, navigation }) {
                       onPress={() => {
                         navigation.navigate('EachTerms', {
                           title: '개인정보 수집이용 동의',
+                          uri: 'http://13.125.211.100:3001/cardealer/privacy',
                         });
                       }}
                       delayPressIn={0}
@@ -257,7 +261,8 @@ export default function SignUp({ route, navigation }) {
                     <TouchableOpacity
                       onPress={() => {
                         navigation.navigate('EachTerms', {
-                          title: '개인정보 제3자 제공 동의 (선택)',
+                          title: '개인정보 제3자 제공 동의',
+                          uri: 'http://13.125.211.100:3001/cardealer/privacy',
                         });
                       }}
                       delayPressIn={0}

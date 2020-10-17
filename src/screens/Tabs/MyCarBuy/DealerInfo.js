@@ -317,6 +317,9 @@ export default function AllBuyPay({ route, navigation }) {
                 </View>
               </View>
               <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ReviewRegist');
+                }}
                 delayPressIn={0}
                 style={{
                   width: scale(280),

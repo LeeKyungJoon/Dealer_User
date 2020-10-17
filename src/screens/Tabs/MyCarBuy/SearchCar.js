@@ -22,6 +22,19 @@ export default function SearchResult({ route, navigation }) {
     { image: require('../../../images/kia.png'), name: '기아' },
     { image: require('../../../images/shevore.png'), name: '쉐보레' },
   ]);
+  const [brandList1, setBrandList1] = useState([
+    { image: require('../../../images/bmw.png'), name: 'BMW' },
+    { image: require('../../../images/audi.png'), name: '아우디' },
+    { image: require('../../../images/benz.png'), name: '벤츠' },
+    { image: require('../../../images/bentley.png'), name: '벤틀리' },
+    { image: require('../../../images/ford.png'), name: '포드' },
+  ]);
+  const [brandList2, setBrandList2] = useState([
+    { image: require('../../../images/tttttt.png'), name: '테슬라' },
+  ]);
+  const [brandList3, setBrandList3] = useState([
+    { image: require('../../../images/samsung.png'), name: '볼보' },
+  ]);
   const [toblist, setTopList] = useState([
     '국산차',
     '수입차',
@@ -29,6 +42,22 @@ export default function SearchResult({ route, navigation }) {
     '화물특장버스',
   ]);
   const [select, setSelect] = useState('국산차');
+
+  const _select = () => {
+    switch (select) {
+      case '국산차':
+        return brandList;
+
+      case '수입차':
+        return brandList1;
+
+      case '전기친환경':
+        return brandList2;
+
+      case '화물특장버스':
+        return brandList3;
+    }
+  };
 
   const _renderItem = (item) => {
     return (
@@ -208,8 +237,8 @@ export default function SearchResult({ route, navigation }) {
         <FlatList
           bounces={false}
           contentContainerStyle={{ marginTop: scale(5) }}
-          keyExtractor={(item) => item.index}
-          data={brandList}
+          keyExtractor={(item) => `${item.index}_${Math.random()}`}
+          data={_select()}
           renderItem={_renderItem}
         />
       </SafeAreaView>

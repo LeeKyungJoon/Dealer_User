@@ -125,7 +125,7 @@ export default function MyCarBuyMain({ route, navigation }) {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('CarDetail');
+                navigation.navigate('BuyCar');
               }}
               delayPressIn={0}
               style={{
@@ -219,9 +219,16 @@ export default function MyCarBuyMain({ route, navigation }) {
                 marginTop: scale(25),
               }}
             >
-              <Text style={{ ...styles.categorytitle }}>
-                인기 매물 <Text style={{ color: '#459bfe' }}>#국산차</Text>
-              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('List');
+                }}
+                delayPressIn={0}
+              >
+                <Text style={{ ...styles.categorytitle }}>
+                  인기 매물 <Text style={{ color: '#459bfe' }}>#국산차</Text>
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   premiumCheck ? setPremiumCheck(false) : setPremiumCheck(true);
@@ -342,15 +349,22 @@ export default function MyCarBuyMain({ route, navigation }) {
               </View>
             </TouchableOpacity>
 
-            <Text
-              style={{
-                ...styles.categorytitle,
-                marginBottom: scale(12),
-                marginTop: scale(25),
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('List');
               }}
+              delayPressIn={0}
             >
-              인기 매물 <Text style={{ color: '#459bfe' }}>#수입차</Text>
-            </Text>
+              <Text
+                style={{
+                  ...styles.categorytitle,
+                  marginBottom: scale(12),
+                  marginTop: scale(25),
+                }}
+              >
+                인기 매물 <Text style={{ color: '#459bfe' }}>#수입차</Text>
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('CarDetail');
@@ -436,9 +450,16 @@ export default function MyCarBuyMain({ route, navigation }) {
               </View>
             </TouchableOpacity>
             <View style={{ marginTop: scale(25) }}>
-              <Text style={{ ...styles.real, marginBottom: scale(10) }}>
-                #리얼 후기 <Text style={{ color: '#1d1d1d' }}>확인하기</Text>
-              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ListReal');
+                }}
+                delayPressIn={0}
+              >
+                <Text style={{ ...styles.real, marginBottom: scale(10) }}>
+                  #리얼 후기 <Text style={{ color: '#1d1d1d' }}>확인하기</Text>
+                </Text>
+              </TouchableOpacity>
               <View
                 style={{
                   marginBottom: scale(15),

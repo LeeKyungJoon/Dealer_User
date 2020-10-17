@@ -1,18 +1,19 @@
-import React from "react";
-import { Header } from "react-native-elements";
-import scale from "../../common/Scale";
-import { TouchableOpacity, Image, StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../common/Scale';
+import { TouchableOpacity, Image, StyleSheet, Text, View } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 export default function SignUp({ route, navigation }) {
-  const { title } = route.params;
+  const { title, uri } = route.params;
 
   return (
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
@@ -28,13 +29,15 @@ export default function SignUp({ route, navigation }) {
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../images/back_ic_80.png")}
+              source={require('../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
         centerComponent={<Text style={{ ...styles.title }}>{title}</Text>}
       />
-      <View style={{ flex: 1, backgroundColor: "#ffffff" }}></View>
+      <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+        <WebView source={{ uri: uri }} />
+      </View>
     </>
   );
 }
@@ -45,17 +48,17 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
 });

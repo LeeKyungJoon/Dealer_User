@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../../common/Scale";
+import React, { useState } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -13,9 +13,9 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
+} from 'react-native';
 
-export default function BuyCar() {
+export default function BuyCar({ route, navigation }) {
   const [agree, setAgree] = useState(false);
   const [agree1, setAgree1] = useState(false);
 
@@ -23,22 +23,25 @@ export default function BuyCar() {
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
         }}
         leftComponent={
           <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../../images/back_ic_80.png")}
+              source={require('../../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
@@ -50,45 +53,54 @@ export default function BuyCar() {
           keyboardShouldPersistTaps="always"
           contentContainerStyle={{
             flexGrow: 1,
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           <View>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginTop: scale(30),
               }}
             >
               <Image
                 style={{ ...styles.logoicon }}
-                source={require("../../../images/dealer_icon_160.png")}
+                source={require('../../../images/dealer_icon_160.png')}
               />
-              <Text style={{ ...styles.logotext, marginLeft: scale(5) }}>
+              <Text
+                style={{
+                  ...styles.logotext,
+                  marginLeft: scale(5),
+                  width: scale(285),
+                }}
+              >
                 필수 약관 및 환불 규정에 대해 확인 후 동의해주세요
               </Text>
             </View>
-            <View style={{ alignSelf: "center", marginTop: scale(30) }}>
+            <View style={{ alignSelf: 'center', marginTop: scale(30) }}>
               <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Terms');
+                }}
                 delayPressIn={0}
                 style={{
                   ...styles.box,
 
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: "row",
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
                   padding: scale(10),
                 }}
               >
                 <Text
-                  style={{ ...styles.boxtext, textDecorationLine: "underline" }}
+                  style={{ ...styles.boxtext, textDecorationLine: 'underline' }}
                 >
                   이용 약관 동의 (필수)
                 </Text>
                 <Image
                   style={{ ...styles.moreicon }}
-                  source={require("../../../images/more_view_ic_72.png")}
+                  source={require('../../../images/more_view_ic_72.png')}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -97,20 +109,20 @@ export default function BuyCar() {
                 }}
                 delayPressIn={0}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginTop: scale(10.5),
                 }}
               >
                 {agree ? (
                   <Image
                     style={{ ...styles.agreeicon }}
-                    source={require("../../../images/circle_on_ic_68.png")}
+                    source={require('../../../images/circle_on_ic_68.png')}
                   />
                 ) : (
                   <Image
                     style={{ ...styles.agreeicon }}
-                    source={require("../../../images/circle_off_ic_68.png")}
+                    source={require('../../../images/circle_off_ic_68.png')}
                   />
                 )}
                 <Text style={{ ...styles.agreetext, marginLeft: scale(5) }}>
@@ -118,24 +130,27 @@ export default function BuyCar() {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Rules');
+                }}
                 delayPressIn={0}
                 style={{
                   ...styles.box,
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: "row",
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
                   padding: scale(10),
                   marginTop: scale(40.5),
                 }}
               >
                 <Text
-                  style={{ ...styles.boxtext, textDecorationLine: "underline" }}
+                  style={{ ...styles.boxtext, textDecorationLine: 'underline' }}
                 >
                   환불 규정 동의 (필수)
                 </Text>
                 <Image
                   style={{ ...styles.moreicon }}
-                  source={require("../../../images/more_view_ic_72.png")}
+                  source={require('../../../images/more_view_ic_72.png')}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -144,20 +159,20 @@ export default function BuyCar() {
                 }}
                 delayPressIn={0}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginTop: scale(10.5),
                 }}
               >
                 {agree1 ? (
                   <Image
                     style={{ ...styles.agreeicon }}
-                    source={require("../../../images/circle_on_ic_68.png")}
+                    source={require('../../../images/circle_on_ic_68.png')}
                   />
                 ) : (
                   <Image
                     style={{ ...styles.agreeicon }}
-                    source={require("../../../images/circle_off_ic_68.png")}
+                    source={require('../../../images/circle_off_ic_68.png')}
                   />
                 )}
 
@@ -168,11 +183,14 @@ export default function BuyCar() {
             </View>
           </View>
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('DepositAccount');
+            }}
             delayPressIn={0}
             style={{
               ...styles.bottombutton,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               marginBottom: scale(15),
             }}
           >
@@ -190,18 +208,18 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
   },
   moreicon: {
     width: scale(18),
@@ -212,54 +230,54 @@ const styles = StyleSheet.create({
     height: scale(40),
   },
   logotext: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: 20,
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#1d1d1d",
+    textAlign: 'left',
+    color: '#1d1d1d',
   },
   box: {
     width: scale(280),
     borderRadius: 5,
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 0.3,
-    borderColor: "#707070",
+    borderColor: '#707070',
   },
   boxtext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#000000",
+    textAlign: 'left',
+    color: '#000000',
   },
   agreeicon: {
     width: scale(17),
     height: scale(17),
   },
   agreetext: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(12),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#000000",
+    textAlign: 'left',
+    color: '#000000',
   },
   bottombutton: {
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "#459bfe",
+    backgroundColor: '#459bfe',
   },
   bottombuttontext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
 });

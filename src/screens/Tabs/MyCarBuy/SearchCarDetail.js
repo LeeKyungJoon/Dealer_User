@@ -59,7 +59,13 @@ export default function SearchCarDetail({ route, navigation }) {
               />
             )}
           </TouchableOpacity>
-          <TouchableOpacity delayPressIn={0} style={{ width: '70%' }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SearchResult');
+            }}
+            delayPressIn={0}
+            style={{ width: '70%' }}
+          >
             <Text
               style={{
                 ...styles.recentlytext,

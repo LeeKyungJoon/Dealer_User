@@ -5,112 +5,125 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  TextInput,
-  Dimensions,
-  SafeAreaView,
   Text,
   View,
-  FlatList,
   ScrollView,
+  TextInput,
+  SafeAreaView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
   ImageBackground,
 } from 'react-native';
 
-const Width = Dimensions.get('window').width;
-
-export default function SearchCar({ route, navigation }) {
-  const [likeCheck, setLikeCheck] = useState(false);
+export default function List({ route, navigation }) {
   const [premiumCheck, setPremiumCheck] = useState(false);
+  const [likeCheck, setLikeCheck] = useState(false);
 
   return (
     <>
       <Header
-        placement="left"
-        backgroundColor={'#ffffff'}
-        barStyle="dark-content"
-        statusBarProps={{
-          translucent: true,
-          backgroundColor: '#ffffff',
-        }}
+        backgroundColor={'#459bfe'}
+        barStyle="light-content"
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
-          paddingHorizontal: scale(15),
         }}
         leftComponent={
           <TouchableOpacity
             onPress={() => {
               navigation.goBack();
             }}
+            style={{ marginLeft: scale(5) }}
             delayPressIn={0}
+            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
-              style={{ ...styles.backsearchicon }}
-              source={require('../../../images/back_ic_72.png')}
+              style={{ ...styles.alert }}
+              source={require('../../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
         centerComponent={
+          <Image
+            style={{ ...styles.mainlogo }}
+            source={require('../../../images/logo.png')}
+          />
+        }
+        rightComponent={
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('SearchCarDetail');
+              navigation.navigate('SearchCar');
             }}
+            style={{ marginRight: scale(5) }}
             delayPressIn={0}
-            activeOpacity={0.5}
-            style={{ width: '100%' }}
+            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
-            <Text style={{ ...styles.toptext }}>
-              검색결과{' '}
-              <Text style={{ color: '#459bfe', marginLeft: scale(5) }}>
-                #제네시스
-              </Text>
-            </Text>
+            <Image
+              style={{ ...styles.search }}
+              source={require('../../../images/search_ic_72.png')}
+            />
           </TouchableOpacity>
         }
       />
       <SafeAreaView style={{ ...styles.container }}>
         <ScrollView
-          contentContainerStyle={{
-            paddingBottom: scale(15),
-            paddingHorizontal: scale(15),
+          style={{
+            backgroundColor: '#ffffff',
           }}
+          contentContainerStyle={{ paddingBottom: scale(15) }}
         >
           <View
             style={{
-              width: '100%',
-              paddingVertical: scale(12),
+              flex: 1,
+              paddingHorizontal: scale(15),
+              backgroundColor: '#f9f9f9',
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                premiumCheck ? setPremiumCheck(false) : setPremiumCheck(true);
-              }}
-              delayPressIn={0}
+            <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                marginBottom: scale(5),
+                justifyContent: 'space-between',
+                marginBottom: scale(12),
+                marginTop: scale(15),
               }}
             >
-              <Image
-                style={{ ...styles.preicon }}
-                source={require('../../../images/premium_on.png')}
-              />
-              <Text style={{ ...styles.pretext, marginRight: scale(3) }}>
-                프리미엄 매물 모아보기
+              <Text style={{ ...styles.categorytitle, color: '#459bfe' }}>
+                #국산차
               </Text>
-              {premiumCheck ? (
+
+              <TouchableOpacity
+                onPress={() => {
+                  premiumCheck ? setPremiumCheck(false) : setPremiumCheck(true);
+                }}
+                delayPressIn={0}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <Image
-                  style={{ ...styles.onofficon }}
-                  source={require('../../../images/check_on_ic_40.png')}
+                  style={{ ...styles.preicon }}
+                  source={require('../../../images/premium_on.png')}
                 />
-              ) : (
-                <Image
-                  style={{ ...styles.onofficon }}
-                  source={require('../../../images/check_off_ic_40.png')}
-                />
-              )}
-            </TouchableOpacity>
+                <Text style={{ ...styles.pretext, marginRight: scale(3) }}>
+                  프리미엄 매물 모아보기
+                </Text>
+                {premiumCheck ? (
+                  <Image
+                    style={{ ...styles.onofficon }}
+                    source={require('../../../images/check_on_ic_40.png')}
+                  />
+                ) : (
+                  <Image
+                    style={{ ...styles.onofficon }}
+                    source={require('../../../images/check_off_ic_40.png')}
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('CarDetail');
@@ -292,21 +305,35 @@ export default function SearchCar({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  backsearchicon: {
+  search: {
+    width: scale(18),
+    height: scale(18),
+  },
+  mainlogo: {
+    width: scale(140),
+    height: scale(22),
+  },
+  alert: {
     width: scale(18),
     height: scale(18),
   },
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
   },
-  toptext: {
+  topimage: {
+    width: scale(330),
+    height: scale(130),
+    borderRadius: 10,
+    alignSelf: 'center',
+  },
+  categorytitle: {
     fontFamily: 'Roboto-Bold',
     fontSize: scale(16),
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',
-    color: '#000000',
+    color: '#1d1d1d',
   },
   carlist: {
     width: scale(330),
