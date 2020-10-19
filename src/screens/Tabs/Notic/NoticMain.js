@@ -104,9 +104,30 @@ export default function NoticMain({ route, navigation }) {
           borderBottomWidth: 0,
           height: scale(80),
         }}
-        leftComponent={
+        //leftComponent={
+        //  <TouchableOpacity
+        //    style={{ marginRight: scale(5) }}
+        //    delayPressIn={0}
+        //    hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
+        //  >
+        //    <Image
+        //      style={{ ...styles.alert }}
+        //      source={require('../../../images/alert_ic_72.png')}
+        //    />
+        //  </TouchableOpacity>
+        //}
+        centerComponent={
+          <Image
+            style={{ ...styles.mainlogo }}
+            source={require('../../../images/logo.png')}
+          />
+        }
+        rightComponent={
           <TouchableOpacity
-            style={{ marginLeft: scale(5) }}
+            onPress={() => {
+              navigation.navigate('SearchCar');
+            }}
+            style={{ marginRight: scale(5) }}
             delayPressIn={0}
             hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
@@ -116,24 +137,6 @@ export default function NoticMain({ route, navigation }) {
             />
           </TouchableOpacity>
         }
-        centerComponent={
-          <Image
-            style={{ ...styles.mainlogo }}
-            source={require('../../../images/logo.png')}
-          />
-        }
-        //rightComponent={
-        //  <TouchableOpacity
-        //    style={{ marginRight: scale(5) }}
-        //    delayPressIn={0}
-        //    hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-        //  >
-        //    <Image
-        //      style={{ ...styles.alert }}
-        //      source={require("../../../images/alert_ic_72.png")}
-        //    />
-        //  </TouchableOpacity>
-        //}
       />
       <SafeAreaView style={{ ...styles.container }}>
         <View style={{ flex: 1 }}>
