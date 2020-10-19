@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Header } from "react-native-elements";
-import scale from "../../common/Scale";
+import React, { useState, useEffect } from 'react';
+import { Header } from 'react-native-elements';
+import scale from '../../common/Scale';
 import {
   TouchableOpacity,
   Image,
@@ -13,17 +13,17 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import AppServer from "../../common/AppServer";
+} from 'react-native';
+import AppServer from '../../common/AppServer';
 
 export default function SignUp({ route, navigation }) {
   const { push_key } = route.params;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordCheck, setPasswordCheck] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [verify, setVerify] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [verify, setVerify] = useState('');
   const [able1, setAble1] = useState(false);
   const [able2, setAble2] = useState(false);
   const [able3, setAble3] = useState(false);
@@ -31,9 +31,9 @@ export default function SignUp({ route, navigation }) {
   const [checkPassword, setCheckPassword] = useState(false);
   const [checkName, setCheckName] = useState(false);
   const [checkVerify, setCheckVerify] = useState(false);
-  const [errorMsg1, setErrorMsg1] = useState({ msg: "", color: "transparent" });
-  const [errorMsg2, setErrorMsg2] = useState({ msg: "", color: "transparent" });
-  const [errorMsg3, setErrorMsg3] = useState({ msg: "", color: "transparent" });
+  const [errorMsg1, setErrorMsg1] = useState({ msg: '', color: 'transparent' });
+  const [errorMsg2, setErrorMsg2] = useState({ msg: '', color: 'transparent' });
+  const [errorMsg3, setErrorMsg3] = useState({ msg: '', color: 'transparent' });
   const [paused, setPaused] = useState(false);
   const [over, setOver] = useState(false);
   const [time, setTime] = useState({
@@ -82,16 +82,16 @@ export default function SignUp({ route, navigation }) {
   const _email = (emailtext) => {
     let regExp = /@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     setEmail(emailtext);
-    if (emailtext === "") {
+    if (emailtext === '') {
       setCheckEmail(false);
-      setErrorMsg1({ msg: "", color: "transparent" });
+      setErrorMsg1({ msg: '', color: 'transparent' });
     } else if (regExp.test(emailtext)) {
-      console.log("이메일 형식 ok");
+      console.log('이메일 형식 ok');
       setAble1(true);
-      setErrorMsg1({ msg: "", color: "transparent" });
+      setErrorMsg1({ msg: '', color: 'transparent' });
       setCheckEmail(false);
     } else {
-      console.log("이메일 형식 no");
+      console.log('이메일 형식 no');
       setAble1(false);
       setCheckEmail(false);
     }
@@ -100,68 +100,68 @@ export default function SignUp({ route, navigation }) {
   const _emailcheck = async () => {
     try {
       let data = await AppServer.CARDEALER_API_00007(email);
-      console.log("_emailcheck>>", data);
+      console.log('_emailcheck>>', data);
       if (!able1) {
         setCheckEmail(false);
-        setErrorMsg1({ msg: "이메일 형식이 맞지 않습니다.", color: "#ff5454" });
-      } else if (data.success_yn && data.msg === "success") {
+        setErrorMsg1({ msg: '이메일 형식이 맞지 않습니다.', color: '#ff5454' });
+      } else if (data.success_yn && data.msg === 'success') {
         setCheckEmail(true);
         setErrorMsg1({
-          msg: "사용 가능한 이메일 주소입니다.",
-          color: "#459bfe",
+          msg: '사용 가능한 이메일 주소입니다.',
+          color: '#459bfe',
         });
-      } else if (!data.success_yn && data.msg === "bad parameter") {
+      } else if (!data.success_yn && data.msg === 'bad parameter') {
         setCheckEmail(false);
-        setErrorMsg1({ msg: "이메일 형식이 맞지 않습니다.", color: "#ff5454" });
+        setErrorMsg1({ msg: '이메일 형식이 맞지 않습니다.', color: '#ff5454' });
       } else {
         setCheckEmail(false);
         setErrorMsg1({
-          msg: "이미 사용중인 이메일 주소입니다.",
-          color: "#ff5454",
+          msg: '이미 사용중인 이메일 주소입니다.',
+          color: '#ff5454',
         });
       }
     } catch (error) {
-      console.log("_emailcheck_NO", error);
+      console.log('_emailcheck_NO', error);
     }
   };
 
   const _password = (passwordtext) => {
     let regExp = /^[a-zA-Z0-9]{7,20}$/;
     setPassword(passwordtext);
-    if (passwordtext === "") {
-      setErrorMsg2({ msg: "", color: "transparent" });
+    if (passwordtext === '') {
+      setErrorMsg2({ msg: '', color: 'transparent' });
     } else if (regExp.test(passwordtext)) {
-      console.log("비밀번호 형식 ok");
-      setErrorMsg2({ msg: "", color: "transparent" });
+      console.log('비밀번호 형식 ok');
+      setErrorMsg2({ msg: '', color: 'transparent' });
     } else {
-      console.log("비밀번호 형식 no");
-      setErrorMsg2({ msg: "비밀번호 형식이 맞지 않습니다.", color: "#ff5454" });
+      console.log('비밀번호 형식 no');
+      setErrorMsg2({ msg: '비밀번호 형식이 맞지 않습니다.', color: '#ff5454' });
     }
   };
 
   const _passwordCheck = (passwordtext) => {
     setPasswordCheck(passwordtext);
-    if (passwordtext === "") {
+    if (passwordtext === '') {
       setCheckPassword(false);
-      setErrorMsg2({ msg: "", color: "transparent" });
+      setErrorMsg2({ msg: '', color: 'transparent' });
     } else if (password === passwordtext) {
-      console.log("비밀번호 체크 ok");
-      setErrorMsg2({ msg: "", color: "transparent" });
+      console.log('비밀번호 체크 ok');
+      setErrorMsg2({ msg: '', color: 'transparent' });
       setCheckPassword(true);
     } else {
-      console.log("비밀번호 체크 no");
-      setErrorMsg2({ msg: "비밀번호가 일치하지 않습니다.", color: "#ff5454" });
+      console.log('비밀번호 체크 no');
+      setErrorMsg2({ msg: '비밀번호가 일치하지 않습니다.', color: '#ff5454' });
       setCheckPassword(false);
     }
   };
 
   const _name = (nametext) => {
     setName(nametext);
-    if (nametext === "") {
-      console.log("이름 체크 no");
+    if (nametext === '') {
+      console.log('이름 체크 no');
       setCheckName(false);
     } else {
-      console.log("이름 체크 ok");
+      console.log('이름 체크 ok');
       setCheckName(true);
     }
   };
@@ -169,17 +169,17 @@ export default function SignUp({ route, navigation }) {
   const _phone = (phonetext) => {
     let regExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+([0-9]{4}))/;
     setPhone(phonetext);
-    if (phonetext === "") {
+    if (phonetext === '') {
       setAble2(false);
-      setErrorMsg3({ msg: "", color: "transparent" });
+      setErrorMsg3({ msg: '', color: 'transparent' });
     } else if (regExp.test(phonetext)) {
-      console.log("폰 체크 ok");
+      console.log('폰 체크 ok');
       setAble2(true);
-      setErrorMsg3({ msg: "", color: "transparent" });
+      setErrorMsg3({ msg: '', color: 'transparent' });
     } else {
-      console.log("폰 체크 no");
+      console.log('폰 체크 no');
       setAble2(false);
-      setErrorMsg3({ msg: "휴대전화가 맞지 않습니다.", color: "#ff5454" });
+      setErrorMsg3({ msg: '휴대전화가 맞지 않습니다.', color: '#ff5454' });
     }
   };
 
@@ -189,36 +189,36 @@ export default function SignUp({ route, navigation }) {
     try {
       let data = await AppServer.CARDEALER_API_00006({
         user_phone: phone,
-        phone_gb: "join",
-        user_type: "user",
+        phone_gb: 'join',
+        user_type: 'user',
       });
-      console.log("_verifyStart", data);
-      if (!data.success_yn && data.msg === "bad parameter") {
-        setErrorMsg3({ msg: "휴대전화가 맞지 않습니다.", color: "#ff5454" });
-      } else if (data.success_yn && data.msg === "success") {
-        setErrorMsg3({ msg: "", color: "transparent" });
+      console.log('_verifyStart', data);
+      if (!data.success_yn && data.msg === 'bad parameter') {
+        setErrorMsg3({ msg: '휴대전화가 맞지 않습니다.', color: '#ff5454' });
+      } else if (data.success_yn && data.msg === 'success') {
+        setErrorMsg3({ msg: '', color: 'transparent' });
       } else {
         setErrorMsg3({
-          msg: "이미 사용중인 휴대전화입니다.",
-          color: "#ff5454",
+          msg: '이미 사용중인 휴대전화입니다.',
+          color: '#ff5454',
         });
       }
     } catch (error) {
-      console.log("_verifyStart_NO", error);
+      console.log('_verifyStart_NO', error);
     }
   };
 
   const _verify = (verifytext) => {
     setVerify(verifytext);
-    if (verifytext === "") {
+    if (verifytext === '') {
       setCheckVerify(false);
-      setErrorMsg3({ msg: "", color: "transparent" });
+      setErrorMsg3({ msg: '', color: 'transparent' });
     } else if (verifytext.length >= 4) {
       setCheckVerify(true);
-      setErrorMsg3({ msg: "", color: "transparent" });
+      setErrorMsg3({ msg: '', color: 'transparent' });
     } else {
       setCheckVerify(false);
-      setErrorMsg3({ msg: "인증번호가 맞지 않습니다.", color: "#ff5454" });
+      setErrorMsg3({ msg: '인증번호가 맞지 않습니다.', color: '#ff5454' });
     }
   };
 
@@ -227,14 +227,14 @@ export default function SignUp({ route, navigation }) {
       user_phone: phone,
       phone_conf_number: verify,
     });
-    console.log("_signUp", data);
+    console.log('_signUp', data);
     if (
       !data.success_yn &&
-      data.msg === "휴대폰 인증코드가 일치하지 않습니다"
+      data.msg === '휴대폰 인증코드가 일치하지 않습니다'
     ) {
-      setErrorMsg3({ msg: data.msg, color: "#ff5454" });
-    } else if (data.success_yn && data.msg === "success")
-      setErrorMsg3({ msg: "", color: "transparent" });
+      setErrorMsg3({ msg: data.msg, color: '#ff5454' });
+    } else if (data.success_yn && data.msg === 'success')
+      setErrorMsg3({ msg: '', color: 'transparent' });
     _complete();
   };
 
@@ -247,21 +247,21 @@ export default function SignUp({ route, navigation }) {
         phone_conf_number: verify,
         user_pass: password,
         social_yn: false,
-        social_type: "",
+        social_type: '',
         push_key: push_key,
         update_page_yn: false,
       });
-      console.log("_complete", data);
-      if (data.success_yn && data.msg === "success") {
+      console.log('_complete', data);
+      if (data.success_yn && data.msg === 'success') {
         navigation.reset({
-          routes: [{ name: "MainScreen" }],
+          routes: [{ name: 'MainScreen' }],
         });
       }
       //else if(!data.success_yn && data.msg === "사용자가 존재합니다") {
 
       //}
     } catch (error) {
-      console.log("_complete_NO", error);
+      console.log('_complete_NO', error);
     }
   };
 
@@ -271,7 +271,7 @@ export default function SignUp({ route, navigation }) {
   });
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("blur", async () => {
+    const unsubscribe = navigation.addListener('blur', async () => {
       //setPaused(!paused);
       setOver(true);
     });
@@ -282,9 +282,9 @@ export default function SignUp({ route, navigation }) {
     <>
       <Header
         placement="left"
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "#459bfe" }}
+        statusBarProps={{ translucent: true, backgroundColor: '#459bfe' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
@@ -300,7 +300,7 @@ export default function SignUp({ route, navigation }) {
           >
             <Image
               style={{ ...styles.back }}
-              source={require("../../images/back_ic_80.png")}
+              source={require('../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
@@ -314,7 +314,7 @@ export default function SignUp({ route, navigation }) {
             }}
             contentContainerStyle={{
               flexGrow: 1,
-              justifyContent: "space-between",
+              justifyContent: 'space-between',
             }}
             keyboardShouldPersistTaps="always"
           >
@@ -326,8 +326,8 @@ export default function SignUp({ route, navigation }) {
                 <TextInput
                   autoCapitalize="none"
                   style={{ ...styles.rightoninput, marginLeft: scale(10) }}
-                  placeholder={"이메일 주소를 입력하세요."}
-                  placeholderTextColor={"#bababa"}
+                  placeholder={'이메일 주소를 입력하세요.'}
+                  placeholderTextColor={'#bababa'}
                   value={email}
                   onChangeText={(text) => {
                     _email(text);
@@ -343,9 +343,9 @@ export default function SignUp({ route, navigation }) {
                   style={{
                     width: scale(59),
                     height: scale(25.5),
-                    backgroundColor: "#bbbbbb",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: '#bbbbbb',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: scale(15),
                   }}
                 >
@@ -366,12 +366,12 @@ export default function SignUp({ route, navigation }) {
                 비밀번호를 입력해주세요
               </Text>
               <TextInput
-                autoCapitalize={"none"}
+                autoCapitalize={'none'}
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
                 placeholder={
-                  "비밀번호를 입력하세요. (영문, 숫자 포함 7자리 이상)"
+                  '비밀번호를 입력하세요. (영문, 숫자 포함 7자리 이상)'
                 }
-                placeholderTextColor={"#bababa"}
+                placeholderTextColor={'#bababa'}
                 secureTextEntry={true}
                 value={password}
                 onChangeText={(text) => {
@@ -379,10 +379,10 @@ export default function SignUp({ route, navigation }) {
                 }}
               />
               <TextInput
-                autoCapitalize={"none"}
+                autoCapitalize={'none'}
                 style={{ ...styles.inputstyle, marginTop: scale(5) }}
-                placeholder={"비밀번호를 확인하세요."}
-                placeholderTextColor={"#bababa"}
+                placeholder={'비밀번호를 확인하세요.'}
+                placeholderTextColor={'#bababa'}
                 secureTextEntry={true}
                 value={passwordCheck}
                 onChangeText={(text) => {
@@ -403,10 +403,10 @@ export default function SignUp({ route, navigation }) {
                 이름을 입력해주세요
               </Text>
               <TextInput
-                autoCapitalize={"none"}
+                autoCapitalize={'none'}
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"이름을 입력하세요."}
-                placeholderTextColor={"#bababa"}
+                placeholder={'이름을 입력하세요.'}
+                placeholderTextColor={'#bababa'}
                 value={name}
                 onChangeText={(text) => {
                   _name(text);
@@ -414,10 +414,10 @@ export default function SignUp({ route, navigation }) {
               />
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   marginTop: scale(25),
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
                 <Text style={{ ...styles.subtitle }}>
@@ -428,7 +428,7 @@ export default function SignUp({ route, navigation }) {
                     (
                     {`${time.minutes.toString()}:${time.seconds
                       .toString()
-                      .padStart(2, "0")}`}
+                      .padStart(2, '0')}`}
                     )
                   </Text>
                 ) : null}
@@ -436,9 +436,9 @@ export default function SignUp({ route, navigation }) {
               <View style={{ ...styles.righton, marginTop: scale(12) }}>
                 <TextInput
                   style={{ ...styles.rightoninput, marginLeft: scale(10) }}
-                  placeholder={"01012345678"}
-                  placeholderTextColor={"#bababa"}
-                  keyboardType={"phone-pad"}
+                  placeholder={'01012345678'}
+                  placeholderTextColor={'#bababa'}
+                  keyboardType={'phone-pad'}
                   value={phone}
                   onChangeText={(text) => {
                     _phone(text);
@@ -455,9 +455,9 @@ export default function SignUp({ route, navigation }) {
                   style={{
                     width: scale(59),
                     height: scale(25.5),
-                    backgroundColor: "#bbbbbb",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: '#bbbbbb',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: scale(15),
                   }}
                 >
@@ -469,10 +469,10 @@ export default function SignUp({ route, navigation }) {
                 </TouchableOpacity>
               </View>
               <TextInput
-                keyboardType={"number-pad"}
+                keyboardType={'number-pad'}
                 style={{ ...styles.inputstyle, marginTop: scale(12) }}
-                placeholder={"인증번호를 입력하세요."}
-                placeholderTextColor={"#bababa"}
+                placeholder={'인증번호를 입력하세요.'}
+                placeholderTextColor={'#bababa'}
                 value={verify}
                 onChangeText={(text) => {
                   _verify(text);
@@ -506,9 +506,9 @@ export default function SignUp({ route, navigation }) {
               }
               style={{
                 ...styles.bottombutton,
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: Platform.OS === "ios" ? 0 : scale(30),
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: Platform.OS === 'ios' ? 0 : scale(30),
                 marginTop: scale(60),
                 backgroundColor:
                   email &&
@@ -522,8 +522,8 @@ export default function SignUp({ route, navigation }) {
                   verify &&
                   checkVerify &&
                   checkEmail
-                    ? "#459bfe"
-                    : "#dddddd",
+                    ? '#459bfe'
+                    : '#dddddd',
               }}
               delayPressIn={0}
             >
@@ -542,72 +542,72 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   title: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
   subtitle: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(16),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#222222",
+    textAlign: 'left',
+    color: '#222222',
   },
   righton: {
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: "#dddddd",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    borderColor: '#dddddd',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   rightoninput: {
     width: scale(200),
-    backgroundColor: "#ffffff",
-    fontFamily: "Roboto-Regular",
+    backgroundColor: '#ffffff',
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.39,
-    textAlign: "left",
-    color: "#000000",
+    textAlign: 'left',
+    color: '#000000',
   },
   rightbutton: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
   inputstyle: {
     width: scale(330),
     height: scale(40),
-    backgroundColor: "#ffffff",
-    borderStyle: "solid",
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: "#dddddd",
+    borderColor: '#dddddd',
     borderRadius: 10,
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(13),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.39,
-    textAlign: "left",
-    color: "#000000",
+    textAlign: 'left',
+    color: '#000000',
     paddingHorizontal: scale(10),
   },
   bottombutton: {
@@ -616,27 +616,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   bottomtext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(15),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
   },
   error: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: -0.3,
-    textAlign: "left",
+    textAlign: 'left',
   },
   count: {
-    fontFamily: "Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: scale(15),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     letterSpacing: 0,
-    color: "#ff5454",
+    color: '#ff5454',
   },
 });

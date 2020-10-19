@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -8,15 +8,15 @@ import {
   SafeAreaView,
   Dimensions,
   Platform,
-} from "react-native";
-import { Header } from "react-native-elements";
-import scale from "../../common/Scale";
-import messaging from "@react-native-firebase/messaging";
-import AsyncStorage from "@react-native-community/async-storage";
+} from 'react-native';
+import { Header } from 'react-native-elements';
+import scale from '../../common/Scale';
+import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const Width = Dimensions.get("window").width;
+const Width = Dimensions.get('window').width;
 
-const Height = Dimensions.get("window").height;
+const Height = Dimensions.get('window').height;
 
 //
 import {
@@ -24,64 +24,64 @@ import {
   GraphRequest,
   GraphRequestManager,
   LoginManager,
-} from "react-native-fbsdk";
+} from 'react-native-fbsdk';
 //
 
 //
-import InstagramLogin from "react-native-instagram-login";
+import InstagramLogin from 'react-native-instagram-login';
 //
 
 export default function MainScreen({ route, navigation }) {
   const instagramLogin = useRef(null);
-  const [token, setToken] = useState({ igToken: "", igUserId: "" });
-  const [push, setPush] = useState("");
+  const [token, setToken] = useState({ igToken: '', igUserId: '' });
+  const [push, setPush] = useState('');
 
   // 페이스북 콜백
   const _responseInfoCallback = async (error, result) => {
     //페북전용
     if (error) {
-      console.log("Error fetching data 1 : " + JSON.stringify(error));
+      console.log('Error fetching data 1 : ' + JSON.stringify(error));
     } else {
-      console.log("Result : " + JSON.stringify(result));
-      console.log("Result Name: " + result.name || "");
-      const names = (result.name || "").split(" ");
+      console.log('Result : ' + JSON.stringify(result));
+      console.log('Result Name: ' + result.name || '');
+      const names = (result.name || '').split(' ');
       let firstName = names[1];
       let lastName = names[0];
-      console.log("firstName : " + firstName);
-      console.log("lastName : " + lastName);
-      if (result.name || ("" === lastName && !firstName)) {
+      console.log('firstName : ' + firstName);
+      console.log('lastName : ' + lastName);
+      if (result.name || ('' === lastName && !firstName)) {
         firstName = result.last_name;
         lastName = result.first_name;
       }
       const email = result.email;
-      const user_img_url = result.picture.data.url ?? "";
+      const user_img_url = result.picture.data.url ?? '';
     }
   };
 
   const FaceBook = async () => {
     let result;
     try {
-      LoginManager.setLoginBehavior("NATIVE_ONLY");
+      LoginManager.setLoginBehavior('NATIVE_ONLY');
       result = await LoginManager.logInWithPermissions([
-        "public_profile",
-        "email",
+        'public_profile',
+        'email',
       ]);
     } catch (error) {
-      LoginManager.setLoginBehavior("WEB_ONLY");
+      LoginManager.setLoginBehavior('WEB_ONLY');
       result = await LoginManager.logInWithPermissions([
-        "public_profile",
-        "email",
+        'public_profile',
+        'email',
       ]);
     }
-    console.log("@@@@@@@@@@@@@@@@@ result : " + JSON.stringify(result));
+    console.log('@@@@@@@@@@@@@@@@@ result : ' + JSON.stringify(result));
     if (result.isCancelled) {
     } else {
       AccessToken.getCurrentAccessToken().then((data) => {
         // console.log(data.accessToken.toString())
         const infoRequest = new GraphRequest(
-          "/me?fields=name,picture,email,last_name,first_name",
+          '/me?fields=name,picture,email,last_name,first_name',
           null,
-          _responseInfoCallback
+          _responseInfoCallback,
         );
         new GraphRequestManager().addRequest(infoRequest).start();
       });
@@ -90,37 +90,37 @@ export default function MainScreen({ route, navigation }) {
 
   // 인스타그램 콜백
   const setIgToken = async (data) => {
-    await store.save("igToken", data.access_token);
-    await store.save("igUserId", data.user_id);
+    await store.save('igToken', data.access_token);
+    await store.save('igUserId', data.user_id);
     setToken({ igToken: data.access_token, igUserId: data.user_id });
   };
 
   const firebasePushSetup = async () => {
     const token = await messaging().getToken();
     setPush(token);
-    console.log("TOKEN =", token);
+    console.log('TOKEN =', token);
 
     const granted = await messaging().requestPermission();
-    console.log("GRANTED =", granted);
+    console.log('GRANTED =', granted);
 
     // if(granted == 1){
-    let fcm_token = await AsyncStorage.getItem("pushtoken");
-    if (fcm_token !== "NONE" && !fcm_token) {
-      await AsyncStorage.setItem("pushtoken", token);
+    let fcm_token = await AsyncStorage.getItem('pushtoken');
+    if (fcm_token !== 'NONE' && !fcm_token) {
+      await AsyncStorage.setItem('pushtoken', token);
     }
     // }else{
     // Step1();
     // }
 
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-      navigation.navigate("NotiModal", remoteMessage);
-      console.log("Message handled in the background1!", remoteMessage);
+      navigation.navigate('NotiModal', remoteMessage);
+      console.log('Message handled in the background1!', remoteMessage);
       // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
 
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      navigation.navigate("NotiModal", remoteMessage);
-      console.log("FCM Message Data:", remoteMessage.data);
+      navigation.navigate('NotiModal', remoteMessage);
+      console.log('FCM Message Data:', remoteMessage.data);
       // Alert.alert('A new FCM message arrived2!', JSON.stringify(remoteMessage));
     });
 
@@ -128,7 +128,7 @@ export default function MainScreen({ route, navigation }) {
   };
 
   useEffect(() => {
-    const focus = navigation.addListener("focus", async () => {
+    const focus = navigation.addListener('focus', async () => {
       firebasePushSetup();
     });
     return focus;
@@ -137,9 +137,9 @@ export default function MainScreen({ route, navigation }) {
   return (
     <>
       <Header
-        backgroundColor={"#459bfe"}
+        backgroundColor={'#459bfe'}
         barStyle="light-content"
-        statusBarProps={{ translucent: true, backgroundColor: "transparent" }}
+        statusBarProps={{ translucent: true, backgroundColor: 'transparent' }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(0),
@@ -148,7 +148,7 @@ export default function MainScreen({ route, navigation }) {
       <SafeAreaView
         style={{
           ...styles.container,
-          justifyContent: "center",
+          justifyContent: 'center',
         }}
       >
         <View style={{ paddingHorizontal: scale(25) }}>
@@ -156,26 +156,26 @@ export default function MainScreen({ route, navigation }) {
             style={{
               ...styles.logo,
               marginBottom: scale(119.8),
-              alignSelf: "center",
+              alignSelf: 'center',
             }}
-            source={require("../../images/logo_600.png")}
+            source={require('../../images/logo_600.png')}
           />
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignTerms", { push_key: push });
+              navigation.navigate('SignTerms', { push_key: push });
             }}
             style={{
               ...styles.button,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#001740",
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#001740',
             }}
             delayPressIn={0}
           >
             <Text
               style={{
                 ...styles.buttontext,
-                color: "#ffffff",
+                color: '#ffffff',
               }}
             >
               회원가입
@@ -183,78 +183,78 @@ export default function MainScreen({ route, navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignIn", { push_key: push });
+              navigation.navigate('SignIn', { push_key: push });
             }}
             style={{
               ...styles.button,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#ffffff",
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#ffffff',
               marginTop: scale(15),
             }}
             delayPressIn={0}
           >
-            <Text style={{ ...styles.buttontext, color: "#001740" }}>
+            <Text style={{ ...styles.buttontext, color: '#001740' }}>
               로그인
             </Text>
           </TouchableOpacity>
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'row',
               marginTop: scale(23),
-              justifyContent: "space-between",
+              justifyContent: 'space-between',
             }}
           >
             <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
               delayPressIn={0}
             >
               <Image
                 style={{ ...styles.bottomicon }}
-                source={require("../../images/kakaotalk_ic_72.png")}
+                source={require('../../images/kakaotalk_ic_72.png')}
               />
               <Text style={{ ...styles.bottomtext, marginLeft: scale(5) }}>
                 kakao
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
               delayPressIn={0}
               onPress={() => {
-                instagramLogin.show();
+                //instagramLogin.show();
               }}
             >
               <Image
                 style={{ ...styles.bottomicon }}
-                source={require("../../images/instagram_ic_72.png")}
+                source={require('../../images/instagram_ic_72.png')}
               />
               <Text style={{ ...styles.bottomtext, marginLeft: scale(5) }}>
                 Instagram
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
               delayPressIn={0}
               onPress={() => {
-                FaceBook();
+                //FaceBook();
               }}
             >
               <Image
                 style={{ ...styles.bottomicon }}
-                source={require("../../images/facebook_ic_72.png")}
+                source={require('../../images/facebook_ic_72.png')}
               />
               <Text style={{ ...styles.bottomtext, marginLeft: scale(5) }}>
                 Facebook
               </Text>
             </TouchableOpacity>
-            {Platform.OS === "ios" ? (
+            {Platform.OS === 'ios' ? (
               <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
+                style={{ flexDirection: 'row', alignItems: 'center' }}
                 delayPressIn={0}
               >
                 <Image
                   style={{ ...styles.bottomicon }}
-                  source={require("../../images/Left_Black_Logo.png")}
+                  source={require('../../images/Left_Black_Logo.png')}
                 />
                 <Text style={{ ...styles.bottomtext, marginLeft: scale(5) }}>
                   Apple
@@ -267,7 +267,7 @@ export default function MainScreen({ route, navigation }) {
             appId="1660689697418817"
             appSecret="a7d6dbe15f7f2139b12f3d87eb79fd8d"
             // redirectUrl='your-redirect-Url'
-            scopes={["user_profile", "user_media"]}
+            scopes={['user_profile', 'user_media']}
             onLoginSuccess={setIgToken}
             onLoginFailure={(data) => console.log(data)}
           />
@@ -280,7 +280,7 @@ export default function MainScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#459bfe",
+    backgroundColor: '#459bfe',
   },
   logo: {
     width: scale(150),
@@ -292,25 +292,25 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttontext: {
-    fontFamily: "Jalnan",
+    fontFamily: 'Jalnan',
     fontSize: scale(16),
-    fontWeight: "normal",
-    fontStyle: "normal",
+    fontWeight: 'normal',
+    fontStyle: 'normal',
     lineHeight: scale(25),
     letterSpacing: 0,
-    textAlign: "center",
+    textAlign: 'center',
   },
   bottomicon: {
     width: scale(18),
     height: scale(18),
   },
   bottomtext: {
-    fontFamily: "Roboto-Bold",
+    fontFamily: 'Roboto-Bold',
     fontSize: scale(12.3),
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: scale(14.8),
     letterSpacing: 0.12,
-    textAlign: "left",
-    color: "#ffffff",
+    textAlign: 'left',
+    color: '#ffffff',
   },
 });
