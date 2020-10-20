@@ -25,6 +25,7 @@ import ReviewRegist from './screens/Tabs/MyCarBuy/ReviewRegist';
 import TransferRefund from './screens/Tabs/MyCarBuy/TransferRefund';
 import RealReviewDetail from './screens/Tabs/MyCarBuy/RealReviewDetail';
 import Chat from './screens/Tabs/MyCarBuy/Chat';
+import VisitReservation from './screens/Tabs/MyCarBuy/VisitReservation';
 ///////
 //소비자용_내차판매
 import QuoteRequest from './screens/Tabs/MyCarSell/QuoteRequest';
@@ -60,7 +61,7 @@ const Stack = createStackNavigator();
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={'none'} initialRouteName={'Chat'}>
+      <Stack.Navigator headerMode={'none'} initialRouteName={'Sign'}>
         <Stack.Screen name={'Sign'} component={Sign} />
         <Stack.Screen name={'Tabs'} component={Tabs} />
         {/* 소비자용_내차구매 */}
@@ -87,6 +88,7 @@ export default function Route() {
         <Stack.Screen name={'TransferRefund'} component={TransferRefund} />
         <Stack.Screen name={'RealReviewDetail'} component={RealReviewDetail} />
         <Stack.Screen name={'Chat'} component={Chat} />
+        <Stack.Screen name={'VisitReservation'} component={VisitReservation} />
         {/*  */}
         {/* 소비자용_내차판매 */}
         <Stack.Screen name={'QuoteRequest'} component={QuoteRequest} />

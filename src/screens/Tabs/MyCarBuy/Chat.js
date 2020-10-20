@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Header } from 'react-native-elements';
+import { Header, Input } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
   TouchableOpacity,
@@ -64,6 +64,7 @@ export default function ConsultMain({ route, navigation }) {
             paddingBottom: scale(15),
             paddingHorizontal: scale(15),
             flex: 1,
+            backgroundColor: '#f9f9f9',
           }}
         >
           <View>
@@ -110,24 +111,65 @@ export default function ConsultMain({ route, navigation }) {
               </Text>
             </View>
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('VisitReservation');
+            }}
+            delayPressIn={0}
+            style={{
+              ...styles.yellow,
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'absolute',
+              bottom: 30,
+              right: 15,
+              zIndex: 1,
+            }}
+          >
+            <Text style={{ ...styles.yellowtext }}>방문{'\n'}예약</Text>
+          </TouchableOpacity>
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Head_Question');
-          }}
-          delayPressIn={0}
+
+        <View
           style={{
-            ...styles.yellow,
-            alignItems: 'center',
+            ...styles.bottombox,
+            paddingHorizontal: scale(11),
             justifyContent: 'center',
-            position: 'absolute',
-            bottom: 25,
-            right: 15,
-            zIndex: 1,
+            paddingVertical: scale(7.5),
+            maxHeight: scale(100),
           }}
         >
-          <Text style={{ ...styles.yellowtext }}>방문{'\n'}예약</Text>
-        </TouchableOpacity>
+          <View
+            style={{
+              ...styles.bottominput1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: scale(10),
+              maxHeight: scale(100),
+            }}
+          >
+            <TextInput
+              maxLength={500}
+              multiline={true}
+              style={{
+                ...styles.bottominput,
+                paddingBottom: 0,
+                paddingTop: 0,
+                marginVertical: scale(8),
+                maxHeight: scale(100),
+              }}
+              placeholder={'메세지를 입력해주세요.'}
+              placeholderTextColor={'#acacac'}
+            />
+            <TouchableOpacity delayPressIn={0}>
+              <Image
+                style={{ width: scale(22), height: scale(22) }}
+                source={require('../../../images/send_icon_on_88.png')}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
       </SafeAreaView>
     </>
   );
@@ -166,7 +208,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
   },
   leftavator: {
     width: scale(40),
@@ -226,5 +268,28 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'left',
     color: 'rgba(255, 255, 255, 0.8)',
+  },
+  bottombox: {
+    width: '100%',
+    //height: scale(50),
+    backgroundColor: '#ffffff',
+  },
+  bottominput: {
+    width: scale(295),
+    //height: scale(14),
+    backgroundColor: '#f9f9f9',
+    //backgroundColor: 'red',
+    fontFamily: 'Roboto-Medium',
+    fontSize: scale(14),
+    fontStyle: 'normal',
+    textAlign: 'left',
+  },
+  bottominput1: {
+    width: '100%',
+    backgroundColor: '#f9f9f9',
+    borderRadius: scale(10),
+    borderStyle: 'solid',
+    borderWidth: 0.5,
+    borderColor: '#cfcfcf',
   },
 });

@@ -882,6 +882,9 @@ export default function CarDetail({ route, navigation }) {
               }}
             >
               <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Chat');
+                }}
                 delayPressIn={0}
                 style={{
                   ...styles.yellowbutton,
