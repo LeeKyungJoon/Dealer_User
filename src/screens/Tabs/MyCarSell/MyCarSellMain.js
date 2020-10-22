@@ -29,38 +29,11 @@ export default function MyCarSellMain({ route, navigation }) {
           borderBottomWidth: 0,
           height: scale(80),
         }}
-        //leftComponent={
-        //  <TouchableOpacity
-        //    style={{ marginRight: scale(5) }}
-        //    delayPressIn={0}
-        //    hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-        //  >
-        //    <Image
-        //      style={{ ...styles.alert }}
-        //      source={require('../../../images/alert_ic_72.png')}
-        //    />
-        //  </TouchableOpacity>
-        //}
         centerComponent={
           <Image
             style={{ ...styles.mainlogo }}
             source={require('../../../images/logo.png')}
           />
-        }
-        rightComponent={
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('SearchCar');
-            }}
-            style={{ marginRight: scale(5) }}
-            delayPressIn={0}
-            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-          >
-            <Image
-              style={{ ...styles.search }}
-              source={require('../../../images/search_ic_72.png')}
-            />
-          </TouchableOpacity>
         }
       />
       <SafeAreaView style={{ ...styles.container }}>
@@ -71,31 +44,6 @@ export default function MyCarSellMain({ route, navigation }) {
               paddingTop: scale(20),
             }}
           >
-            {/*<Swiper
-              loop={false}
-              height={scale(130)}
-              style={{ height: scale(130), flex: 0 }}
-              containerStyle={{
-                height: scale(130),
-                flex: 0,
-              }}
-              activeDotColor={'#ffbe26'}
-              dotColor={'#e9e9e9'}
-              paginationStyle={{ bottom: 10 }}
-            >
-              <Image
-                style={{ ...styles.topimage }}
-                source={require('../../../images/banner.png')}
-              />
-              <Image
-                style={{ ...styles.topimage }}
-                source={require('../../../images/banner.png')}
-              />
-              <Image
-                style={{ ...styles.topimage }}
-                source={require('../../../images/banner.png')}
-              />
-            </Swiper>*/}
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('DealerAuction');
