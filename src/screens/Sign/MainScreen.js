@@ -14,10 +14,6 @@ import scale from '../../common/Scale';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const Width = Dimensions.get('window').width;
-
-const Height = Dimensions.get('window').height;
-
 //
 import {
   AccessToken,
