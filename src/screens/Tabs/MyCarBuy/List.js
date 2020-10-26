@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -15,12 +15,50 @@ import {
   Keyboard,
   ImageBackground,
 } from 'react-native';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
+import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
 
 export default function List({ route, navigation }) {
+  let regexp = /\B(?=(\d{3})+(?!\d))/g;
+  const [data, setData] = useState(null);
   const [premiumCheck, setPremiumCheck] = useState(false);
-  const [likeCheck, setLikeCheck] = useState(false);
+  const { title } = route.params;
 
-  return (
+  const _getList = async ({ check }) => {
+    try {
+      let data = await AppServer.CARDEALER_API_00018({
+        data_type: title,
+        premium_yn: check,
+        page: 1,
+        range: 30,
+      });
+      console.log('getList>>>', data);
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getList>>', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getList({ check: premiumCheck });
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         backgroundColor={'#459bfe'}
@@ -90,12 +128,13 @@ export default function List({ route, navigation }) {
               }}
             >
               <Text style={{ ...styles.categorytitle, color: '#459bfe' }}>
-                #국산차
+                #{title ? '수입차' : '국산차'}
               </Text>
 
               <TouchableOpacity
                 onPress={() => {
-                  premiumCheck ? setPremiumCheck(false) : setPremiumCheck(true);
+                  setPremiumCheck(!premiumCheck);
+                  _getList({ check: !premiumCheck });
                 }}
                 delayPressIn={0}
                 style={{
@@ -124,183 +163,111 @@ export default function List({ route, navigation }) {
                 )}
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('CarDetail');
-              }}
-              delayPressIn={0}
-              style={{
-                ...styles.carlist,
-                elevation: 1.5,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
-                marginBottom: scale(10),
-              }}
-            >
-              <ImageBackground
-                style={{ ...styles.carimage }}
-                source={require('../../../images/k_7_02.png')}
-              >
-                <View
-                  style={{
-                    width: scale(90),
-                    height: scale(30),
-                    backgroundColor: '#001740',
-                    position: 'absolute',
-                    bottom: 0,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text style={{ ...styles.price }}>2,000만원</Text>
-                </View>
-                <Image
-                  style={{ ...styles.premark, position: 'absolute' }}
-                  source={require('../../../images/premium.png')}
-                />
+            {data.list.map((item, index) => {
+              return (
                 <TouchableOpacity
+                  key={index}
                   onPress={() => {
-                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
+                    navigation.navigate('CarDetail');
                   }}
                   delayPressIn={0}
-                  style={{ position: 'absolute', right: 5, top: 5 }}
+                  style={{
+                    ...styles.carlist,
+                    elevation: 1.5,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                    marginBottom: scale(10),
+                  }}
                 >
-                  {likeCheck ? (
-                    <Image
+                  <ImageBackground
+                    style={{ ...styles.carimage }}
+                    source={{ uri: item.car_img }}
+                  >
+                    <View
                       style={{
-                        ...styles.like,
+                        width: scale(90),
+                        height: scale(30),
+                        backgroundColor: '#001740',
+                        position: 'absolute',
+                        bottom: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
-                      source={require('../../../images/likes_on.png')}
-                    />
-                  ) : (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_off.png')}
-                    />
-                  )}
-                </TouchableOpacity>
-              </ImageBackground>
+                    >
+                      <Text style={{ ...styles.price }}>
+                        {item.car_price
+                          .substring(item.car_price.length - 4, 0)
+                          .replace(regexp, ',')}
+                        만원
+                      </Text>
+                    </View>
+                    {item.premium_yn ? (
+                      <Image
+                        style={{ ...styles.premark, position: 'absolute' }}
+                        source={require('../../../images/premium.png')}
+                      />
+                    ) : null}
+                    <View style={{ position: 'absolute', right: 5, top: 5 }}>
+                      {item.like_yn ? (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_on.png')}
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_off.png')}
+                        />
+                      )}
+                    </View>
+                  </ImageBackground>
 
-              <Image
-                style={{
-                  ...styles.avator,
-                  position: 'absolute',
-                  right: 10,
-                  bottom: 50,
-                }}
-                source={require('../../../images/shutterstock_682551649.png')}
-              />
-              <View style={{ padding: scale(10) }}>
-                <Text style={{ ...styles.carname }}>기아 더뉴 K7</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: scale(3),
-                  }}
-                >
-                  <Text style={{ ...styles.carhistory }}>
-                    서울 / 18년 10월 / 8,859km
-                  </Text>
-                  <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('CarDetail');
-              }}
-              delayPressIn={0}
-              style={{
-                ...styles.carlist,
-                elevation: 1.5,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
-              }}
-            >
-              <ImageBackground
-                style={{ ...styles.carimage }}
-                source={require('../../../images/321_373244444.png')}
-              >
-                <View
-                  style={{
-                    width: scale(90),
-                    height: scale(30),
-                    backgroundColor: '#001740',
-                    position: 'absolute',
-                    bottom: 0,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text style={{ ...styles.price }}>2,000만원</Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
-                  }}
-                  delayPressIn={0}
-                  style={{ position: 'absolute', right: 5, top: 5 }}
-                >
-                  {likeCheck ? (
-                    <Image
+                  <Image
+                    style={{
+                      ...styles.avator,
+                      position: 'absolute',
+                      right: 10,
+                      bottom: 50,
+                    }}
+                    source={{ uri: item.dealer_img }}
+                  />
+                  <View style={{ padding: scale(10) }}>
+                    <Text style={{ ...styles.carname }}>{item.car_nm}</Text>
+                    <View
                       style={{
-                        ...styles.like,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: scale(3),
                       }}
-                      source={require('../../../images/likes_on.png')}
-                    />
-                  ) : (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_off.png')}
-                    />
-                  )}
+                    >
+                      <Text style={{ ...styles.carhistory }}>
+                        {item.sido} / {item.vehicle_year}년 /{' '}
+                        {item.driven_distance.toString().replace(regexp, ',')}km
+                      </Text>
+                      <Text style={{ ...styles.daypeople }}>
+                        {moment(item.reg_dt * 1000).format('YYYY.MM.DD')} /{' '}
+                        {item.like_cnt}명 찜
+                      </Text>
+                    </View>
+                  </View>
                 </TouchableOpacity>
-              </ImageBackground>
-
-              <Image
-                style={{
-                  ...styles.avator,
-                  position: 'absolute',
-                  right: 10,
-                  bottom: 50,
-                }}
-                source={require('../../../images/shutterstock_682551649.png')}
-              />
-              <View style={{ padding: scale(10) }}>
-                <Text style={{ ...styles.carname }}>르노삼성 QM6</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: scale(3),
-                  }}
-                >
-                  <Text style={{ ...styles.carhistory }}>
-                    서울 / 18년 10월 / 8,859km
-                  </Text>
-                  <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+              );
+            })}
           </View>
         </ScrollView>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 

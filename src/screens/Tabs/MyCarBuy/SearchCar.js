@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -12,29 +12,14 @@ import {
   View,
   FlatList,
 } from 'react-native';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Width = Dimensions.get('window').width;
 
 export default function SearchResult({ route, navigation }) {
-  const [brandList, setBrandList] = useState([
-    { image: require('../../../images/hyundai.png'), name: '현대' },
-    { image: require('../../../images/jenesis.png'), name: '제네시스' },
-    { image: require('../../../images/kia.png'), name: '기아' },
-    { image: require('../../../images/shevore.png'), name: '쉐보레' },
-  ]);
-  const [brandList1, setBrandList1] = useState([
-    { image: require('../../../images/bmw.png'), name: 'BMW' },
-    { image: require('../../../images/audi.png'), name: '아우디' },
-    { image: require('../../../images/benz.png'), name: '벤츠' },
-    { image: require('../../../images/bentley.png'), name: '벤틀리' },
-    { image: require('../../../images/ford.png'), name: '포드' },
-  ]);
-  const [brandList2, setBrandList2] = useState([
-    { image: require('../../../images/tttttt.png'), name: '테슬라' },
-  ]);
-  const [brandList3, setBrandList3] = useState([
-    { image: require('../../../images/samsung.png'), name: '볼보' },
-  ]);
+  const [data, setData] = useState(null);
   const [toblist, setTopList] = useState([
     '국산차',
     '수입차',
@@ -46,24 +31,32 @@ export default function SearchResult({ route, navigation }) {
   const _select = () => {
     switch (select) {
       case '국산차':
-        return brandList;
+        return data.brand_list.filter(
+          (brand) => brand.category_nm === '국산차',
+        );
 
       case '수입차':
-        return brandList1;
+        return data.brand_list.filter(
+          (brand) => brand.category_nm === '해외차',
+        );
 
       case '전기친환경':
-        return brandList2;
+        return data.brand_list.filter(
+          (brand) => brand.category_nm === '전기친환경',
+        );
 
       case '화물특장버스':
-        return brandList3;
+        return data.brand_list.filter(
+          (brand) => brand.category_nm === '화물특장버스',
+        );
     }
   };
 
-  const _renderItem = (item) => {
+  const _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('SearchResult');
+          navigation.navigate('SearchResult', { result: item.brand_nm });
         }}
         delayPressIn={0}
         style={{
@@ -82,62 +75,47 @@ export default function SearchResult({ route, navigation }) {
             alignItems: 'center',
           }}
         >
-          <Image style={{ ...styles.brandimage }} source={item.item.image} />
+          <Image
+            style={{ ...styles.brandimage }}
+            source={{ uri: item.brand_logo }}
+          />
           <Text style={{ ...styles.brandtext, marginLeft: scale(15) }}>
-            {item.item.name}
+            {item.brand_nm}
           </Text>
         </View>
-        <Text style={{ ...styles.count }}>27,954</Text>
+        <Text style={{ ...styles.count }}>{item.brand_cnt}</Text>
       </TouchableOpacity>
     );
   };
 
-  const _renderItem1 = (item) => {
-    return (
-      <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingHorizontal: scale(15),
-          borderBottomColor: '#e8e8e8',
-          borderBottomWidth: 1,
-          paddingVertical: scale(10),
-        }}
-      >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity delayPressIn={0}>
-            <Image
-              style={{ ...styles.likes }}
-              source={require('../../../images/likes_on.png')}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity delayPressIn={0}>
-            <Text
-              style={{
-                ...styles.recentlytext,
-                marginLeft: scale(10),
-                marginTop: scale(2),
-              }}
-            >
-              {item.item.name}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          delayPressIn={0}
-          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-        >
-          <Image
-            style={{ ...styles.delete }}
-            source={require('../../../images/delete_ic_60.png')}
-          />
-        </TouchableOpacity>
-      </TouchableOpacity>
-    );
+  const _getBrandList = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00016();
+      console.log('_getBrandList>>>>>', data);
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getBrandList', error);
+    }
   };
 
-  return (
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      _getBrandList();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         placement="left"
@@ -243,6 +221,8 @@ export default function SearchResult({ route, navigation }) {
         />
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 

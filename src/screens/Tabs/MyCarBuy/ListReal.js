@@ -15,6 +15,7 @@ import {
   Keyboard,
   ImageBackground,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function ListReal({ route, navigation }) {
   const [premiumCheck, setPremiumCheck] = useState(false);

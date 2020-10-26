@@ -237,29 +237,29 @@ export default function SingIn({ route, navigation }) {
             </View>
             <TouchableOpacity
               onPress={() => {
-                //_signIn();
-                navigation.reset({
-                  routes: [{ name: 'Tabs' }],
-                });
+                _signIn();
+                //navigation.reset({
+                //  routes: [{ name: 'Tabs' }],
+                //});
               }}
-              //disabled={checkEmail && checkPassword ? false : true}
-              //style={{
-              //  ...styles.bottombutton,
-              //  backgroundColor:
-              //    checkEmail && checkPassword ? '#459bfe' : '#dddddd',
-              //  alignItems: 'center',
-              //  justifyContent: 'center',
-              //  marginBottom: Platform.OS === 'ios' ? 0 : scale(30),
-              //  marginTop: scale(60),
-              //}}
+              disabled={checkEmail && checkPassword ? false : true}
               style={{
                 ...styles.bottombutton,
-                backgroundColor: '#459bfe',
+                backgroundColor:
+                  checkEmail && checkPassword ? '#459bfe' : '#dddddd',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: Platform.OS === 'ios' ? 0 : scale(30),
                 marginTop: scale(60),
               }}
+              //style={{
+              //  ...styles.bottombutton,
+              //  backgroundColor: '#459bfe',
+              //  alignItems: 'center',
+              //  justifyContent: 'center',
+              //  marginBottom: Platform.OS === 'ios' ? 0 : scale(30),
+              //  marginTop: scale(60),
+              //}}
               delayPressIn={0}
             >
               <Text style={{ ...styles.bottomtext }}>로그인</Text>

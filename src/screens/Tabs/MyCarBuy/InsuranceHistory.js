@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -12,11 +12,46 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
 
 const Width = Dimensions.get('window').width;
 
 export default function InsuranceHistory({ route, navigation }) {
-  return (
+  const { car_no, car_user_type, car_nm, year } = route.params;
+  const [data, setData] = useState(null);
+
+  const _getDetail = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00026({
+        car_no: car_no,
+        car_user_type: car_user_type,
+      });
+      console.log('_getDetail>>>', JSON.stringify(data));
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getDetail>>>>>', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getDetail();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         backgroundColor={'#ffffff'}
@@ -63,7 +98,9 @@ export default function InsuranceHistory({ route, navigation }) {
                 justifyContent: 'center',
               }}
             >
-              <Text style={{ ...styles.carnumber }}>12가3456</Text>
+              <Text style={{ ...styles.carnumber }}>
+                {data.data.car_number}
+              </Text>
               <Text style={{ ...styles.infoyear }}>정보조회일 2020/05/11</Text>
             </View>
             <View style={{ paddingHorizontal: scale(15) }}>
@@ -74,36 +111,50 @@ export default function InsuranceHistory({ route, navigation }) {
                 <View style={{ ...styles.subview }}>
                   <Text style={{ ...styles.lefttext }}>일반사양</Text>
                   <Text style={{ ...styles.righttext }}>
-                    기아, 더뉴 K7, 2017년식
+                    {car_nm}, {year}년식
                   </Text>
                 </View>
                 <View style={{ ...styles.subview }}>
                   <Text style={{ ...styles.lefttext }}>용도 변경이력</Text>
-                  <Text style={{ ...styles.righttext }}>없음</Text>
+                  <Text style={{ ...styles.righttext }}>
+                    {data.data.usage_change_yn ? '있음' : '없음'}
+                  </Text>
                 </View>
                 <View style={{ ...styles.subview }}>
                   <Text style={{ ...styles.lefttext }}>
                     번호 / 소유자 변경이력
                   </Text>
-                  <Text style={{ ...styles.righttext }}>0회 / 3회</Text>
+                  <Text style={{ ...styles.righttext }}>
+                    {data.data.number_change_cnt}회 /{' '}
+                    {data.data.owner_change_cnt}회
+                  </Text>
                 </View>
                 <View style={{ ...styles.subview }}>
                   <Text style={{ ...styles.lefttext }}>특수 사고이력</Text>
                   <Text style={{ ...styles.righttext }}>
-                    전손 0회 / 침수(전손,분손) 0회 / 도난 0회
+                    전손 {data.data.total_loss_cnt}회 / 침수(전손,분손){' '}
+                    {data.data.flooding_cnt}회 / 도난 {data.data.theft_cnt}회
                   </Text>
                 </View>
                 <View style={{ ...styles.subview }}>
                   <Text style={{ ...styles.lefttext }}>
                     보험 사고 이력 (내차 피해)
                   </Text>
-                  <Text style={{ ...styles.righttext }}>없음</Text>
+                  <Text style={{ ...styles.righttext }}>
+                    {data.data.car_damage_my_cnt === 0
+                      ? '없음'
+                      : data.data.car_damage_my_cnt + '회'}
+                  </Text>
                 </View>
                 <View style={{ ...styles.subview }}>
                   <Text style={{ ...styles.lefttext }}>
                     보험 사고 이력 (타차 가해)
                   </Text>
-                  <Text style={{ ...styles.righttext }}>없음</Text>
+                  <Text style={{ ...styles.righttext }}>
+                    {data.data.car_damage_other_cnt === 0
+                      ? '없음'
+                      : data.data.car_damage_other_cnt + '회'}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -146,6 +197,8 @@ export default function InsuranceHistory({ route, navigation }) {
         </ScrollView>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 

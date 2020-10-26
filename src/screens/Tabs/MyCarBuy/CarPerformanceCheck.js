@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -14,60 +14,51 @@ import {
 } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Modal from 'react-native-modal';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
+import AsyncStorage from '@react-native-community/async-storage';
+import Swiper from 'react-native-swiper';
+import ImageZoom from 'react-native-image-pan-zoom';
 
 const Width = Dimensions.get('window').width;
 
 export default function CarPerformanceCheck({ route, navigation }) {
   const [isvisible, setIsvisible] = useState(false);
-  const [img, setImg] = useState([
-    {
-      url: '',
-      props: { source: require('../../../images/car_map_2.png') },
-    },
-  ]);
+  const [isvisible1, setIsvisible1] = useState(false);
+  const { car_no, car_user_type } = route.params;
+  const [data, setData] = useState(null);
   const [topList, setTopList] = useState(['외판', '주요 골격', '성능점검표']);
   const [selectList, setSelectList] = useState('외판');
-  const [list, setList] = useState([
-    '1. 후드',
-    '2. 프론트 휀더 (좌)',
-    '3. 프론트 휀더 (우)',
-    '4. 프론트 도우 (좌)',
-    '5. 프론트 도우 (우)',
-    '6. 리어 도우 (좌)',
-    '7. 리어 도우 (우)',
-    '8. 트렁크리드',
-    '9. 라디에이터 서포트 (볼트체결부품)',
-    '10. 루프 패널',
-    '11. 쿼터 패널 (좌)',
-    '12. 쿼터 패널 (우)',
-    '13. 사이드실 패널 (좌)',
-    '14. 사이드실 패널 (우)',
-  ]);
-  const [list1, setList1] = useState([
-    '1. 프론트 패널',
-    '2. 크로스 멤버',
-    '3. 인사이드 패널 (좌)',
-    '4. 인사이드 패널 (우)',
-    '5. 리어 패널',
-    '6. 트렁크 플로어',
-    '7. 프론트 사이드 멤버 (좌)',
-    '8. 프론트 사이드 멤버 (우)',
-    '9. 리어 사이드 멤버 (우)',
-    '10. 리어 사이드 멤버 (좌)',
-    '11. 프론트 휠하우스 (좌)',
-    '12. 프론트 휠하우스 (우)',
-    '13. 리어 휠하우스 (좌)',
-    '14. 리어 휠하우스 (우)',
-    '15. 필러 패널A (좌)',
-    '16. 필러 패널A (우)',
-    '17. 필러 패널B (좌)',
-    '18. 필러 패널B (우)',
-    '19. 필러 패널C (좌)',
-    '20. 필러 패널C (우)',
-    '21. 패키지트레이',
-    '22. 대쉬 패널',
-    '23. 플로어 패널 (바닥)',
-  ]);
+
+  const _getDetailList = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00025({
+        car_no: car_no,
+        car_user_type: car_user_type,
+      });
+      console.log('_getDeatilList>>>', JSON.stringify(data));
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getDeatilList>>>>>', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getDetailList();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const _list = () => {
     switch (selectList) {
@@ -80,7 +71,7 @@ export default function CarPerformanceCheck({ route, navigation }) {
                 height: scale(300),
                 alignSelf: 'center',
               }}
-              source={require('../../../images/562.png')}
+              source={{ uri: data.data.accident_outside_img_url }}
             />
             <View
               style={{
@@ -92,7 +83,7 @@ export default function CarPerformanceCheck({ route, navigation }) {
                 borderWidth: 0.3,
               }}
             >
-              {list.map((item, index) => {
+              {data.data.accident_outside_arr.map((item, index) => {
                 return (
                   <View
                     key={index}
@@ -105,11 +96,36 @@ export default function CarPerformanceCheck({ route, navigation }) {
                       borderBottomWidth: 0.5,
                     }}
                   >
-                    <Text style={{ ...styles.subtext }}>{item}</Text>
-                    <Image
-                      style={{ width: scale(17), height: scale(17) }}
-                      source={require('../../../images/circle_off_ic_68.png')}
-                    />
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <Text style={{ ...styles.subtext }}>
+                        {item.code_desc}
+                      </Text>
+                      {item.result_value === 'null' ? null : (
+                        <Text
+                          style={{
+                            ...styles.subtext,
+                            fontSize: scale(10),
+                            fontFamily: 'Roboto-Regular',
+                          }}
+                        >
+                          {' - '}
+                          {item.result_value}
+                        </Text>
+                      )}
+                    </View>
+                    {item.result_value === 'null' ? (
+                      <Image
+                        style={{ width: scale(17), height: scale(17) }}
+                        source={require('../../../images/circle_off_ic_68.png')}
+                      />
+                    ) : (
+                      <Image
+                        style={{ width: scale(17), height: scale(17) }}
+                        source={require('../../../images/circle_on_ic_68.png')}
+                      />
+                    )}
                   </View>
                 );
               })}
@@ -125,7 +141,7 @@ export default function CarPerformanceCheck({ route, navigation }) {
                 height: scale(300),
                 alignSelf: 'center',
               }}
-              source={require('../../../images/563.png')}
+              source={{ uri: data.data.accident_base_img_url }}
             />
             <View
               style={{
@@ -137,7 +153,7 @@ export default function CarPerformanceCheck({ route, navigation }) {
                 borderWidth: 0.3,
               }}
             >
-              {list1.map((item, index) => {
+              {data.data.accident_base_arr.map((item, index) => {
                 return (
                   <View
                     key={index}
@@ -150,11 +166,36 @@ export default function CarPerformanceCheck({ route, navigation }) {
                       borderBottomWidth: 0.5,
                     }}
                   >
-                    <Text style={{ ...styles.subtext }}>{item}</Text>
-                    <Image
-                      style={{ width: scale(17), height: scale(17) }}
-                      source={require('../../../images/circle_off_ic_68.png')}
-                    />
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <Text style={{ ...styles.subtext }}>
+                        {item.code_desc}
+                      </Text>
+                      {item.result_value === 'null' ? null : (
+                        <Text
+                          style={{
+                            ...styles.subtext,
+                            fontSize: scale(10),
+                            fontFamily: 'Roboto-Regular',
+                          }}
+                        >
+                          {' - '}
+                          {item.result_value}
+                        </Text>
+                      )}
+                    </View>
+                    {item.result_value === 'null' ? (
+                      <Image
+                        style={{ width: scale(17), height: scale(17) }}
+                        source={require('../../../images/circle_off_ic_68.png')}
+                      />
+                    ) : (
+                      <Image
+                        style={{ width: scale(17), height: scale(17) }}
+                        source={require('../../../images/circle_on_ic_68.png')}
+                      />
+                    )}
                   </View>
                 );
               })}
@@ -163,36 +204,70 @@ export default function CarPerformanceCheck({ route, navigation }) {
         );
       case '성능점검표':
         return (
-          <View style={{ alignSelf: 'center' }}>
-            <Image
-              resizeMode={'contain'}
-              style={{
-                width: scale(330),
-                height: scale(300),
+          <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+            <Swiper
+              loop={false}
+              height={scale(300)}
+              style={{ height: scale(300), flex: 0 }}
+              containerStyle={{
+                height: scale(320),
+                flex: 0,
               }}
-              source={img[0].props.source}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setIsvisible(true);
-              }}
-              delayPressIn={0}
-              style={{ alignItems: 'flex-end', marginTop: -scale(20) }}
+              activeDotColor={'#001740'}
+              dotColor={'#e9e9e9'}
+              paginationStyle={{ bottom: 10 }}
             >
-              <Image
-                style={{
-                  width: scale(25),
-                  height: scale(25),
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setIsvisible(true);
                 }}
-                source={require('../../../images/view_ic_100.png')}
-              />
-            </TouchableOpacity>
+                delayPressIn={0}
+              >
+                <Image
+                  resizeMode={'contain'}
+                  style={{
+                    //width: scale(330),
+                    height: scale(300),
+                  }}
+                  source={{ uri: data.data.perform_img_1_url }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setIsvisible1(true);
+                }}
+                delayPressIn={0}
+              >
+                <Image
+                  resizeMode={'contain'}
+                  style={{
+                    //width: scale(330),
+                    height: scale(300),
+                  }}
+                  source={{ uri: data.data.perform_img_2_url }}
+                />
+              </TouchableOpacity>
+            </Swiper>
+
+            <Image
+              style={{
+                width: scale(25),
+                height: scale(25),
+                marginRight: scale(15),
+                position: 'absolute',
+                right: 5,
+                bottom: 20,
+              }}
+              source={require('../../../images/view_ic_100.png')}
+            />
           </View>
         );
     }
   };
 
-  return (
+  return data ? (
     <>
       <Header
         backgroundColor={'#ffffff'}
@@ -280,7 +355,7 @@ export default function CarPerformanceCheck({ route, navigation }) {
                 marginTop: scale(15),
               }}
             >
-              2017년식, 12가3456
+              {data.data.vehicle_year}년식, {data.data.car_number}
             </Text>
             <Text style={{ ...styles.topnumber, marginBottom: scale(10) }}>
               제시번호 2020016756
@@ -314,8 +389,8 @@ export default function CarPerformanceCheck({ route, navigation }) {
               source={require('../../../images/close_icon_wh_88.png')}
             />
           </TouchableOpacity>
-          <ImageViewer
-            imageUrls={img}
+          {/*<ImageViewer
+            imageUrls={data.data.perform_img_1_url}
             useNativeDriver={true}
             backgroundColor="transparent"
             renderIndicator={() => null}
@@ -323,10 +398,73 @@ export default function CarPerformanceCheck({ route, navigation }) {
               width: '100%',
               height: scale(270),
             }}
-          />
+          />*/}
+          <ImageZoom
+            cropWidth={Dimensions.get('window').width}
+            cropHeight={Dimensions.get('window').height}
+            imageWidth={scale(360)}
+            imageHeight={scale(270)}
+          >
+            <Image
+              useNativeDriver={true}
+              style={{ width: scale(360), height: scale(265) }}
+              source={{ uri: data.data.perform_img_1_url }}
+            />
+          </ImageZoom>
+        </Modal>
+        <Modal
+          isVisible={isvisible1}
+          onBackButtonPress={() => {
+            setIsvisible1(false);
+          }}
+          useNativeDriver={true}
+          style={{ margin: 0 }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              setIsvisible1(false);
+            }}
+            delayPressIn={0}
+            style={{
+              position: 'absolute',
+              top: 40,
+              right: 15,
+              zIndex: 1,
+            }}
+            hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
+          >
+            <Image
+              style={{ width: scale(23), height: scale(23) }}
+              source={require('../../../images/close_icon_wh_88.png')}
+            />
+          </TouchableOpacity>
+          {/*<ImageViewer
+            imageUrls={data.data.perform_img_1_url}
+            useNativeDriver={true}
+            backgroundColor="transparent"
+            renderIndicator={() => null}
+            style={{
+              width: '100%',
+              height: scale(270),
+            }}
+          />*/}
+          <ImageZoom
+            cropWidth={Dimensions.get('window').width}
+            cropHeight={Dimensions.get('window').height}
+            imageWidth={scale(360)}
+            imageHeight={scale(270)}
+          >
+            <Image
+              useNativeDriver={true}
+              style={{ width: scale(360), height: scale(265) }}
+              source={{ uri: data.data.perform_img_2_url }}
+            />
+          </ImageZoom>
         </Modal>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 

@@ -338,8 +338,8 @@ export default function MyInfoMain(props) {
             <TouchableOpacity
               delayPressIn={0}
               onPress={() => {
-                //_logout();
-                props.navigation.reset({ routes: [{ name: 'Sign' }] });
+                _logout();
+                //props.navigation.reset({ routes: [{ name: 'Sign' }] });
               }}
             >
               <Text style={{ ...styles.modalconfirm }}>확인</Text>

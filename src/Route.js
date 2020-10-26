@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import MainLoading from './common/MainLoading';
 import Sign from './Sign';
 import Tabs from './Tabs';
 //소비자용_내차구매
@@ -61,7 +62,8 @@ const Stack = createStackNavigator();
 export default function Route() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={'none'} initialRouteName={'Sign'}>
+      <Stack.Navigator headerMode={'none'} initialRouteName={'MainLoading'}>
+        <Stack.Screen name={'MainLoading'} component={MainLoading} />
         <Stack.Screen name={'Sign'} component={Sign} />
         <Stack.Screen name={'Tabs'} component={Tabs} />
         {/* 소비자용_내차구매 */}

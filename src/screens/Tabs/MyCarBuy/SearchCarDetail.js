@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -12,21 +12,70 @@ import {
   View,
   FlatList,
 } from 'react-native';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Width = Dimensions.get('window').width;
 
 export default function SearchCarDetail({ route, navigation }) {
-  const [recently, setRecently] = useState([
-    { name: '포르쉐 뉴 카이엔' },
-    { name: '포드 머스탱' },
-    { name: '현대 싼타페TM' },
-    { name: '포르쉐 파나메라' },
-  ]);
   const [focuslist, setFocusList] = useState(['최근 검색', '즐겨찾기']);
   const [focusSelect, setFocusSelect] = useState('최근 검색');
-  const [like, setLike] = useState(false);
+  const [searchResult, setSearchResult] = useState('');
+  const [data, setData] = useState(null);
 
-  const _renderItem = (item) => {
+  const _searchResult = (searchresulttext) => {
+    setSearchResult(searchresulttext);
+  };
+
+  const _deleteSearch = async (notext) => {
+    try {
+      let data = await AppServer.CARDEALER_API_00021({
+        search_no: notext,
+      });
+      console.log('_deleteSearch>>>>', data);
+      if (data.success_yn) {
+        _recentlyResult();
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_deleteSearch>>', error);
+    }
+  };
+
+  const _recentlyResult = async () => {
+    let data = await AppServer.CARDEALER_API_00019({
+      user_type: 'user',
+    });
+    console.log('_recentlyResult>>>', data);
+    if (data.success_yn) {
+      setData(data);
+    } else if (
+      !data.success_yn &&
+      data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+    ) {
+      await AsyncStorage.clear();
+      navigation.reset({
+        routes: [{ name: 'Sign' }],
+      });
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _recentlyResult();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const _renderItem = ({ item }) => {
     return (
       <View
         style={{
@@ -41,13 +90,13 @@ export default function SearchCarDetail({ route, navigation }) {
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
-            onPress={() => {
-              like ? setLike(false) : setLike(true);
-            }}
+            //onPress={() => {
+            //  like ? setLike(false) : setLike(true);
+            //}}
             delayPressIn={0}
             style={{ flexDirection: 'row', alignItems: 'center' }}
           >
-            {like ? (
+            {item.like_yn ? (
               <Image
                 style={{ ...styles.likes }}
                 source={require('../../../images/likes_on.png')}
@@ -73,11 +122,14 @@ export default function SearchCarDetail({ route, navigation }) {
                 marginTop: scale(2),
               }}
             >
-              {item.item.name}
+              {item.search_text}
             </Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
+          onPress={() => {
+            _deleteSearch(item.search_no);
+          }}
           delayPressIn={0}
           hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         >
@@ -120,13 +172,23 @@ export default function SearchCarDetail({ route, navigation }) {
         }
         centerComponent={
           <TextInput
+            autoCapitalize={'none'}
             style={{ ...styles.headerinput }}
             placeholder={'브랜드, 차종명 검색'}
             placeholderTextColor="#dedede"
+            value={searchResult}
+            onChangeText={(text) => {
+              _searchResult(text);
+            }}
           />
         }
         rightComponent={
-          <TouchableOpacity delayPressIn={0}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SearchResult', { result: searchResult });
+            }}
+            delayPressIn={0}
+          >
             <Image
               style={{ ...styles.backsearchicon }}
               source={require('../../../images/search_ic_bl_72.png')}
@@ -186,15 +248,19 @@ export default function SearchCarDetail({ route, navigation }) {
             );
           })}
         </View>
-        {focusSelect === '최근 검색' ? (
-          <FlatList
-            bounces={false}
-            contentContainerStyle={{ marginTop: scale(5) }}
-            keyExtractor={(item) => item.index}
-            data={recently}
-            renderItem={_renderItem}
-          />
-        ) : null}
+        {data ? (
+          focusSelect === '최근 검색' ? (
+            <FlatList
+              bounces={false}
+              contentContainerStyle={{ marginTop: scale(5) }}
+              keyExtractor={(item) => item.no}
+              data={data.list}
+              renderItem={_renderItem}
+            />
+          ) : null
+        ) : (
+          <SubLoading />
+        )}
       </SafeAreaView>
     </>
   );
@@ -211,7 +277,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',
-    color: '#dedede',
+    color: '#000000',
   },
   container: {
     flex: 1,

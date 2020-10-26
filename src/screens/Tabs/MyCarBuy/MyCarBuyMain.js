@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -14,17 +14,53 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ImageBackground,
+  Linking,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Swiper from 'react-native-swiper';
+import AppServer from '../../../common/AppServer';
+import moment from 'moment';
+import AsyncStorage from '@react-native-community/async-storage';
+import SubLoading from '../../../common/SubLoading';
 
 export default function MyCarBuyMain({ route, navigation }) {
+  let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const [isvisible, setIsvisible] = useState(false);
   const [isvisible1, setIsvisible1] = useState(false);
   const [premiumCheck, setPremiumCheck] = useState(false);
-  const [likeCheck, setLikeCheck] = useState(false);
+  const [data, setData] = useState(null);
 
-  return (
+  const _getBuyList = async ({ check }) => {
+    try {
+      const data = await AppServer.CARDEALER_API_00015({
+        premium_yn: check,
+        premium_yn_other: check,
+      });
+      console.log('_getBuyList', data);
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getBuy', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getBuyList({ check: premiumCheck });
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         backgroundColor={'#459bfe'}
@@ -34,18 +70,6 @@ export default function MyCarBuyMain({ route, navigation }) {
           borderBottomWidth: 0,
           height: scale(80),
         }}
-        //leftComponent={
-        //  <TouchableOpacity
-        //    style={{ marginRight: scale(5) }}
-        //    delayPressIn={0}
-        //    hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
-        //  >
-        //    <Image
-        //      style={{ ...styles.alert }}
-        //      source={require('../../../images/alert_ic_72.png')}
-        //    />
-        //  </TouchableOpacity>
-        //}
         centerComponent={
           <Image
             style={{ ...styles.mainlogo }}
@@ -73,7 +97,6 @@ export default function MyCarBuyMain({ route, navigation }) {
           style={{
             backgroundColor: '#ffffff',
           }}
-          contentContainerStyle={{ paddingBottom: scale(15) }}
         >
           <View
             style={{
@@ -93,18 +116,22 @@ export default function MyCarBuyMain({ route, navigation }) {
               dotColor={'#e9e9e9'}
               paginationStyle={{ bottom: 10 }}
             >
-              <Image
-                style={{ ...styles.topimage }}
-                source={require('../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png')}
-              />
-              <Image
-                style={{ ...styles.topimage }}
-                source={require('../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png')}
-              />
-              <Image
-                style={{ ...styles.topimage }}
-                source={require('../../../images/i_43_w_q_055_kj_n_q_9_e_w_cu_vb_5_jx_y_t_ak.png')}
-              />
+              {data.ad_list.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      Linking.openURL(item.link_url);
+                    }}
+                    delayPressIn={0}
+                  >
+                    <Image
+                      style={{ ...styles.topimage }}
+                      source={{ uri: item.ad_image }}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
             </Swiper>
           </View>
           <View
@@ -112,6 +139,7 @@ export default function MyCarBuyMain({ route, navigation }) {
               flex: 1,
               paddingHorizontal: scale(15),
               backgroundColor: '#f9f9f9',
+              paddingBottom: scale(15),
             }}
           >
             <Text
@@ -123,105 +151,119 @@ export default function MyCarBuyMain({ route, navigation }) {
             >
               구매 진행 중인 차량
             </Text>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('BuyCar');
-              }}
-              delayPressIn={0}
-              style={{
-                ...styles.carlist,
-                elevation: 1.5,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
-              }}
-            >
-              <ImageBackground
-                style={{ ...styles.carimage }}
-                source={require('../../../images/k_7_02.png')}
-              >
-                <View
-                  style={{
-                    width: scale(90),
-                    height: scale(30),
-                    backgroundColor: '#001740',
-                    position: 'absolute',
-                    bottom: 0,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text style={{ ...styles.price }}>2,000만원</Text>
-                </View>
-                <Image
-                  style={{ ...styles.premark, position: 'absolute' }}
-                  source={require('../../../images/premium.png')}
-                />
+
+            {data.process_list.map((item, index) => {
+              return (
                 <TouchableOpacity
+                  key={index}
                   onPress={() => {
-                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
+                    navigation.navigate('BuyCar');
                   }}
                   delayPressIn={0}
-                  style={{ position: 'absolute', right: 5, top: 5 }}
-                >
-                  {likeCheck ? (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_on.png')}
-                    />
-                  ) : (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_off.png')}
-                    />
-                  )}
-                </TouchableOpacity>
-              </ImageBackground>
-
-              <Image
-                style={{
-                  ...styles.avator,
-                  position: 'absolute',
-                  right: 10,
-                  bottom: 50,
-                }}
-                source={require('../../../images/shutterstock_682551649.png')}
-              />
-              <View style={{ padding: scale(10) }}>
-                <Text style={{ ...styles.carname }}>기아 더뉴 K7</Text>
-                <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: scale(3),
+                    ...styles.carlist,
+                    elevation: 1.5,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                    marginBottom: scale(10),
                   }}
                 >
-                  <Text style={{ ...styles.carhistory }}>
-                    서울 / 18년 10월 / 8,859km
-                  </Text>
-                  <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+                  <ImageBackground
+                    style={{ ...styles.carimage }}
+                    source={{ uri: item.car_img }}
+                  >
+                    <View
+                      style={{
+                        width: scale(90),
+                        height: scale(30),
+                        backgroundColor: '#001740',
+                        position: 'absolute',
+                        bottom: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Text style={{ ...styles.price }}>
+                        {item.car_price
+                          .substring(item.car_price.length - 4, 0)
+                          .replace(regexp, ',')}
+                        만원
+                      </Text>
+                    </View>
+                    {item.premium_yn ? (
+                      <Image
+                        style={{ ...styles.premark, position: 'absolute' }}
+                        source={require('../../../images/premium.png')}
+                      />
+                    ) : null}
+
+                    <View style={{ position: 'absolute', right: 5, top: 5 }}>
+                      {item.like_yn ? (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_on.png')}
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_off.png')}
+                        />
+                      )}
+                    </View>
+                  </ImageBackground>
+
+                  <Image
+                    style={{
+                      ...styles.avator,
+                      position: 'absolute',
+                      right: 10,
+                      bottom: 50,
+                    }}
+                    source={{ uri: item.dealer_img }}
+                  />
+                  <View style={{ padding: scale(10) }}>
+                    <Text style={{ ...styles.carname }}>{item.car_nm}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: scale(3),
+                      }}
+                    >
+                      <Text style={{ ...styles.carhistory }}>
+                        {item.sido} / {item.vehicle_year}년 /{' '}
+                        {item.driven_distance.toString().replace(regexp, ',')}km
+                      </Text>
+                      <Text style={{ ...styles.daypeople }}>
+                        {moment(item.reg_dt * 1000).format('YYYY.MM.DD')} /{' '}
+                        {item.like_cnt}명 찜
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginBottom: scale(12),
-                marginTop: scale(25),
+                marginTop: scale(15),
               }}
             >
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('List');
+                  navigation.navigate('List', { title: false });
                 }}
                 delayPressIn={0}
               >
@@ -231,7 +273,8 @@ export default function MyCarBuyMain({ route, navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  premiumCheck ? setPremiumCheck(false) : setPremiumCheck(true);
+                  setPremiumCheck(!premiumCheck);
+                  _getBuyList({ check: !premiumCheck });
                 }}
                 delayPressIn={0}
                 style={{
@@ -260,98 +303,113 @@ export default function MyCarBuyMain({ route, navigation }) {
                 )}
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('CarDetail');
-              }}
-              delayPressIn={0}
-              style={{
-                ...styles.carlist,
-                elevation: 1.5,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
-              }}
-            >
-              <ImageBackground
-                style={{ ...styles.carimage }}
-                source={require('../../../images/k_7_02.png')}
-              >
-                <View
-                  style={{
-                    width: scale(90),
-                    height: scale(30),
-                    backgroundColor: '#001740',
-                    position: 'absolute',
-                    bottom: 0,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text style={{ ...styles.price }}>2,000만원</Text>
-                </View>
-                <Image
-                  style={{ ...styles.premark, position: 'absolute' }}
-                  source={require('../../../images/premium.png')}
-                />
+            {data.car_list.map((item, index) => {
+              return (
                 <TouchableOpacity
+                  key={index}
                   onPress={() => {
-                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
+                    navigation.navigate('CarDetail', {
+                      car_no: item.car_no,
+                      car_user_type: item.car_user_type,
+                      sido: item.sido,
+                    });
                   }}
                   delayPressIn={0}
-                  style={{ position: 'absolute', right: 5, top: 5 }}
-                >
-                  {likeCheck ? (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_on.png')}
-                    />
-                  ) : (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_off.png')}
-                    />
-                  )}
-                </TouchableOpacity>
-              </ImageBackground>
-
-              <Image
-                style={{
-                  ...styles.avator,
-                  position: 'absolute',
-                  right: 10,
-                  bottom: 50,
-                }}
-                source={require('../../../images/shutterstock_682551649.png')}
-              />
-              <View style={{ padding: scale(10) }}>
-                <Text style={{ ...styles.carname }}>기아 더뉴 K7</Text>
-                <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: scale(3),
+                    ...styles.carlist,
+                    elevation: 1.5,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                    marginBottom: scale(10),
                   }}
                 >
-                  <Text style={{ ...styles.carhistory }}>
-                    서울 / 18년 10월 / 8,859km
-                  </Text>
-                  <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+                  <ImageBackground
+                    style={{ ...styles.carimage }}
+                    source={{ uri: item.car_img }}
+                  >
+                    <View
+                      style={{
+                        width: scale(90),
+                        height: scale(30),
+                        backgroundColor: '#001740',
+                        position: 'absolute',
+                        bottom: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Text style={{ ...styles.price }}>
+                        {item.car_price
+                          .substring(item.car_price.length - 4, 0)
+                          .replace(regexp, ',')}
+                        만원
+                      </Text>
+                    </View>
+                    {item.premium_yn ? (
+                      <Image
+                        style={{ ...styles.premark, position: 'absolute' }}
+                        source={require('../../../images/premium.png')}
+                      />
+                    ) : null}
 
+                    <View style={{ position: 'absolute', right: 5, top: 5 }}>
+                      {item.like_yn ? (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_on.png')}
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_off.png')}
+                        />
+                      )}
+                    </View>
+                  </ImageBackground>
+
+                  <Image
+                    style={{
+                      ...styles.avator,
+                      position: 'absolute',
+                      right: 10,
+                      bottom: 50,
+                    }}
+                    source={{ uri: item.dealer_img }}
+                  />
+                  <View style={{ padding: scale(10) }}>
+                    <Text style={{ ...styles.carname }}>{item.car_nm}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: scale(3),
+                      }}
+                    >
+                      <Text style={{ ...styles.carhistory }}>
+                        {item.sido} / {item.vehicle_year}년 /{' '}
+                        {item.driven_distance.toString().replace(regexp, ',')}km
+                      </Text>
+                      <Text style={{ ...styles.daypeople }}>
+                        {moment(item.reg_dt * 1000).format('YYYY.MM.DD')} /{' '}
+                        {item.like_cnt}명 찜
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('List');
+                navigation.navigate('List', { title: true });
               }}
               delayPressIn={0}
             >
@@ -359,96 +417,112 @@ export default function MyCarBuyMain({ route, navigation }) {
                 style={{
                   ...styles.categorytitle,
                   marginBottom: scale(12),
-                  marginTop: scale(25),
+                  marginTop: scale(15),
                 }}
               >
                 인기 매물 <Text style={{ color: '#459bfe' }}>#수입차</Text>
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('CarDetail');
-              }}
-              delayPressIn={0}
-              style={{
-                ...styles.carlist,
-                elevation: 1.5,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
-              }}
-            >
-              <ImageBackground
-                style={{ ...styles.carimage }}
-                source={require('../../../images/1.png')}
-              >
-                <View
-                  style={{
-                    width: scale(90),
-                    height: scale(30),
-                    backgroundColor: '#001740',
-                    position: 'absolute',
-                    bottom: 0,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text style={{ ...styles.price }}>5,000만원</Text>
-                </View>
+            {data.car_list_other.map((item, index) => {
+              return (
                 <TouchableOpacity
+                  key={index}
                   onPress={() => {
-                    likeCheck ? setLikeCheck(false) : setLikeCheck(true);
+                    navigation.navigate('CarDetail');
                   }}
                   delayPressIn={0}
-                  style={{ position: 'absolute', right: 5, top: 5 }}
-                >
-                  {likeCheck ? (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_on.png')}
-                    />
-                  ) : (
-                    <Image
-                      style={{
-                        ...styles.like,
-                      }}
-                      source={require('../../../images/likes_off.png')}
-                    />
-                  )}
-                </TouchableOpacity>
-              </ImageBackground>
-
-              <Image
-                style={{
-                  ...styles.avator,
-                  position: 'absolute',
-                  right: 10,
-                  bottom: 50,
-                }}
-                source={require('../../../images/shutterstock_682551649.png')}
-              />
-              <View style={{ padding: scale(10) }}>
-                <Text style={{ ...styles.carname }}>BMW 528i</Text>
-                <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: scale(3),
+                    ...styles.carlist,
+                    elevation: 1.5,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                    marginBottom: scale(10),
                   }}
                 >
-                  <Text style={{ ...styles.carhistory }}>
-                    서울 / 18년 10월 / 8,859km
-                  </Text>
-                  <Text style={{ ...styles.daypeople }}>5일전 / 30명 찜</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+                  <ImageBackground
+                    style={{ ...styles.carimage }}
+                    source={{ uri: item.car_img }}
+                  >
+                    <View
+                      style={{
+                        width: scale(90),
+                        height: scale(30),
+                        backgroundColor: '#001740',
+                        position: 'absolute',
+                        bottom: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Text style={{ ...styles.price }}>
+                        {item.car_price
+                          .substring(item.car_price.length - 4, 0)
+                          .replace(regexp, ',')}
+                        만원
+                      </Text>
+                    </View>
+                    {item.premium_yn ? (
+                      <Image
+                        style={{ ...styles.premark, position: 'absolute' }}
+                        source={require('../../../images/premium.png')}
+                      />
+                    ) : null}
+
+                    <View style={{ position: 'absolute', right: 5, top: 5 }}>
+                      {item.like_yn ? (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_on.png')}
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            ...styles.like,
+                          }}
+                          source={require('../../../images/likes_off.png')}
+                        />
+                      )}
+                    </View>
+                  </ImageBackground>
+
+                  <Image
+                    style={{
+                      ...styles.avator,
+                      position: 'absolute',
+                      right: 10,
+                      bottom: 50,
+                    }}
+                    source={{ uri: item.dealer_img }}
+                  />
+                  <View style={{ padding: scale(10) }}>
+                    <Text style={{ ...styles.carname }}>{item.car_nm}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: scale(3),
+                      }}
+                    >
+                      <Text style={{ ...styles.carhistory }}>
+                        {item.sido} / {item.vehicle_year}년 /{' '}
+                        {item.driven_distance.toString().replace(regexp, ',')}km
+                      </Text>
+                      <Text style={{ ...styles.daypeople }}>
+                        {moment(item.reg_dt * 1000).format('YYYY.MM.DD')} /{' '}
+                        {item.like_cnt}명 찜
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
             <View style={{ marginTop: scale(25) }}>
               <TouchableOpacity
                 onPress={() => {
@@ -468,149 +542,60 @@ export default function MyCarBuyMain({ route, navigation }) {
                   flexWrap: 'wrap',
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                    marginBottom: scale(20),
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                    marginBottom: scale(20),
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                {data.review_list.map((item, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        navigation.navigate('RealReviewDetail');
+                      }}
+                      delayPressIn={0}
+                      style={{
+                        width: scale(157.5),
+                        height: scale(180),
+                        backgroundColor: '#ffffff',
+                        elevation: 1.5,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 1.41,
+                      }}
+                    >
+                      <ImageBackground
+                        style={{ ...styles.realcar }}
+                        source={require('../../../images/g_703.png')}
+                      ></ImageBackground>
+                      <Image
+                        style={{
+                          width: scale(30),
+                          height: scale(30),
+                          position: 'absolute',
+                          right: 4,
+                          bottom: 40,
+                        }}
+                        source={require('../../../images/shutterstock_682551649.png')}
+                      />
+                      <View
+                        style={{
+                          paddingHorizontal: scale(4),
+                          paddingVertical: scale(7),
+                        }}
+                      >
+                        <Text style={{ ...styles.smallcarname }}>
+                          제네시스 G70
+                        </Text>
+                        <Text style={{ ...styles.review }} numberOfLines={2}>
+                          생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
+                          마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
+                          기도합니다. 제발제발 좋게 써주세요.
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
           </View>
@@ -662,6 +647,8 @@ export default function MyCarBuyMain({ route, navigation }) {
         </Modal>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 
@@ -716,6 +703,7 @@ const styles = StyleSheet.create({
   avator: {
     width: scale(50),
     height: scale(50),
+    borderRadius: scale(50),
   },
   price: {
     fontFamily: 'NotoSans-Bold',

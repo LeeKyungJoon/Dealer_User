@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -17,17 +17,50 @@ import {
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
 import Modal1 from 'react-native-modal';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
+import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
 
 const Width = Dimensions.get('window').width;
 
 export default function CarDetail({ route, navigation }) {
+  let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const [drop, setDrop] = useState(false);
   const [isvisible, setIsvisible] = useState(false);
   const [isvisible1, setIsvisible1] = useState(false);
   const [delivery, setDelivery] = useState(['로드탁송', '세이프티 로더']);
   const [selectDe, setSelectDe] = useState('로드탁송');
+  const { car_no, car_user_type, sido } = route.params;
+  const [data, setData] = useState(null);
 
-  return (
+  const _getDetail = async () => {
+    let data = await AppServer.CARDEALER_API_00022({
+      car_no: car_no,
+      car_user_type: car_user_type,
+    });
+    console.log('_getDetail>>>', data);
+    if (data.success_yn) {
+      setData(data);
+    } else if (
+      !data.success_yn &&
+      data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+    ) {
+      await AsyncStorage.clear();
+      navigation.reset({
+        routes: [{ name: 'Sign' }],
+      });
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getDetail({ car_no: car_no, car_user_type: car_user_type });
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         backgroundColor={'#ffffff'}
@@ -55,7 +88,9 @@ export default function CarDetail({ route, navigation }) {
           </TouchableOpacity>
         }
         centerComponent={
-          <Text style={{ ...styles.headercenter }}>12가3456</Text>
+          <Text style={{ ...styles.headercenter }}>
+            {data.dealer_data.car_number}
+          </Text>
         }
       />
       <SafeAreaView style={{ ...styles.container }}>
@@ -72,86 +107,71 @@ export default function CarDetail({ route, navigation }) {
             dotColor={'#e9e9e9'}
             paginationStyle={{ bottom: 10 }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                setIsvisible1(true);
-              }}
-              delayPressIn={0}
-              style={{ flex: 1 }}
-              activeOpacity={0.5}
-            >
-              <Image
-                resizeMode={'cover'}
-                style={{ width: '100%', height: '100%', flex: 1 }}
-                source={require('../../../images/k_7_02.png')}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  position: 'absolute',
-                  right: 5,
-                  top: 5,
-                }}
-              >
-                <View
-                  style={{
-                    ...styles.swipetop,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+            {data.dealer_data.car_img_arr.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    setIsvisible1(true);
                   }}
+                  delayPressIn={0}
+                  style={{ flex: 1 }}
+                  activeOpacity={0.5}
                 >
-                  <Text style={{ ...styles.refund }}>3일내 환불</Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.swipetop,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginLeft: scale(4),
-                  }}
-                >
-                  <Text style={{ ...styles.refund }}> 홈서비스 </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  ...styles.swipebottom,
-                  position: 'absolute',
-                  bottom: 0,
-                  justifyContent: 'center',
-                }}
-              >
-                <Text style={{ ...styles.price }}>2,000만원</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setIsvisible1(true);
-              }}
-              delayPressIn={0}
-              style={{ flex: 1 }}
-              activeOpacity={0.5}
-            >
-              <Image
-                resizeMode={'cover'}
-                style={{ width: '100%', height: '100%', flex: 1 }}
-                source={require('../../../images/k_7_02.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setIsvisible1(true);
-              }}
-              delayPressIn={0}
-              style={{ flex: 1 }}
-              activeOpacity={0.5}
-            >
-              <Image
-                resizeMode={'cover'}
-                style={{ width: '100%', height: '100%', flex: 1 }}
-                source={require('../../../images/k_7_02.png')}
-              />
-            </TouchableOpacity>
+                  <Image
+                    resizeMode={'cover'}
+                    style={{ width: '100%', height: '100%', flex: 1 }}
+                    source={{ uri: item }}
+                  />
+                  {car_user_type === 'dealer' ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        position: 'absolute',
+                        right: 5,
+                        top: 5,
+                      }}
+                    >
+                      <View
+                        style={{
+                          ...styles.swipetop,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Text style={{ ...styles.refund }}>3일내 환불</Text>
+                      </View>
+                      <View
+                        style={{
+                          ...styles.swipetop,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginLeft: scale(4),
+                        }}
+                      >
+                        <Text style={{ ...styles.refund }}> 홈서비스 </Text>
+                      </View>
+                    </View>
+                  ) : null}
+
+                  <View
+                    style={{
+                      ...styles.swipebottom,
+                      position: 'absolute',
+                      bottom: 0,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text style={{ ...styles.price }}>
+                      {data.dealer_data.car_price
+                        .substring(data.dealer_data.car_price.length - 4, 0)
+                        .replace(regexp, ',')}
+                      만원
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
           </Swiper>
 
           <View
@@ -177,9 +197,15 @@ export default function CarDetail({ route, navigation }) {
               }}
             >
               <View>
-                <Text style={{ ...styles.carkinds }}>기아 더뉴 K7</Text>
+                <Text style={{ ...styles.carkinds }}>
+                  {data.dealer_data.car_nm}
+                </Text>
                 <View style={{ flexDirection: 'row', marginTop: scale(4) }}>
-                  <Text style={{ ...styles.subcarkinds }}>2020.05.06</Text>
+                  <Text style={{ ...styles.subcarkinds }}>
+                    {moment(data.dealer_data.confirm_dt * 1000).format(
+                      'YYYY.MM.DD',
+                    )}
+                  </Text>
                   <Text style={{ ...styles.subcarkinds, marginLeft: scale(4) }}>
                     실매물 조회 완료
                   </Text>
@@ -192,7 +218,7 @@ export default function CarDetail({ route, navigation }) {
                     {' '}
                     ·{' '}
                   </Text>
-                  <Text style={{ ...styles.subcarkinds }}>경기</Text>
+                  <Text style={{ ...styles.subcarkinds }}>{sido}</Text>
                 </View>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
@@ -201,7 +227,8 @@ export default function CarDetail({ route, navigation }) {
                   source={require('../../../images/likes_on.png')}
                 />
                 <Text style={{ ...styles.peoplecount, marginTop: scale(5) }}>
-                  5일전 / 30명 찜
+                  {moment(data.dealer_data.reg_dt * 1000).format('YYYY.MM.DD')}{' '}
+                  / {data.dealer_data.like_cnt}명 찜
                 </Text>
               </View>
             </View>
@@ -214,7 +241,14 @@ export default function CarDetail({ route, navigation }) {
             >
               <Text style={{ ...styles.average }}>평균 시세</Text>
               <Text style={{ ...styles.averageprice, marginLeft: scale(30) }}>
-                1,740만원 ~ 2,490만원
+                {data.dealer_data.avg_price_low
+                  .substring(data.dealer_data.avg_price_low.length - 4, 0)
+                  .replace(regexp, ',')}
+                만원 ~{' '}
+                {data.dealer_data.avg_price_high
+                  .substring(data.dealer_data.avg_price_high.length - 4, 0)
+                  .replace(regexp, ',')}
+                만원
               </Text>
             </View>
           </View>
@@ -231,7 +265,10 @@ export default function CarDetail({ route, navigation }) {
             >
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('CarPerformanceCheck');
+                  navigation.navigate('CarPerformanceCheck', {
+                    car_no: car_no,
+                    car_user_type: car_user_type,
+                  });
                 }}
                 delayPressIn={0}
                 style={{ alignItems: 'center' }}
@@ -246,7 +283,12 @@ export default function CarDetail({ route, navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('InsuranceHistory');
+                  navigation.navigate('InsuranceHistory', {
+                    car_no: car_no,
+                    car_user_type: car_user_type,
+                    car_nm: data.dealer_data.car_nm,
+                    year: data.dealer_data.vehicle_year,
+                  });
                 }}
                 delayPressIn={0}
                 style={{ alignItems: 'center' }}
@@ -1025,6 +1067,8 @@ export default function CarDetail({ route, navigation }) {
         </Modal1>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 
