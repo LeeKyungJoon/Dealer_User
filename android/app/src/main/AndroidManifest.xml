@@ -55,7 +55,9 @@
         <data android:scheme="@string/fb_login_protocol_scheme"/>
       </intent-filter>
     </activity>
-
+    <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="att51mor8v" />
 
   </application>
 
