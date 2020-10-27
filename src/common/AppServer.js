@@ -323,7 +323,6 @@ export default class AppServer {
     console.log('프로필 이미지 변경 응답', responsedata.uri);
 
     try {
-      console.log('1');
       let response = await Http.post(
         '/cardealer/CARDEALER_API_00012',
         responsedata,
@@ -488,6 +487,11 @@ export default class AppServer {
 
   //검색 삭제
   static CARDEALER_API_00021 = async ({ search_no }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
     console.log('검색 삭제 응답');
     try {
       let response = await Http.post(
@@ -643,6 +647,32 @@ export default class AppServer {
       return response.data;
     } catch (error) {
       console.log('CARDEALER_API_00027', error);
+      return error.response.data;
+    }
+  };
+
+  //찜하기
+  static CARDEALER_API_00032 = async ({ car_no, like_type, like_yn }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('찜하기 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00032',
+        {
+          car_no: car_no,
+          like_type: like_type,
+          like_yn: like_yn,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('찜하기 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00032', error);
       return error.response.data;
     }
   };

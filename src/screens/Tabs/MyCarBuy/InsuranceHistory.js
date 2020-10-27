@@ -21,6 +21,24 @@ export default function InsuranceHistory({ route, navigation }) {
   const { car_no, car_user_type, car_nm, year } = route.params;
   const [data, setData] = useState(null);
 
+  const getToday = () => {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ('0' + (1 + date.getMonth())).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+
+    return year + '/' + month + '/' + day;
+  };
+
+  const getToday1 = () => {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ('0' + (1 + date.getMonth())).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+
+    return year + '년 ' + month + '월 ' + day + '일';
+  };
+
   const _getDetail = async () => {
     try {
       let data = await AppServer.CARDEALER_API_00026({
@@ -101,7 +119,9 @@ export default function InsuranceHistory({ route, navigation }) {
               <Text style={{ ...styles.carnumber }}>
                 {data.data.car_number}
               </Text>
-              <Text style={{ ...styles.infoyear }}>정보조회일 2020/05/11</Text>
+              <Text style={{ ...styles.infoyear }}>
+                정보조회일 {getToday()}
+              </Text>
             </View>
             <View style={{ paddingHorizontal: scale(15) }}>
               <Text style={{ ...styles.subtitle, marginTop: scale(20) }}>
@@ -174,25 +194,9 @@ export default function InsuranceHistory({ route, navigation }) {
               중고차사고이력정보서비스(www.carhistory.or.kr)는 보험업법시행령
               제86조 제1호에 근거하여 제공합니다.
             </Text>
-            <Text style={{ ...styles.yeartext, marginVertical: scale(10) }}>
-              2020년 01월 22일
+            <Text style={{ ...styles.yeartext, marginTop: scale(10) }}>
+              {getToday1()}
             </Text>
-            <TouchableOpacity
-              delayPressIn={0}
-              style={{
-                width: scale(257.3),
-                backgroundColor: '#959595',
-                borderStyle: 'solid',
-                borderWidth: 0.3,
-                borderColor: '#707070',
-                paddingVertical: scale(9.5),
-                alignSelf: 'center',
-              }}
-            >
-              <Text style={{ ...styles.intext }}>
-                보험개발원장 (인) *이미지*
-              </Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </SafeAreaView>

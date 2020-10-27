@@ -68,6 +68,30 @@ export default function SearchCarDetail({ route, navigation }) {
     }
   };
 
+  const _like = async (search_no, like_yn) => {
+    try {
+      let data = await AppServer.CARDEALER_API_00032({
+        car_no: search_no,
+        like_type: 'LT_003',
+        like_yn: like_yn,
+      });
+      console.log('_like>>>', data);
+      if (data.success_yn) {
+        _recentlyResult();
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_like>>>', error);
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
       _recentlyResult();
@@ -90,9 +114,9 @@ export default function SearchCarDetail({ route, navigation }) {
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
-            //onPress={() => {
-            //  like ? setLike(false) : setLike(true);
-            //}}
+            onPress={() => {
+              _like(item.search_no, !item.like_yn);
+            }}
             delayPressIn={0}
             style={{ flexDirection: 'row', alignItems: 'center' }}
           >
@@ -257,7 +281,15 @@ export default function SearchCarDetail({ route, navigation }) {
               data={data.list}
               renderItem={_renderItem}
             />
-          ) : null
+          ) : (
+            <FlatList
+              bounces={false}
+              contentContainerStyle={{ marginTop: scale(5) }}
+              keyExtractor={(item) => item.no}
+              data={data.list.filter((like) => like.like_yn === true)}
+              renderItem={_renderItem}
+            />
+          )
         ) : (
           <SubLoading />
         )}

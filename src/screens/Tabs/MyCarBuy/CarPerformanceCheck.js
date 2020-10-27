@@ -351,14 +351,11 @@ export default function CarPerformanceCheck({ route, navigation }) {
             <Text
               style={{
                 ...styles.yearcarnumber,
-                marginBottom: scale(2),
+                marginBottom: scale(12),
                 marginTop: scale(15),
               }}
             >
               {data.data.vehicle_year}년식, {data.data.car_number}
-            </Text>
-            <Text style={{ ...styles.topnumber, marginBottom: scale(10) }}>
-              제시번호 2020016756
             </Text>
           </View>
           {_list()}
