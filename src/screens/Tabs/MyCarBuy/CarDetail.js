@@ -13,26 +13,273 @@ import {
   ImageBackground,
   TextInput,
   Platform,
+  Linking,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
-import Modal1 from 'react-native-modal';
 import AppServer from '../../../common/AppServer';
 import SubLoading from '../../../common/SubLoading';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
+import Postcode from 'react-native-daum-postcode';
+import NaverMapView, {
+  Circle,
+  Marker,
+  Path,
+  Polyline,
+  Polygon,
+} from 'react-native-nmap';
 
 const Width = Dimensions.get('window').width;
 
 export default function CarDetail({ route, navigation }) {
+  const P0 = { latitude: 37.564362, longitude: 126.977011 };
+  const P1 = { latitude: 37.565051, longitude: 126.978567 };
+  const P2 = { latitude: 37.565383, longitude: 126.976292 };
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const [drop, setDrop] = useState(false);
   const [isvisible, setIsvisible] = useState(false);
   const [isvisible1, setIsvisible1] = useState(false);
-  const [delivery, setDelivery] = useState(['로드탁송', '세이프티 로더']);
-  const [selectDe, setSelectDe] = useState('로드탁송');
+  const [isvisible2, setIsvisible2] = useState(false);
+  const [isvisible3, setIsvisible3] = useState(false);
+  const [selectDe, setSelectDe] = useState({ desc: '', method: '' });
   const { car_no, car_user_type, sido } = route.params;
   const [data, setData] = useState(null);
+  const [address, setAddress] = useState('');
+  const [addressOther, setAddressOther] = useState('');
+  const [deliveryPrice, setDeliveryPrice] = useState('');
+  const [reportDesc, setReportDesc] = useState('');
+
+  const _report = (reporttext) => {
+    setReportDesc(reporttext);
+  };
+
+  const _reportPost = async () => {
+    if (reportDesc) {
+      setIsvisible3(false);
+      try {
+        let data = await AppServer.CARDEALER_API_00024({
+          car_no: car_no,
+          car_user_type: car_user_type,
+          reason: reportDesc,
+        });
+        console.log('_reportPost>>>', data);
+      } catch (error) {
+        console.log('_reportPost>>>', error);
+      }
+    } else {
+      setIsvisible3(false);
+    }
+  };
+
+  const _star = () => {
+    switch (data.dealer_info.review_point) {
+      case '0':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '1':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '2':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '3':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '4':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '5':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+          </View>
+        );
+    }
+  };
+
+  const _deliveryPay = async (delivery_method) => {
+    try {
+      let data = await AppServer.CARDEALER_API_00023({
+        car_no: car_no,
+        car_user_type: car_user_type,
+        delivery_method: delivery_method,
+        address: address,
+        address_detail: addressOther,
+      });
+      console.log('_deliveryPay>>', data);
+      if (data.success_yn) {
+        setDeliveryPrice(data.delivery_price);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_deliveryPay>>', error);
+    }
+  };
+
+  const _addressOther = (addressothertext) => {
+    setAddressOther(addressothertext);
+  };
+
+  const _like = async (car_no, like_yn) => {
+    try {
+      let data = await AppServer.CARDEALER_API_00032({
+        car_no: car_no,
+        like_type: 'LT_001',
+        like_yn: like_yn,
+      });
+      console.log('_like>>>>>', data);
+      if (data.success_yn) {
+        _getDetail();
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_like>>>>>>>', error);
+    }
+  };
 
   const _getDetail = async () => {
     let data = await AppServer.CARDEALER_API_00022({
@@ -222,10 +469,25 @@ export default function CarDetail({ route, navigation }) {
                 </View>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
-                <Image
-                  style={{ ...styles.like }}
-                  source={require('../../../images/likes_on.png')}
-                />
+                <TouchableOpacity
+                  onPress={() => {
+                    _like(data.dealer_data.car_no, !data.dealer_data.like_yn);
+                  }}
+                  delayPressIn={0}
+                >
+                  {data.dealer_data.like_yn ? (
+                    <Image
+                      style={{ ...styles.like }}
+                      source={require('../../../images/likes_on.png')}
+                    />
+                  ) : (
+                    <Image
+                      style={{ ...styles.like }}
+                      source={require('../../../images/likes_off.png')}
+                    />
+                  )}
+                </TouchableOpacity>
+
                 <Text style={{ ...styles.peoplecount, marginTop: scale(5) }}>
                   {moment(data.dealer_data.reg_dt * 1000).format('YYYY.MM.DD')}{' '}
                   / {data.dealer_data.like_cnt}명 찜
@@ -403,8 +665,12 @@ export default function CarDetail({ route, navigation }) {
                     marginBottom: scale(7),
                   }}
                 >
-                  <Text style={{ ...styles.baseinfotitle }}>로드탁송</Text>
-                  <Text style={{ ...styles.baseinfodesc }}>1Km 500원</Text>
+                  <Text style={{ ...styles.baseinfotitle }}>
+                    {data.delivery_info[0].code_desc}
+                  </Text>
+                  <Text style={{ ...styles.baseinfodesc }}>
+                    1Km {data.delivery_info[0].delivery_price}원
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -414,8 +680,16 @@ export default function CarDetail({ route, navigation }) {
                     marginBottom: scale(20),
                   }}
                 >
-                  <Text style={{ ...styles.baseinfotitle }}>세이프티 로더</Text>
-                  <Text style={{ ...styles.baseinfodesc }}>1Km 1,200원</Text>
+                  <Text style={{ ...styles.baseinfotitle }}>
+                    {data.delivery_info[1].code_desc}
+                  </Text>
+                  <Text style={{ ...styles.baseinfodesc }}>
+                    1Km{' '}
+                    {data.delivery_info[1].delivery_price
+                      .toString()
+                      .replace(regexp, ',')}
+                    원
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -426,7 +700,7 @@ export default function CarDetail({ route, navigation }) {
                 >
                   <Text style={{ ...styles.baseinfotitle }}>차고지 주소</Text>
                   <Text style={{ ...styles.baseinfodesc }}>
-                    경기 수원시 권선구 오토콜렉션 11-1
+                    {data.dealer_data.address}, {data.dealer_info.store_nm}
                   </Text>
                 </View>
                 <View
@@ -449,6 +723,7 @@ export default function CarDetail({ route, navigation }) {
                     }}
                   >
                     <TextInput
+                      editable={false}
                       style={{
                         ...styles.searchaddressinput,
                         width: scale(161),
@@ -458,8 +733,12 @@ export default function CarDetail({ route, navigation }) {
                       }}
                       placeholder={'주소를 입력하세요.'}
                       placeholderTextColor={'rgba(0, 0, 0, 0.3)'}
+                      value={address}
                     />
                     <TouchableOpacity
+                      onPress={() => {
+                        setIsvisible2(true);
+                      }}
                       delayPressIn={0}
                       style={{
                         width: scale(59),
@@ -490,6 +769,10 @@ export default function CarDetail({ route, navigation }) {
                     }}
                     placeholder={'나머지 주소 입력'}
                     placeholderTextColor={'rgba(0, 0, 0, 0.3)'}
+                    value={addressOther}
+                    onChangeText={(text) => {
+                      _addressOther(text);
+                    }}
                   />
                 </View>
                 <View
@@ -509,11 +792,16 @@ export default function CarDetail({ route, navigation }) {
                       width: scale(220),
                     }}
                   >
-                    {delivery.map((item, index) => {
+                    {data.delivery_info.map((item, index) => {
                       return (
                         <TouchableOpacity
+                          disabled={address && addressOther ? false : true}
                           onPress={() => {
-                            setSelectDe(item);
+                            setSelectDe({
+                              desc: item.code_desc,
+                              method: item.code_id,
+                            });
+                            _deliveryPay(item.code_id);
                           }}
                           key={index}
                           style={{
@@ -523,7 +811,7 @@ export default function CarDetail({ route, navigation }) {
                           }}
                           delayPressIn={0}
                         >
-                          {selectDe === item ? (
+                          {selectDe.desc === item.code_desc ? (
                             <Image
                               style={{
                                 ...styles.checkicon,
@@ -541,7 +829,9 @@ export default function CarDetail({ route, navigation }) {
                             />
                           )}
 
-                          <Text style={{ ...styles.deliverytext }}>{item}</Text>
+                          <Text style={{ ...styles.deliverytext }}>
+                            {item.code_desc}
+                          </Text>
                         </TouchableOpacity>
                       );
                     })}
@@ -568,14 +858,18 @@ export default function CarDetail({ route, navigation }) {
                       ※실제 금액과 차이가 있을 수 있습니다.
                     </Text>
                   </View>
-                  <Text style={{ ...styles.totalprice }}>60,000원</Text>
+                  <Text style={{ ...styles.totalprice }}>
+                    {deliveryPrice
+                      .substring(deliveryPrice.length - 2, 0)
+                      .replace(regexp, ',')}
+                    원
+                  </Text>
                 </View>
               </View>
             ) : null}
             <View
               style={{
                 ...styles.sameview,
-                height: scale(216.3),
                 marginTop: scale(20),
                 paddingHorizontal: scale(15),
                 paddingVertical: scale(20),
@@ -618,22 +912,10 @@ export default function CarDetail({ route, navigation }) {
                     paddingVertical: scale(7),
                   }}
                 >
-                  <Text style={{ ...styles.baseinfotitle }}>
-                    연비 / 연비등급
-                  </Text>
-                  <Text style={{ ...styles.baseinfodesc }}>없음</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingVertical: scale(7),
-                  }}
-                >
                   <Text style={{ ...styles.baseinfotitle }}>차종 / 배기량</Text>
                   <Text style={{ ...styles.baseinfodesc }}>
-                    SUV·RV / 1,580cc
+                    {data.dealer_data.car_type_txt} /{' '}
+                    {data.dealer_data.displacement.replace(regexp, ',')}cc
                   </Text>
                 </View>
                 <View
@@ -646,7 +928,7 @@ export default function CarDetail({ route, navigation }) {
                 >
                   <Text style={{ ...styles.baseinfotitle }}>차량위치</Text>
                   <Text style={{ ...styles.baseinfodesc }}>
-                    경기 수원시 권선구
+                    {data.dealer_data.address}
                   </Text>
                 </View>
               </View>
@@ -693,62 +975,11 @@ export default function CarDetail({ route, navigation }) {
                     </View>
                   );
                 })}
-
-                {/*<View
-                  style={{ ...styles.selectbox, backgroundColor: '#ffffff' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#999999' }}>
-                    네비게이션
-                  </Text>
-                </View>
-                <View
-                  style={{ ...styles.selectbox, backgroundColor: '#ffffff' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#999999' }}>
-                    썬루프
-                  </Text>
-                </View>
-                <View
-                  style={{ ...styles.selectbox, backgroundColor: '#ffffff' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#999999' }}>
-                    후방카메라
-                  </Text>
-                </View>
-                <View
-                  style={{ ...styles.selectbox, backgroundColor: '#459bfe' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#ffffff' }}>
-                    후방감지센서
-                  </Text>
-                </View>
-                <View
-                  style={{ ...styles.selectbox, backgroundColor: '#459bfe' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#ffffff' }}>
-                    열선시트
-                  </Text>
-                </View>
-                <View
-                  style={{ ...styles.selectbox, backgroundColor: '#ffffff' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#999999' }}>
-                    하이패스
-                  </Text>
-                </View>
-                <View
-                  style={{ ...styles.selectbox, backgroundColor: '#ffffff' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#999999' }}>
-                    스마트키
-                  </Text>
-                </View>*/}
               </View>
             </View>
             <View
               style={{
                 ...styles.sameview,
-                height: scale(151.8),
                 marginTop: scale(20),
                 paddingHorizontal: scale(15),
                 paddingVertical: scale(20),
@@ -763,39 +994,9 @@ export default function CarDetail({ route, navigation }) {
                   marginTop: scale(15),
                 }}
               >
-                <Text style={{ ...styles.baseinfotitle }}>
-                  제조사보증 (차체/일반)
-                </Text>
-                <Text style={{ ...styles.baseinfodesc }}>보증기간 종료</Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: scale(7),
-                }}
-              >
-                <Text style={{ ...styles.baseinfotitle }}>
-                  제조사보증 (엔진/주요)
-                </Text>
+                <Text style={{ ...styles.baseinfotitle }}>제조사보증</Text>
                 <Text style={{ ...styles.baseinfodesc }}>
-                  45,241km / 1년 9개월
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: scale(7),
-                }}
-              >
-                <Text style={{ ...styles.baseinfotitle }}>
-                  제조사보증 (하이브리드부품)
-                </Text>
-                <Text style={{ ...styles.baseinfodesc }}>
-                  145,241km / 6년 9개월
+                  {data.dealer_data.guarantee_yn_txt}
                 </Text>
               </View>
               <View
@@ -811,11 +1012,23 @@ export default function CarDetail({ route, navigation }) {
                   2,000km / 1개월
                 </Text>
               </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: scale(7),
+                }}
+              >
+                <Text style={{ ...styles.baseinfotitle }}>배달의딜러보증</Text>
+                <Text style={{ ...styles.baseinfodesc, color: '#459bfe' }}>
+                  3,000km / 2개월
+                </Text>
+              </View>
             </View>
             <View
               style={{
                 ...styles.sameview,
-                height: scale(433),
                 paddingHorizontal: scale(15),
                 paddingVertical: scale(20),
                 marginTop: scale(20),
@@ -837,34 +1050,13 @@ export default function CarDetail({ route, navigation }) {
                 >
                   <Image
                     style={{ ...styles.profile }}
-                    source={require('../../../images/shutterstock_682551649.png')}
+                    source={{ uri: data.dealer_info.dealer_img }}
                   />
                 </TouchableOpacity>
                 <Text style={{ ...styles.name, marginTop: scale(7) }}>
-                  홍길동 인증딜러
+                  {data.dealer_info.dealer_nm} 인증딜러
                 </Text>
-                <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
-                  <Image
-                    style={{ ...styles.star }}
-                    source={require('../../../images/likes_on.png')}
-                  />
-                  <Image
-                    style={{ ...styles.star }}
-                    source={require('../../../images/likes_on.png')}
-                  />
-                  <Image
-                    style={{ ...styles.star }}
-                    source={require('../../../images/likes_on.png')}
-                  />
-                  <Image
-                    style={{ ...styles.star }}
-                    source={require('../../../images/likes_on.png')}
-                  />
-                  <Image
-                    style={{ ...styles.star }}
-                    source={require('../../../images/likes_off.png')}
-                  />
-                </View>
+                {_star()}
                 <Text
                   style={{
                     ...styles.score,
@@ -872,30 +1064,69 @@ export default function CarDetail({ route, navigation }) {
                     marginBottom: scale(20),
                   }}
                 >
-                  4점 / 후기 55
+                  {data.dealer_info.review_point}점 / 후기{' '}
+                  {data.dealer_info.review_cnt}
                 </Text>
               </View>
               <Text style={{ ...styles.introduce, marginTop: scale(20) }}>
-                안녕하세요. 배달의 딜러 우수 인증딜러 홍길동입니다.{'\n'}
-                우수 인증딜러는 배달의 딜러 내에 약 5000명 딜러종사자 중 배달의
-                딜러에서 인증한 50명에 선정된 우수 딜러입니다.{'\n'}
-                {'\n'}어떤 차량을 선택하는지도 중요하지만 어떤 딜러와 인연이
-                될지 선택하는 것이 더욱 중요합니다. 단 한번의 계약으로 평생의
-                카매니저가 되어드리겠습니다. ^^{'\n'}
-                {'\n'}- 차종 : 니로 1.6 하이브리드 노블레스{'\n'}- 특이사항 :
-                무사고 A급 차량{'\n'}
-                {'\n'}* 전액 할부가능 (차대금+이전비+보험료 포함){'\n'}
-                {'\n'}오시는 길{'\n'}-{'>'} 수원시 권선구 권선로 341 오토컬렉션
+                {data.dealer_info.dealer_desc}
               </Text>
             </View>
-            <Image
+            {/*<Image
               style={{
                 width: scale(330),
                 height: scale(160),
                 marginTop: scale(20),
               }}
               source={require('../../../images/no_path.png')}
-            />
+            />*/}
+            <NaverMapView
+              style={{ width: '100%', height: '100%' }}
+              showsMyLocationButton={true}
+              center={{ ...P0, zoom: 16 }}
+              onTouch={(e) =>
+                console.warn('onTouch', JSON.stringify(e.nativeEvent))
+              }
+              onCameraChange={(e) =>
+                console.warn('onCameraChange', JSON.stringify(e))
+              }
+              onMapClick={(e) => console.warn('onMapClick', JSON.stringify(e))}
+            >
+              <Marker
+                coordinate={P0}
+                onClick={() => console.warn('onClick! p0')}
+              />
+              <Marker
+                coordinate={P1}
+                pinColor="blue"
+                onClick={() => console.warn('onClick! p1')}
+              />
+              <Marker
+                coordinate={P2}
+                pinColor="red"
+                onClick={() => console.warn('onClick! p2')}
+              />
+              <Path
+                coordinates={[P0, P1]}
+                onClick={() => console.warn('onClick! path')}
+                width={10}
+              />
+              <Polyline
+                coordinates={[P1, P2]}
+                onClick={() => console.warn('onClick! polyline')}
+              />
+              <Circle
+                coordinate={P0}
+                color={'rgba(255,0,0,0.3)'}
+                radius={200}
+                onClick={() => console.warn('onClick! circle')}
+              />
+              <Polygon
+                coordinates={[P0, P1, P2]}
+                color={`rgba(0, 0, 0, 0.5)`}
+                onClick={() => console.warn('onClick! polygon')}
+              />
+            </NaverMapView>
             <View
               style={{
                 flexDirection: 'row',
@@ -909,6 +1140,9 @@ export default function CarDetail({ route, navigation }) {
                 있습니다.
               </Text>
               <TouchableOpacity
+                onPress={() => {
+                  setIsvisible3(true);
+                }}
                 delayPressIn={0}
                 style={{
                   width: scale(59),
@@ -946,6 +1180,9 @@ export default function CarDetail({ route, navigation }) {
                 />
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(`tel:${data.dealer_info.dealer_phone}`);
+                }}
                 delayPressIn={0}
                 style={{
                   ...styles.yellowbutton,
@@ -1035,7 +1272,7 @@ export default function CarDetail({ route, navigation }) {
             </TouchableOpacity>
           </View>
         </Modal>
-        <Modal1
+        <Modal
           isVisible={isvisible1}
           backdropOpacity={0.8}
           useNativeDriver={true}
@@ -1070,8 +1307,71 @@ export default function CarDetail({ route, navigation }) {
               (차대금+이전비+보험료 포함)
             </Text>
           </View>
-        </Modal1>
+        </Modal>
       </SafeAreaView>
+      <Modal
+        isVisible={isvisible2}
+        useNativeDriver={true}
+        onBackButtonPress={() => setIsvisible2(false)}
+        onBackdropPress={() => setIsvisible2(false)}
+      >
+        <View style={{ height: '80%', width: '100%' }}>
+          <Postcode
+            style={{ flex: 1 }}
+            jsOptions={{ animated: true }}
+            onSelected={(data) => {
+              setAddress(data.address);
+              setIsvisible2(false);
+            }}
+          />
+        </View>
+      </Modal>
+      <Modal
+        isVisible={isvisible3}
+        style={{ alignItems: 'center' }}
+        useNativeDriver={true}
+        onBackButtonPress={() => setIsvisible3(false)}
+        onBackdropPress={() => setIsvisible3(false)}
+      >
+        <View
+          style={{
+            ...styles.modalbox,
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(16.2),
+          }}
+        >
+          <Text style={{ ...styles.modaltext }}>
+            차량에 대한 신고 사유를 입력해주세요.
+          </Text>
+          <TextInput
+            multiline={true}
+            style={{
+              ...styles.modalinput,
+              textAlignVertical: 'top',
+              marginTop: scale(16.2),
+            }}
+            placeholder={'직접입력'}
+            placeholderTextColor={'rgba(29, 29, 29, 0.3)'}
+            value={reportDesc}
+            onChangeText={(text) => {
+              _report(text);
+            }}
+          />
+        </View>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => {
+            _reportPost();
+          }}
+          style={{
+            ...styles.modalbutton,
+            paddingVertical: scale(10),
+          }}
+          delayPressIn={0}
+        >
+          <Text style={{ ...styles.modalbuttontext }}>확인</Text>
+        </TouchableOpacity>
+      </Modal>
     </>
   ) : (
     <SubLoading />
@@ -1310,6 +1610,7 @@ const styles = StyleSheet.create({
   profile: {
     width: scale(50),
     height: scale(50),
+    borderRadius: scale(50),
   },
   name: {
     fontFamily: 'Roboto-Bold',
@@ -1419,6 +1720,40 @@ const styles = StyleSheet.create({
   deliverytext: {
     fontFamily: 'Roboto-Regular',
     fontSize: scale(10),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#000000',
+  },
+  modalbox: {
+    width: scale(280),
+    backgroundColor: '#ffffff',
+  },
+  modaltext1: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    lineHeight: 18,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#1d1d1d',
+  },
+  modalbutton: {
+    width: scale(280),
+    backgroundColor: '#459bfe',
+  },
+  modalbuttontext: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#ffffff',
+  },
+  modalinput: {
+    height: scale(83.8),
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',

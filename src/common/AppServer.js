@@ -676,4 +676,66 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //배송료 계산
+  static CARDEALER_API_00023 = async ({
+    car_no,
+    car_user_type,
+    delivery_method,
+    address,
+    address_detail,
+  }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('배송료 계산 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00023',
+        {
+          params: {
+            car_no: car_no,
+            car_user_type: car_user_type,
+            delivery_method: delivery_method,
+            address: address,
+            address_detail: address_detail,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('배송료 계산 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00023', error);
+      return error.response.data;
+    }
+  };
+
+  //차량 신고하기
+  static CARDEALER_API_00024 = async ({ car_no, car_user_type, reason }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 신고하기 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00024',
+        {
+          car_no: car_no,
+          car_user_type: car_user_type,
+          reason: reason,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 신고하기 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00024', error);
+      return error.response.data;
+    }
+  };
 }
