@@ -619,4 +619,31 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //총 구매비용 계산
+  static CARDEALER_API_00027 = async ({ car_no, car_user_type }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('총 구매비용 계산 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00027',
+        {
+          params: {
+            car_no: car_no,
+            car_user_type: car_user_type,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('총 구매비용 계산 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00027', error);
+      return error.response.data;
+    }
+  };
 }

@@ -303,7 +303,10 @@ export default function CarDetail({ route, navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('AllBuyPay');
+                  navigation.navigate('AllBuyPay', {
+                    car_no: car_no,
+                    car_user_type: car_user_type,
+                  });
                 }}
                 delayPressIn={0}
                 style={{ alignItems: 'center' }}
@@ -589,7 +592,9 @@ export default function CarDetail({ route, navigation }) {
                   }}
                 >
                   <Text style={{ ...styles.baseinfotitle }}>연식 (연형)</Text>
-                  <Text style={{ ...styles.baseinfodesc }}>2017년 2월</Text>
+                  <Text style={{ ...styles.baseinfodesc }}>
+                    {data.dealer_data.vehicle_year}년
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -601,7 +606,8 @@ export default function CarDetail({ route, navigation }) {
                 >
                   <Text style={{ ...styles.baseinfotitle }}>연료 / 변속기</Text>
                   <Text style={{ ...styles.baseinfodesc }}>
-                    가솔린+전기 / 오토
+                    {data.dealer_data.fuel_txt} /{' '}
+                    {data.dealer_data.transmission_txt}
                   </Text>
                 </View>
                 <View
@@ -638,17 +644,6 @@ export default function CarDetail({ route, navigation }) {
                     paddingVertical: scale(7),
                   }}
                 >
-                  <Text style={{ ...styles.baseinfotitle }}>색상</Text>
-                  <Text style={{ ...styles.baseinfodesc }}>흰색</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingVertical: scale(7),
-                  }}
-                >
                   <Text style={{ ...styles.baseinfotitle }}>차량위치</Text>
                   <Text style={{ ...styles.baseinfodesc }}>
                     경기 수원시 권선구
@@ -662,25 +657,44 @@ export default function CarDetail({ route, navigation }) {
                 height: scale(189.8),
                 marginTop: scale(20),
                 paddingVertical: scale(20),
-                paddingHorizontal: scale(15),
+                //paddingHorizontal: scale(15),
               }}
             >
-              <Text style={{ ...styles.anotherviewtitle }}>주요 옵션</Text>
+              <Text
+                style={{ ...styles.anotherviewtitle, marginLeft: scale(15) }}
+              >
+                주요 옵션
+              </Text>
               <View
                 style={{
                   flexDirection: 'row',
                   flexWrap: 'wrap',
-                  justifyContent: 'space-between',
+                  //justifyContent: 'space-between',
                 }}
               >
-                <View
-                  style={{ ...styles.selectbox, backgroundColor: '#459bfe' }}
-                >
-                  <Text style={{ ...styles.selectboxtext, color: '#ffffff' }}>
-                    블랙박스
-                  </Text>
-                </View>
-                <View
+                {data.option_list.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        ...styles.selectbox,
+                        backgroundColor: item.select_yn ? '#459bfe' : '#ffffff',
+                        marginLeft: scale(15),
+                      }}
+                    >
+                      <Text
+                        style={{
+                          ...styles.selectboxtext,
+                          color: item.select_yn ? '#ffffff' : '#999999',
+                        }}
+                      >
+                        {item.option_nm}
+                      </Text>
+                    </View>
+                  );
+                })}
+
+                {/*<View
                   style={{ ...styles.selectbox, backgroundColor: '#ffffff' }}
                 >
                   <Text style={{ ...styles.selectboxtext, color: '#999999' }}>
@@ -728,15 +742,7 @@ export default function CarDetail({ route, navigation }) {
                   <Text style={{ ...styles.selectboxtext, color: '#999999' }}>
                     스마트키
                   </Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.selectboxnull,
-                    backgroundColor: 'transparent',
-                  }}
-                >
-                  {/*<Text style={{...styles.selectboxtext}}>스마트키</Text>*/}
-                </View>
+                </View>*/}
               </View>
             </View>
             <View

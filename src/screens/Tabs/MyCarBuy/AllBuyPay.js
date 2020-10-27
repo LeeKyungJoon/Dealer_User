@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -12,11 +12,47 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
 
 const Width = Dimensions.get('window').width;
 
 export default function AllBuyPay({ route, navigation }) {
-  return (
+  let regexp = /\B(?=(\d{3})+(?!\d))/g;
+  const { car_no, car_user_type } = route.params;
+  const [data, setData] = useState(null);
+
+  const _getDetail = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00027({
+        car_no: car_no,
+        car_user_type: car_user_type,
+      });
+      console.log('_getDetail>>>', JSON.stringify(data));
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getDetail>>>>>', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getDetail();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         backgroundColor={'#ffffff'}
@@ -73,7 +109,12 @@ export default function AllBuyPay({ route, navigation }) {
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>차량가격</Text>
-                <Text style={{ ...styles.righttext }}>2,000만원</Text>
+                <Text style={{ ...styles.righttext }}>
+                  {data.data.car_price
+                    .substring(data.data.car_price.length - 4, 0)
+                    .replace(regexp, ',')}
+                  만원
+                </Text>
               </View>
               <View
                 style={{
@@ -84,7 +125,9 @@ export default function AllBuyPay({ route, navigation }) {
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>배송료</Text>
-                <Text style={{ ...styles.righttext }}>60,000원</Text>
+                <Text style={{ ...styles.righttext }}>
+                  {data.data.delivery_price.toString().replace(regexp, ',')}원
+                </Text>
               </View>
               <View
                 style={{
@@ -95,7 +138,9 @@ export default function AllBuyPay({ route, navigation }) {
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>매도비용</Text>
-                <Text style={{ ...styles.righttext }}>330,000원</Text>
+                <Text style={{ ...styles.righttext }}>
+                  {data.data.sell_price.toString().replace(regexp, ',')}원
+                </Text>
               </View>
               <View
                 style={{
@@ -106,7 +151,9 @@ export default function AllBuyPay({ route, navigation }) {
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>성능보증보험료</Text>
-                <Text style={{ ...styles.righttext }}>23,000원</Text>
+                <Text style={{ ...styles.righttext }}>
+                  {data.data.insurance_price.toString().replace(regexp, ',')}원
+                </Text>
               </View>
               <View
                 style={{
@@ -119,7 +166,8 @@ export default function AllBuyPay({ route, navigation }) {
               >
                 <Text style={{ ...styles.lefttext }}>이전비용</Text>
                 <Text style={{ ...styles.righttext }}>
-                  20,413,000원 (약 8%적용)
+                  {data.data.transfer_price.toString().replace(regexp, ',')}원
+                  (약 {data.data.transfer_rate * 100}%적용)
                 </Text>
               </View>
             </View>
@@ -141,7 +189,9 @@ export default function AllBuyPay({ route, navigation }) {
                 <Text style={{ ...styles.allprice }}>총 구매비용</Text>
                 <Text style={{ ...styles.suballprice }}>(보험료 제외)</Text>
               </View>
-              <Text style={{ ...styles.price }}>20,413,000원</Text>
+              <Text style={{ ...styles.price }}>
+                {data.data.total_price.toString().replace(regexp, ',')}원
+              </Text>
             </View>
           </View>
           <View style={{ paddingHorizontal: scale(15) }}>
@@ -169,10 +219,12 @@ export default function AllBuyPay({ route, navigation }) {
               >
                 <View>
                   <Text style={{ ...styles.lefttext1 }}>
-                    이 차량을 36개월 기준, 최저금리 3.9% 적용 시
+                    이 차량을 {data.data.base_period}개월 기준, 최저금리{' '}
+                    {data.data.base_interest}% 적용 시
                   </Text>
                   <Text style={{ ...styles.lefttext2 }}>
-                    월 납입액 792,999 원
+                    월 납입액{' '}
+                    {data.data.calc_price.toString().replace(regexp, ',')} 원
                   </Text>
                 </View>
                 <Image
@@ -207,6 +259,8 @@ export default function AllBuyPay({ route, navigation }) {
         </ScrollView>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 
