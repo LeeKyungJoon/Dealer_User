@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -18,11 +18,45 @@ import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
 import Rating from 'react-native-rating';
 import { Easing } from 'react-native';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
 
 const Width = Dimensions.get('window').width;
 
 export default function RealReviewDetail({ route, navigation }) {
-  return (
+  const [data, setData] = useState(null);
+  const { review_no } = route.params;
+
+  const _getReview = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00020({
+        review_no: review_no,
+      });
+      console.log('_getReview>>', data);
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getReview>>', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getReview();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         backgroundColor={'#ffffff'}
@@ -211,6 +245,8 @@ export default function RealReviewDetail({ route, navigation }) {
         </ScrollView>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 

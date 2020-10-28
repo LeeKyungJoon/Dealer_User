@@ -168,7 +168,11 @@ export default function List({ route, navigation }) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    navigation.navigate('CarDetail');
+                    navigation.navigate('CarDetail', {
+                      car_no: item.car_no,
+                      car_user_type: item.car_user_type,
+                      sido: item.sido,
+                    });
                   }}
                   delayPressIn={0}
                   style={{

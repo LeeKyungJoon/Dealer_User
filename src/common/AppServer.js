@@ -738,4 +738,146 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //딜러 상세정보
+  static CARDEALER_API_00028 = async ({ dealer_no }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('딜러 상세정보 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00028',
+        {
+          params: {
+            dealer_no: dealer_no,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('딜러 상세정보 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00028', error);
+      return error.response.data;
+    }
+  };
+
+  //후기 전체보기
+  static CARDEALER_API_00028_2 = async ({ dealer_no, page, range }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('후기 전체보기 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00028_2',
+        {
+          params: {
+            dealer_no: dealer_no,
+            page: page,
+            range: range,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('후기 전체보기 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00028_2', error);
+      return error.response.data;
+    }
+  };
+
+  //딜러 차량 전체보기
+  static CARDEALER_API_00028_3 = async ({
+    dealer_no,
+    premium_yn,
+    page,
+    range,
+  }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('딜러 차량 전체보기 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00028_3',
+        {
+          params: {
+            dealer_no: dealer_no,
+            premium_yn: premium_yn,
+            page: page,
+            range: range,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('딜러 차량 전체보기 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00028_3', error);
+      return error.response.data;
+    }
+  };
+
+  //리얼후기 리스트
+  static CARDEALER_API_00049 = async ({ review_type, page, range }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('리얼후기 리스트 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00049',
+        {
+          params: {
+            review_type: review_type,
+            page: page,
+            range: range,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('리얼후기 리스트 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00049', error);
+      return error.response.data;
+    }
+  };
+
+  //리얼후기 상세
+  static CARDEALER_API_00020 = async ({ review_no }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('리얼후기 상세 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00020',
+        {
+          params: {
+            review_no: review_no,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('리얼후기 상세 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00020', error);
+      return error.response.data;
+    }
+  };
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import scale from '../../../common/Scale';
 import {
@@ -16,12 +16,45 @@ import {
   ImageBackground,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import AppServer from '../../../common/AppServer';
+import SubLoading from '../../../common/SubLoading';
 
 export default function ListReal({ route, navigation }) {
-  const [premiumCheck, setPremiumCheck] = useState(false);
-  const [likeCheck, setLikeCheck] = useState(false);
+  const { review_type } = route.params;
+  const [data, setData] = useState(null);
 
-  return (
+  const _getReviewList = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00049({
+        review_type: review_type,
+        page: 1,
+        range: 30,
+      });
+      console.log('_getReviewList>>', data);
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getReviewList>>', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      _getReviewList();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return data ? (
     <>
       <Header
         backgroundColor={'#459bfe'}
@@ -78,11 +111,10 @@ export default function ListReal({ route, navigation }) {
             }}
           >
             <View style={{ marginTop: scale(15) }}>
-              <TouchableOpacity onPress={() => {}} delayPressIn={0}>
-                <Text style={{ ...styles.real, marginBottom: scale(10) }}>
-                  #리얼 후기
-                </Text>
-              </TouchableOpacity>
+              <Text style={{ ...styles.real, marginBottom: scale(10) }}>
+                #리얼 후기
+              </Text>
+
               <View
                 style={{
                   marginBottom: scale(15),
@@ -91,249 +123,72 @@ export default function ListReal({ route, navigation }) {
                   flexWrap: 'wrap',
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                    marginBottom: scale(20),
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                    marginBottom: scale(20),
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('RealReviewDetail');
-                  }}
-                  delayPressIn={0}
-                  style={{
-                    width: scale(157.5),
-                    height: scale(180),
-                    backgroundColor: '#ffffff',
-                    elevation: 1.5,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                  }}
-                >
-                  <ImageBackground
-                    style={{ ...styles.realcar }}
-                    source={require('../../../images/g_703.png')}
-                  ></ImageBackground>
-                  <Image
-                    style={{
-                      width: scale(30),
-                      height: scale(30),
-                      position: 'absolute',
-                      right: 4,
-                      bottom: 40,
-                    }}
-                    source={require('../../../images/shutterstock_682551649.png')}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: scale(4),
-                      paddingVertical: scale(7),
-                    }}
-                  >
-                    <Text style={{ ...styles.smallcarname }}>제네시스 G70</Text>
-                    <Text style={{ ...styles.review }} numberOfLines={2}>
-                      생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                      마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                      기도합니다. 제발제발 좋게 써주세요.
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                {data.list.map((item, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        navigation.navigate('RealReviewDetail', {
+                          review_no: item.review_no,
+                        });
+                      }}
+                      delayPressIn={0}
+                      style={{
+                        width: scale(157.5),
+                        height: scale(180),
+                        backgroundColor: '#ffffff',
+                        elevation: 1.5,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 1.41,
+                      }}
+                    >
+                      <Image
+                        style={{ ...styles.realcar }}
+                        source={{ uri: item.review_img }}
+                      />
+                      <Image
+                        style={{
+                          width: scale(30),
+                          height: scale(30),
+                          position: 'absolute',
+                          right: 4,
+                          bottom: 40,
+                          borderRadius: scale(50),
+                        }}
+                        source={{ uri: item.dealer_img }}
+                      />
+                      <View
+                        style={{
+                          paddingHorizontal: scale(4),
+                          paddingVertical: scale(7),
+                        }}
+                      >
+                        <Text style={{ ...styles.smallcarname }}>
+                          {item.car_nm}
+                        </Text>
+                        <Text
+                          style={{ ...styles.review, marginTop: scale(4) }}
+                          numberOfLines={2}
+                        >
+                          {item.review_desc}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
           </View>
         </ScrollView>
       </SafeAreaView>
     </>
+  ) : (
+    <SubLoading />
   );
 }
 

@@ -16,27 +16,25 @@ import {
 } from 'react-native';
 import AppServer from '../../../common/AppServer';
 import SubLoading from '../../../common/SubLoading';
-import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 
 const Width = Dimensions.get('window').width;
 
-export default function SearchCar({ route, navigation }) {
+export default function DealerCarAll({ route, navigation }) {
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
+  const { dealer_no } = route.params;
   const [data, setData] = useState(null);
   const [premiumCheck, setPremiumCheck] = useState(false);
-  const { result } = route.params;
 
-  const _getResult = async ({ check }) => {
+  const _getDealerCar = async ({ check }) => {
     try {
-      let data = await AppServer.CARDEALER_API_00017({
-        search_text: result,
+      let data = await AppServer.CARDEALER_API_00028_3({
+        dealer_no: dealer_no,
         premium_yn: check,
-        user_type: 'user',
         page: 1,
         range: 30,
       });
-      console.log('_getResult>>>>', data);
+      console.log('_getDealerCar>>>', data);
       if (data.success_yn) {
         setData(data);
       } else if (
@@ -49,13 +47,13 @@ export default function SearchCar({ route, navigation }) {
         });
       }
     } catch (error) {
-      console.log('_getResult>>>>', error);
+      console.log('_getDealerCar>>>', error);
     }
   };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
-      _getResult({ check: premiumCheck });
+      _getDealerCar({ check: premiumCheck });
     });
     return unsubscribe;
   }, [navigation]);
@@ -64,39 +62,33 @@ export default function SearchCar({ route, navigation }) {
     <>
       <Header
         placement="left"
-        backgroundColor={'#ffffff'}
-        barStyle="dark-content"
+        backgroundColor={'#459bfe'}
+        barStyle="light-content"
         statusBarProps={{
           translucent: true,
-          backgroundColor: '#ffffff',
+          backgroundColor: '#459bfe',
         }}
         containerStyle={{
           borderBottomWidth: 0,
           height: scale(80),
-          paddingHorizontal: scale(15),
         }}
         leftComponent={
           <TouchableOpacity
             onPress={() => {
               navigation.goBack();
             }}
+            style={{ marginLeft: scale(5) }}
             delayPressIn={0}
+            hitSlop={{ top: 25, bottom: 25, left: 25, right: 25 }}
           >
             <Image
-              style={{ ...styles.backsearchicon }}
-              source={require('../../../images/back_ic_72.png')}
+              style={{ ...styles.back }}
+              source={require('../../../images/back_ic_80.png')}
             />
           </TouchableOpacity>
         }
         centerComponent={
-          <View style={{ width: '100%' }}>
-            <Text style={{ ...styles.toptext }}>
-              검색결과{' '}
-              <Text style={{ color: '#459bfe', marginLeft: scale(5) }}>
-                #{result}
-              </Text>
-            </Text>
-          </View>
+          <Text style={{ ...styles.headercenter }}>판매중인 차량</Text>
         }
       />
       <SafeAreaView style={{ ...styles.container }}>
@@ -115,7 +107,7 @@ export default function SearchCar({ route, navigation }) {
             <TouchableOpacity
               onPress={() => {
                 setPremiumCheck(!premiumCheck);
-                _getResult({ check: !premiumCheck });
+                _getDealerCar({ check: !premiumCheck });
               }}
               delayPressIn={0}
               style={{
@@ -144,7 +136,7 @@ export default function SearchCar({ route, navigation }) {
                 />
               )}
             </TouchableOpacity>
-            {data.search_list.map((item, index) => {
+            {data.car_list.map((item, index) => {
               return (
                 <TouchableOpacity
                   key={index}
@@ -258,6 +250,20 @@ export default function SearchCar({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  back: {
+    width: scale(18),
+    height: scale(18),
+  },
+  headercenter: {
+    fontFamily: 'Jalnan',
+    fontSize: scale(16),
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    lineHeight: scale(25),
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#ffffff',
+  },
   backsearchicon: {
     width: scale(18),
     height: scale(18),

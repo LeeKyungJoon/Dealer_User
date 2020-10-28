@@ -29,7 +29,7 @@ rm -rf ./android/.idea
 rm -rf ./android/build
 rm -rf ./android/.gradle
 cd ./android && ./gradlew clean && cd ..
-#open ./ios/*.xcworkspace
-#open -a /Applications/Android\ Studio.app ./android/
+open ./ios/*.xcworkspace
+open -a /Applications/Android\ Studio.app ./android/
 code .
 echo 'Finished'

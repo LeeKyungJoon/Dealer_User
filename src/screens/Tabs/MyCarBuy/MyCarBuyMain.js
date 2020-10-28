@@ -308,11 +308,17 @@ export default function MyCarBuyMain({ route, navigation }) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    navigation.navigate('CarDetail', {
-                      car_no: item.car_no,
-                      car_user_type: item.car_user_type,
-                      sido: item.sido,
-                    });
+                    item.car_user_type === 'dealer'
+                      ? navigation.navigate('CarDetail', {
+                          car_no: item.car_no,
+                          car_user_type: item.car_user_type,
+                          sido: item.sido,
+                        })
+                      : navigation.navigate('CarDetailPersonal', {
+                          car_no: item.car_no,
+                          car_user_type: item.car_user_type,
+                          sido: item.sido,
+                        });
                   }}
                   delayPressIn={0}
                   style={{
@@ -428,7 +434,17 @@ export default function MyCarBuyMain({ route, navigation }) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    navigation.navigate('CarDetail');
+                    item.car_user_type === 'dealer'
+                      ? navigation.navigate('CarDetail', {
+                          car_no: item.car_no,
+                          car_user_type: item.car_user_type,
+                          sido: item.sido,
+                        })
+                      : navigation.navigate('CarDetailPersonal', {
+                          car_no: item.car_no,
+                          car_user_type: item.car_user_type,
+                          sido: item.sido,
+                        });
                   }}
                   delayPressIn={0}
                   style={{
@@ -526,7 +542,7 @@ export default function MyCarBuyMain({ route, navigation }) {
             <View style={{ marginTop: scale(25) }}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('ListReal');
+                  navigation.navigate('ListReal', { review_type: 'RT_009' });
                 }}
                 delayPressIn={0}
               >
@@ -547,7 +563,9 @@ export default function MyCarBuyMain({ route, navigation }) {
                     <TouchableOpacity
                       key={index}
                       onPress={() => {
-                        navigation.navigate('RealReviewDetail');
+                        navigation.navigate('RealReviewDetail', {
+                          review_no: item.review_no,
+                        });
                       }}
                       delayPressIn={0}
                       style={{
@@ -566,7 +584,7 @@ export default function MyCarBuyMain({ route, navigation }) {
                     >
                       <ImageBackground
                         style={{ ...styles.realcar }}
-                        source={require('../../../images/g_703.png')}
+                        source={{ uri: item.review_img }}
                       ></ImageBackground>
                       <Image
                         style={{
@@ -575,8 +593,9 @@ export default function MyCarBuyMain({ route, navigation }) {
                           position: 'absolute',
                           right: 4,
                           bottom: 40,
+                          borderRadius: scale(50),
                         }}
-                        source={require('../../../images/shutterstock_682551649.png')}
+                        source={{ uri: item.dealer_img }}
                       />
                       <View
                         style={{
@@ -585,12 +604,13 @@ export default function MyCarBuyMain({ route, navigation }) {
                         }}
                       >
                         <Text style={{ ...styles.smallcarname }}>
-                          제네시스 G70
+                          {item.car_nm}
                         </Text>
-                        <Text style={{ ...styles.review }} numberOfLines={2}>
-                          생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때
-                          마음이 좀 싱숭생숭 했었습니다. 새 주인을 잘 만나길
-                          기도합니다. 제발제발 좋게 써주세요.
+                        <Text
+                          style={{ ...styles.review, marginTop: scale(4) }}
+                          numberOfLines={2}
+                        >
+                          {item.review_desc}
                         </Text>
                       </View>
                     </TouchableOpacity>

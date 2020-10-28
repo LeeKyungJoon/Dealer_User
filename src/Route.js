@@ -8,7 +8,9 @@ import Tabs from './Tabs';
 import SearchCar from './screens/Tabs/MyCarBuy/SearchCar';
 import SearchCarDetail from './screens/Tabs/MyCarBuy/SearchCarDetail';
 import CarDetail from './screens/Tabs/MyCarBuy/CarDetail';
+import CarDetailPersonal from './screens/Tabs/MyCarBuy/CarDetailPersonal';
 import CarPerformanceCheck from './screens/Tabs/MyCarBuy/CarPerformanceCheck';
+import CarPerformancePersonal from './screens/Tabs/MyCarBuy/CarPerformancePersonal';
 import InsuranceHistory from './screens/Tabs/MyCarBuy/InsuranceHistory';
 import AllBuyPay from './screens/Tabs/MyCarBuy/AllBuyPay';
 import DealerInfo from './screens/Tabs/MyCarBuy/DealerInfo';
@@ -27,6 +29,8 @@ import TransferRefund from './screens/Tabs/MyCarBuy/TransferRefund';
 import RealReviewDetail from './screens/Tabs/MyCarBuy/RealReviewDetail';
 import Chat from './screens/Tabs/MyCarBuy/Chat';
 import VisitReservation from './screens/Tabs/MyCarBuy/VisitReservation';
+import DealerReviewList from './screens/Tabs/MyCarBuy/DealerReviewList';
+import DealerCarAll from './screens/Tabs/MyCarBuy/DealerCarAll';
 ///////
 //소비자용_내차판매
 import QuoteRequest from './screens/Tabs/MyCarSell/QuoteRequest';
@@ -56,75 +60,352 @@ import Noti_Setting from './screens/Tabs/MyInfo/Noti_Setting';
 import Reset_Password from './screens/Tabs/MyInfo/Reset_Password';
 import Reset_Phone from './screens/Tabs/MyInfo/Reset_Phone';
 ///////
-
+import { CardStyleInterpolators } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 export default function Route() {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode={'none'} initialRouteName={'MainLoading'}>
-        <Stack.Screen name={'MainLoading'} component={MainLoading} />
-        <Stack.Screen name={'Sign'} component={Sign} />
-        <Stack.Screen name={'Tabs'} component={Tabs} />
+        <Stack.Screen
+          name={'MainLoading'}
+          component={MainLoading}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'Sign'}
+          component={Sign}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'Tabs'}
+          component={Tabs}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
         {/* 소비자용_내차구매 */}
 
-        <Stack.Screen name={'CarDetail'} component={CarDetail} />
+        <Stack.Screen
+          name={'CarDetail'}
+          component={CarDetail}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'CarDetailPersonal'}
+          component={CarDetailPersonal}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
         <Stack.Screen
           name={'CarPerformanceCheck'}
           component={CarPerformanceCheck}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
         />
-        <Stack.Screen name={'InsuranceHistory'} component={InsuranceHistory} />
-        <Stack.Screen name={'AllBuyPay'} component={AllBuyPay} />
-        <Stack.Screen name={'DealerInfo'} component={DealerInfo} />
-        <Stack.Screen name={'BuyCash'} component={BuyCash} />
-        <Stack.Screen name={'BuyCashComplete'} component={BuyCashComplete} />
-        <Stack.Screen name={'BuyCar'} component={BuyCar} />
-        <Stack.Screen name={'Terms'} component={Terms} />
-        <Stack.Screen name={'Rules'} component={Rules} />
-        <Stack.Screen name={'DepositAccount'} component={DepositAccount} />
-        <Stack.Screen name={'ReceivePlace'} component={ReceivePlace} />
-        <Stack.Screen name={'RefundAccount'} component={RefundAccount} />
-        <Stack.Screen name={'DeliverySchedule'} component={DeliverySchedule} />
-        <Stack.Screen name={'CarConfirmation'} component={CarConfirmation} />
-        <Stack.Screen name={'ReviewRegist'} component={ReviewRegist} />
-        <Stack.Screen name={'TransferRefund'} component={TransferRefund} />
-        <Stack.Screen name={'RealReviewDetail'} component={RealReviewDetail} />
-        <Stack.Screen name={'Chat'} component={Chat} />
-        <Stack.Screen name={'VisitReservation'} component={VisitReservation} />
+        <Stack.Screen
+          name={'CarPerformancePersonal'}
+          component={CarPerformancePersonal}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'InsuranceHistory'}
+          component={InsuranceHistory}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'AllBuyPay'}
+          component={AllBuyPay}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DealerInfo'}
+          component={DealerInfo}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'BuyCash'}
+          component={BuyCash}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'BuyCashComplete'}
+          component={BuyCashComplete}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'BuyCar'}
+          component={BuyCar}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'Terms'}
+          component={Terms}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'Rules'}
+          component={Rules}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DepositAccount'}
+          component={DepositAccount}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'ReceivePlace'}
+          component={ReceivePlace}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'RefundAccount'}
+          component={RefundAccount}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DeliverySchedule'}
+          component={DeliverySchedule}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'CarConfirmation'}
+          component={CarConfirmation}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'ReviewRegist'}
+          component={ReviewRegist}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'TransferRefund'}
+          component={TransferRefund}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'RealReviewDetail'}
+          component={RealReviewDetail}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'Chat'}
+          component={Chat}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'VisitReservation'}
+          component={VisitReservation}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DealerReviewList'}
+          component={DealerReviewList}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DealerCarAll'}
+          component={DealerCarAll}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
         {/*  */}
         {/* 소비자용_내차판매 */}
-        <Stack.Screen name={'QuoteRequest'} component={QuoteRequest} />
-        <Stack.Screen name={'EnterSellsPrice'} component={EnterSellsPrice} />
-        <Stack.Screen name={'DefaultInfo'} component={DefaultInfo} />
+        <Stack.Screen
+          name={'QuoteRequest'}
+          component={QuoteRequest}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'EnterSellsPrice'}
+          component={EnterSellsPrice}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DefaultInfo'}
+          component={DefaultInfo}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
         <Stack.Screen
           name={'DefaultInfoConfirm'}
           component={DefaultInfoConfirm}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
         />
         <Stack.Screen
           name={'SelectTransmission'}
           component={SelectTransmission}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
         />
-        <Stack.Screen name={'DistanceDriven'} component={DistanceDriven} />
-        <Stack.Screen name={'Options'} component={Options} />
-        <Stack.Screen name={'CarStatus'} component={CarStatus} />
-        <Stack.Screen name={'DealAddress'} component={DealAddress} />
-        <Stack.Screen name={'VideoPicture'} component={VideoPicture} />
-        <Stack.Screen name={'AddCarInfo'} component={AddCarInfo} />
-        <Stack.Screen name={'AddAccident'} component={AddAccident} />
-        <Stack.Screen name={'AddComment'} component={AddComment} />
-        <Stack.Screen name={'QuoteComplete'} component={QuoteComplete} />
-        <Stack.Screen name={'DealerAuction'} component={DealerAuction} />
+        <Stack.Screen
+          name={'DistanceDriven'}
+          component={DistanceDriven}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'Options'}
+          component={Options}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'CarStatus'}
+          component={CarStatus}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DealAddress'}
+          component={DealAddress}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'VideoPicture'}
+          component={VideoPicture}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'AddCarInfo'}
+          component={AddCarInfo}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'AddAccident'}
+          component={AddAccident}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'AddComment'}
+          component={AddComment}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'QuoteComplete'}
+          component={QuoteComplete}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DealerAuction'}
+          component={DealerAuction}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
         {/*  */}
         {/* 소비자용_상담요청 */}
         {/*  */}
         {/* 소비자용_공지사항 */}
-        <Stack.Screen name={'NoticDetail'} component={NoticDetail} />
+        <Stack.Screen
+          name={'NoticDetail'}
+          component={NoticDetail}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
         {/*  */}
         {/* 소비자용_내정보 */}
-        <Stack.Screen name="Head_Question" component={Head_Question} />
-        <Stack.Screen name="Noti_Setting" component={Noti_Setting} />
-        <Stack.Screen name="Reset_Password" component={Reset_Password} />
-        <Stack.Screen name="Reset_Phone" component={Reset_Phone} />
+        <Stack.Screen
+          name="Head_Question"
+          component={Head_Question}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name="Noti_Setting"
+          component={Noti_Setting}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name="Reset_Password"
+          component={Reset_Password}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name="Reset_Phone"
+          component={Reset_Phone}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
         {/*  */}
       </Stack.Navigator>
     </NavigationContainer>

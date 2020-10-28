@@ -133,7 +133,7 @@ export default function SearchResult({ route, navigation }) {
         leftComponent={
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              navigation.popToTop();
             }}
             delayPressIn={0}
           >

@@ -33,13 +33,10 @@ import NaverMapView, {
 const Width = Dimensions.get('window').width;
 
 export default function CarDetail({ route, navigation }) {
-  const P0 = { latitude: 37.564362, longitude: 126.977011 };
-  const P1 = { latitude: 37.565051, longitude: 126.978567 };
-  const P2 = { latitude: 37.565383, longitude: 126.976292 };
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const [drop, setDrop] = useState(false);
   const [isvisible, setIsvisible] = useState(false);
-  const [isvisible1, setIsvisible1] = useState(false);
+  const [isvisible1, setIsvisible1] = useState({ open: false, image: '' });
   const [isvisible2, setIsvisible2] = useState(false);
   const [isvisible3, setIsvisible3] = useState(false);
   const [selectDe, setSelectDe] = useState({ desc: '', method: '' });
@@ -282,21 +279,25 @@ export default function CarDetail({ route, navigation }) {
   };
 
   const _getDetail = async () => {
-    let data = await AppServer.CARDEALER_API_00022({
-      car_no: car_no,
-      car_user_type: car_user_type,
-    });
-    console.log('_getDetail>>>', data);
-    if (data.success_yn) {
-      setData(data);
-    } else if (
-      !data.success_yn &&
-      data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
-    ) {
-      await AsyncStorage.clear();
-      navigation.reset({
-        routes: [{ name: 'Sign' }],
+    try {
+      let data = await AppServer.CARDEALER_API_00022({
+        car_no: car_no,
+        car_user_type: car_user_type,
       });
+      console.log('_getDetail>>>', data);
+      if (data.success_yn) {
+        setData(data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getDetail>>>', error);
     }
   };
 
@@ -359,7 +360,7 @@ export default function CarDetail({ route, navigation }) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    setIsvisible1(true);
+                    setIsvisible1({ open: true, image: item });
                   }}
                   delayPressIn={0}
                   style={{ flex: 1 }}
@@ -370,36 +371,35 @@ export default function CarDetail({ route, navigation }) {
                     style={{ width: '100%', height: '100%', flex: 1 }}
                     source={{ uri: item }}
                   />
-                  {car_user_type === 'dealer' ? (
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      position: 'absolute',
+                      right: 5,
+                      top: 5,
+                    }}
+                  >
                     <View
                       style={{
-                        flexDirection: 'row',
-                        position: 'absolute',
-                        right: 5,
-                        top: 5,
+                        ...styles.swipetop,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}
                     >
-                      <View
-                        style={{
-                          ...styles.swipetop,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Text style={{ ...styles.refund }}>3일내 환불</Text>
-                      </View>
-                      <View
-                        style={{
-                          ...styles.swipetop,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          marginLeft: scale(4),
-                        }}
-                      >
-                        <Text style={{ ...styles.refund }}> 홈서비스 </Text>
-                      </View>
+                      <Text style={{ ...styles.refund }}>3일내 환불</Text>
                     </View>
-                  ) : null}
+                    <View
+                      style={{
+                        ...styles.swipetop,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginLeft: scale(4),
+                      }}
+                    >
+                      <Text style={{ ...styles.refund }}> 홈서비스 </Text>
+                    </View>
+                  </View>
 
                   <View
                     style={{
@@ -1044,7 +1044,9 @@ export default function CarDetail({ route, navigation }) {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('DealerInfo');
+                    navigation.navigate('DealerInfo', {
+                      dealer_no: data.dealer_info.dealer_no,
+                    });
                   }}
                   delayPressIn={0}
                 >
@@ -1072,59 +1074,29 @@ export default function CarDetail({ route, navigation }) {
                 {data.dealer_info.dealer_desc}
               </Text>
             </View>
-            {/*<Image
+            <NaverMapView
               style={{
                 width: scale(330),
                 height: scale(160),
                 marginTop: scale(20),
               }}
-              source={require('../../../images/no_path.png')}
-            />*/}
-            <NaverMapView
-              style={{ width: '100%', height: '100%' }}
-              showsMyLocationButton={true}
-              center={{ ...P0, zoom: 16 }}
-              onTouch={(e) =>
-                console.warn('onTouch', JSON.stringify(e.nativeEvent))
-              }
-              onCameraChange={(e) =>
-                console.warn('onCameraChange', JSON.stringify(e))
-              }
-              onMapClick={(e) => console.warn('onMapClick', JSON.stringify(e))}
+              showsMyLocationButton={false}
+              zoomControl={false}
+              scaleBar={false}
+              center={{
+                ...{
+                  latitude: data.dealer_data.latitude,
+                  longitude: data.dealer_data.longitude,
+                },
+                zoom: 15,
+              }}
             >
               <Marker
-                coordinate={P0}
+                coordinate={{
+                  latitude: data.dealer_data.latitude,
+                  longitude: data.dealer_data.longitude,
+                }}
                 onClick={() => console.warn('onClick! p0')}
-              />
-              <Marker
-                coordinate={P1}
-                pinColor="blue"
-                onClick={() => console.warn('onClick! p1')}
-              />
-              <Marker
-                coordinate={P2}
-                pinColor="red"
-                onClick={() => console.warn('onClick! p2')}
-              />
-              <Path
-                coordinates={[P0, P1]}
-                onClick={() => console.warn('onClick! path')}
-                width={10}
-              />
-              <Polyline
-                coordinates={[P1, P2]}
-                onClick={() => console.warn('onClick! polyline')}
-              />
-              <Circle
-                coordinate={P0}
-                color={'rgba(255,0,0,0.3)'}
-                radius={200}
-                onClick={() => console.warn('onClick! circle')}
-              />
-              <Polygon
-                coordinates={[P0, P1, P2]}
-                color={`rgba(0, 0, 0, 0.5)`}
-                onClick={() => console.warn('onClick! polygon')}
               />
             </NaverMapView>
             <View
@@ -1273,14 +1245,14 @@ export default function CarDetail({ route, navigation }) {
           </View>
         </Modal>
         <Modal
-          isVisible={isvisible1}
+          isVisible={isvisible1.open}
           backdropOpacity={0.8}
           useNativeDriver={true}
           style={{ margin: 0 }}
         >
           <TouchableOpacity
             onPress={() => {
-              setIsvisible1(false);
+              setIsvisible1({ open: false, image: '' });
             }}
             delayPressIn={0}
             hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
@@ -1299,12 +1271,10 @@ export default function CarDetail({ route, navigation }) {
             <Image
               resizeMode="contain"
               style={{ width: '100%', height: scale(270) }}
-              source={require('../../../images/k_7_02.png')}
+              source={{ uri: isvisible1.image }}
             />
             <Text style={{ ...styles.modalcardetail, marginLeft: scale(15) }}>
-              - 차종 : 니로 1.6 하이브리드 노블레스{'\n'}- 특이사항 : 무사고 A급
-              차량{'\n'}- 사고경력 없습니다!{'\n'}* 전액 할부가능
-              (차대금+이전비+보험료 포함)
+              {data.dealer_data.img_desc}
             </Text>
           </View>
         </Modal>
