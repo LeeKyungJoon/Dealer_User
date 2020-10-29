@@ -17,7 +17,13 @@ import {
 import { WebView } from 'react-native-webview';
 
 export default function Rules({ route, navigation }) {
-  const [agree, setAgree] = useState(false);
+  const { setAgree1 } = route.params;
+  const [agree4, setAgree4] = useState(false);
+
+  const _goBack = () => {
+    setAgree1(true);
+    navigation.goBack();
+  };
 
   return (
     <>
@@ -93,7 +99,7 @@ export default function Rules({ route, navigation }) {
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  agree ? setAgree(false) : setAgree(true);
+                  setAgree4(!agree4);
                 }}
                 delayPressIn={0}
                 style={{
@@ -102,7 +108,7 @@ export default function Rules({ route, navigation }) {
                   marginTop: scale(15),
                 }}
               >
-                {agree ? (
+                {agree4 ? (
                   <Image
                     style={{ ...styles.agreeicon }}
                     source={require('../../../images/circle_on_ic_68.png')}
@@ -120,8 +126,9 @@ export default function Rules({ route, navigation }) {
             </View>
           </View>
           <TouchableOpacity
+            disabled={agree4 ? false : true}
             onPress={() => {
-              navigation.goBack();
+              _goBack();
             }}
             delayPressIn={0}
             style={{
@@ -129,6 +136,7 @@ export default function Rules({ route, navigation }) {
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: scale(15),
+              backgroundColor: agree4 ? '#459bfe' : 'rgba(69, 155, 254, 0.3)',
             }}
           >
             <Text style={{ ...styles.bottombuttontext }}>확인</Text>

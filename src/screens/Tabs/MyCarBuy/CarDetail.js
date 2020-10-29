@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
+import Modal1 from 'react-native-modal';
 import AppServer from '../../../common/AppServer';
 import SubLoading from '../../../common/SubLoading';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -29,6 +30,8 @@ import NaverMapView, {
   Polyline,
   Polygon,
 } from 'react-native-nmap';
+import Rating from 'react-native-rating';
+import { Easing } from 'react-native';
 
 const Width = Dimensions.get('window').width;
 
@@ -39,9 +42,11 @@ export default function CarDetail({ route, navigation }) {
   const [isvisible1, setIsvisible1] = useState({ open: false, image: '' });
   const [isvisible2, setIsvisible2] = useState(false);
   const [isvisible3, setIsvisible3] = useState(false);
+  const [isvisible4, setIsvisible4] = useState({ open: false, title: '' });
   const [selectDe, setSelectDe] = useState({ desc: '', method: '' });
   const { car_no, car_user_type, sido } = route.params;
   const [data, setData] = useState(null);
+  const [data1, setData1] = useState([]);
   const [address, setAddress] = useState('');
   const [addressOther, setAddressOther] = useState('');
   const [deliveryPrice, setDeliveryPrice] = useState('');
@@ -66,161 +71,6 @@ export default function CarDetail({ route, navigation }) {
       }
     } else {
       setIsvisible3(false);
-    }
-  };
-
-  const _star = () => {
-    switch (data.dealer_info.review_point) {
-      case '0':
-        return (
-          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-          </View>
-        );
-      case '1':
-        return (
-          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-          </View>
-        );
-      case '2':
-        return (
-          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-          </View>
-        );
-      case '3':
-        return (
-          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-          </View>
-        );
-      case '4':
-        return (
-          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_off.png')}
-            />
-          </View>
-        );
-      case '5':
-        return (
-          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-            <Image
-              style={{ ...styles.star }}
-              source={require('../../../images/likes_on.png')}
-            />
-          </View>
-        );
     }
   };
 
@@ -278,6 +128,64 @@ export default function CarDetail({ route, navigation }) {
     }
   };
 
+  const _getBuyList = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00029();
+      console.log('_getBuyList>>>', data);
+      if (data.success_yn) {
+        setData1(data.data);
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_getBuyList>>>', error);
+    }
+  };
+
+  const _selectBuy = async (buy_type, phone_number) => {
+    setIsvisible(false);
+    let result = await AppServer.CARDEALER_API_00030({
+      car_no: car_no,
+      car_user_type: car_user_type,
+      buy_type: buy_type,
+    });
+    console.log('_selectBuy>>>', result);
+    if (result.success_yn) {
+      if (buy_type === 'BT_001') {
+        navigation.navigate('BuyCash', {
+          car_no: car_no,
+          car_user_type: car_user_type,
+          car_number: data.dealer_data.car_number,
+          car_nm: data.dealer_data.car_nm,
+          car_year: data.dealer_data.vehicle_year,
+        });
+      } else {
+        Linking.openURL(`tel:${phone_number}`);
+      }
+    } else if (
+      !result.success_yn &&
+      result.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+    ) {
+      await AsyncStorage.clear();
+      navigation.reset({
+        routes: [{ name: 'Sign' }],
+      });
+    } else if (
+      !result.success_yn &&
+      result.msg === '배송비를 먼저 계산해주세요'
+    ) {
+      setTimeout(() => {
+        setIsvisible4({ open: true, title: result.msg });
+      }, 500);
+    }
+  };
+
   const _getDetail = async () => {
     try {
       let data = await AppServer.CARDEALER_API_00022({
@@ -304,6 +212,7 @@ export default function CarDetail({ route, navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
       _getDetail({ car_no: car_no, car_user_type: car_user_type });
+      _getBuyList();
     });
     return unsubscribe;
   }, [navigation]);
@@ -342,7 +251,10 @@ export default function CarDetail({ route, navigation }) {
         }
       />
       <SafeAreaView style={{ ...styles.container }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="always"
+        >
           <Swiper
             loop={false}
             height={scale(200)}
@@ -355,70 +267,74 @@ export default function CarDetail({ route, navigation }) {
             dotColor={'#e9e9e9'}
             paginationStyle={{ bottom: 10 }}
           >
-            {data.dealer_data.car_img_arr.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    setIsvisible1({ open: true, image: item });
-                  }}
-                  delayPressIn={0}
-                  style={{ flex: 1 }}
-                  activeOpacity={0.5}
-                >
-                  <Image
-                    resizeMode={'cover'}
-                    style={{ width: '100%', height: '100%', flex: 1 }}
-                    source={{ uri: item }}
-                  />
-
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      position: 'absolute',
-                      right: 5,
-                      top: 5,
+            {data.dealer_data.car_img_arr ? (
+              data.dealer_data.car_img_arr.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      setIsvisible1({ open: true, image: item });
                     }}
+                    delayPressIn={0}
+                    style={{ flex: 1 }}
+                    activeOpacity={0.5}
                   >
+                    <Image
+                      resizeMode={'cover'}
+                      style={{ width: '100%', height: '100%', flex: 1 }}
+                      source={{ uri: item }}
+                    />
+
                     <View
                       style={{
-                        ...styles.swipetop,
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        flexDirection: 'row',
+                        position: 'absolute',
+                        right: 5,
+                        top: 5,
                       }}
                     >
-                      <Text style={{ ...styles.refund }}>3일내 환불</Text>
+                      <View
+                        style={{
+                          ...styles.swipetop,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Text style={{ ...styles.refund }}>3일내 환불</Text>
+                      </View>
+                      <View
+                        style={{
+                          ...styles.swipetop,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginLeft: scale(4),
+                        }}
+                      >
+                        <Text style={{ ...styles.refund }}> 홈서비스 </Text>
+                      </View>
                     </View>
+
                     <View
                       style={{
-                        ...styles.swipetop,
+                        ...styles.swipebottom,
+                        position: 'absolute',
+                        bottom: 0,
                         justifyContent: 'center',
-                        alignItems: 'center',
-                        marginLeft: scale(4),
                       }}
                     >
-                      <Text style={{ ...styles.refund }}> 홈서비스 </Text>
+                      <Text style={{ ...styles.price }}>
+                        {data.dealer_data.car_price
+                          .substring(data.dealer_data.car_price.length - 4, 0)
+                          .replace(regexp, ',')}
+                        만원
+                      </Text>
                     </View>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.swipebottom,
-                      position: 'absolute',
-                      bottom: 0,
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text style={{ ...styles.price }}>
-                      {data.dealer_data.car_price
-                        .substring(data.dealer_data.car_price.length - 4, 0)
-                        .replace(regexp, ',')}
-                      만원
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
+                  </TouchableOpacity>
+                );
+              })
+            ) : (
+              <View style={{ flex: 1 }} />
+            )}
           </Swiper>
 
           <View
@@ -860,8 +776,10 @@ export default function CarDetail({ route, navigation }) {
                   </View>
                   <Text style={{ ...styles.totalprice }}>
                     {deliveryPrice
-                      .substring(deliveryPrice.length - 2, 0)
-                      .replace(regexp, ',')}
+                      ? deliveryPrice
+                          .substring(deliveryPrice.length - 2, 0)
+                          .replace(regexp, ',')
+                      : 0}
                     원
                   </Text>
                 </View>
@@ -1056,9 +974,24 @@ export default function CarDetail({ route, navigation }) {
                   />
                 </TouchableOpacity>
                 <Text style={{ ...styles.name, marginTop: scale(7) }}>
-                  {data.dealer_info.dealer_nm} 인증딜러
+                  {data.dealer_info.dealer_nm} 딜러
                 </Text>
-                {_star()}
+                <Rating
+                  editable={false}
+                  initial={Number(data.dealer_info.review_point)}
+                  selectedStar={require('../../../images/likes_on.png')}
+                  unselectedStar={require('../../../images/likes_off.png')}
+                  config={{
+                    easing: Easing.inOut(Easing.ease),
+                    duration: 0,
+                  }}
+                  //maxScale={1.4}
+                  starStyle={{
+                    width: scale(24),
+                    height: scale(24),
+                    marginTop: scale(7),
+                  }}
+                />
                 <Text
                   style={{
                     ...styles.score,
@@ -1199,49 +1132,31 @@ export default function CarDetail({ route, navigation }) {
           }}
         >
           <View style={{ ...styles.modal }}>
-            <TouchableOpacity
-              onPress={() => {
-                setIsvisible(false);
-                navigation.navigate('BuyCash');
-              }}
-              delayPressIn={0}
-              style={{
-                paddingVertical: scale(16.2),
-                paddingHorizontal: scale(20),
-                borderStyle: 'solid',
-                borderBottomWidth: 0.3,
-                borderColor: 'rgba(112, 112, 112, 0.5)',
-              }}
-            >
-              <Text style={{ ...styles.modaltext }}>현금구매</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              delayPressIn={0}
-              style={{
-                paddingVertical: scale(16.2),
-                paddingHorizontal: scale(20),
-                borderStyle: 'solid',
-                borderBottomWidth: 0.3,
-                borderColor: 'rgba(112, 112, 112, 0.5)',
-              }}
-            >
-              <Text style={{ ...styles.modaltext }}>할부구매</Text>
-              <Text style={{ ...styles.modalsubtext }}>
-                ※ 이미 할부 승인 고객님이시라면 현금구매로 진행해주세요.
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              delayPressIn={0}
-              style={{
-                paddingVertical: scale(16.2),
-                paddingHorizontal: scale(20),
-                borderStyle: 'solid',
-                borderBottomWidth: 0.3,
-                borderColor: 'rgba(112, 112, 112, 0.5)',
-              }}
-            >
-              <Text style={{ ...styles.modaltext }}>리스구매</Text>
-            </TouchableOpacity>
+            {data1.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    _selectBuy(item.code_id, item.phone_number);
+                  }}
+                  delayPressIn={0}
+                  style={{
+                    paddingVertical: scale(16.2),
+                    paddingHorizontal: scale(20),
+                    borderStyle: 'solid',
+                    borderBottomWidth: 0.3,
+                    borderColor: 'rgba(112, 112, 112, 0.5)',
+                  }}
+                >
+                  <Text style={{ ...styles.modaltext }}>{item.code_desc}</Text>
+                  {item.description ? (
+                    <Text style={{ ...styles.modalsubtext }}>
+                      {item.description}
+                    </Text>
+                  ) : null}
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </Modal>
         <Modal
@@ -1249,6 +1164,12 @@ export default function CarDetail({ route, navigation }) {
           backdropOpacity={0.8}
           useNativeDriver={true}
           style={{ margin: 0 }}
+          onBackButtonPress={() => {
+            setIsvisible1({ open: false, image: '' });
+          }}
+          onBackdropPress={() => {
+            setIsvisible1({ open: false, image: '' });
+          }}
         >
           <TouchableOpacity
             onPress={() => {
@@ -1288,7 +1209,7 @@ export default function CarDetail({ route, navigation }) {
         <View style={{ height: '80%', width: '100%' }}>
           <Postcode
             style={{ flex: 1 }}
-            jsOptions={{ animated: true }}
+            jsOptions={{ animated: false }}
             onSelected={(data) => {
               setAddress(data.address);
               setIsvisible2(false);
@@ -1342,6 +1263,33 @@ export default function CarDetail({ route, navigation }) {
           <Text style={{ ...styles.modalbuttontext }}>확인</Text>
         </TouchableOpacity>
       </Modal>
+      <Modal1
+        isVisible={isvisible4.open}
+        style={{ alignItems: 'center' }}
+        useNativeDriver={true}
+        onBackButtonPress={() => setIsvisible4({ open: false, title: '' })}
+        onBackdropPress={() => setIsvisible4({ open: false, title: '' })}
+      >
+        <View
+          style={{
+            width: scale(280),
+            backgroundColor: '#ffffff',
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(15),
+          }}
+        >
+          <Text style={{ ...styles.text1 }}>{isvisible4.title}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              setIsvisible4({ open: false, title: '' });
+            }}
+            style={{ alignSelf: 'flex-end' }}
+            delayPressIn={0}
+          >
+            <Text style={{ ...styles.text2, marginTop: scale(20) }}>확인</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal1>
     </>
   ) : (
     <SubLoading />
@@ -1728,5 +1676,22 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'left',
     color: '#000000',
+  },
+  text1: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    lineHeight: 18,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#1d1d1d',
+  },
+  text2: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'right',
+    color: '#459bfe',
   },
 });

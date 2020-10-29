@@ -880,4 +880,134 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //차량 구매정보 조회
+  static CARDEALER_API_00029 = async () => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 구매정보 조회 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00029',
+        {},
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 구매정보 조회 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00029', error);
+      return error.response.data;
+    }
+  };
+
+  //차량 구매정보 선택
+  static CARDEALER_API_00030 = async ({ car_no, car_user_type, buy_type }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 구매정보 선택 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00030',
+        {
+          car_no: car_no,
+          car_user_type: car_user_type,
+          buy_type: buy_type,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 구매정보 선택 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00030', error);
+      return error.response.data;
+    }
+  };
+
+  //차량 판매동의 요청
+  static CARDEALER_API_00031 = async ({
+    car_no,
+    car_user_type,
+    birth_dt,
+    gender,
+  }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 판매동의 요청 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00031',
+        {
+          car_no: car_no,
+          car_user_type: car_user_type,
+          birth_dt: birth_dt,
+          gender: gender,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 판매동의 요청 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00031', error);
+      return error.response.data;
+    }
+  };
+
+  //차량 구매 진행단계 조회
+  static CARDEALER_API_00033 = async ({ car_no }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 구매 진행단계 조회 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00033',
+        {
+          params: {
+            car_no: car_no,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 구매 진행단계 조회 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00033', error);
+      return error.response.data;
+    }
+  };
+
+  //차량구매 입금계좌 요청
+  static CARDEALER_API_00034 = async ({ trade_no }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량구매 입금계좌 요청 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00034',
+        {
+          trade_no: trade_no,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량구매 입금계좌 요청 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00034', error);
+      return error.response.data;
+    }
+  };
 }

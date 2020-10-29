@@ -27,8 +27,9 @@ const Width = Dimensions.get('window').width;
 
 export default function CarDetailPersonal({ route, navigation }) {
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
-  const [isvisible1, setIsvisible1] = useState(false);
+  const [isvisible1, setIsvisible1] = useState({ open: false, image: '' });
   const [isvisible3, setIsvisible3] = useState(false);
+  const [isvisible4, setIsvisible4] = useState(false);
   const { car_no, car_user_type, sido } = route.params;
   const [data, setData] = useState(null);
   const [reportDesc, setReportDesc] = useState('');
@@ -157,7 +158,7 @@ export default function CarDetailPersonal({ route, navigation }) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    setIsvisible1(true);
+                    setIsvisible1({ open: true, image: item });
                   }}
                   delayPressIn={0}
                   style={{ flex: 1 }}
@@ -549,7 +550,7 @@ export default function CarDetailPersonal({ route, navigation }) {
             >
               <TouchableOpacity
                 onPress={() => {
-                  Linking.openURL(`tel:${data.user_data.user_phone}`);
+                  setIsvisible4(true);
                 }}
                 delayPressIn={0}
                 style={{
@@ -569,14 +570,20 @@ export default function CarDetailPersonal({ route, navigation }) {
           </View>
         </ScrollView>
         <Modal
-          isVisible={isvisible1}
+          isVisible={isvisible1.open}
           backdropOpacity={0.8}
           useNativeDriver={true}
           style={{ margin: 0 }}
+          onBackButtonPress={() => {
+            setIsvisible1({ open: false, image: '' });
+          }}
+          onBackdropPress={() => {
+            setIsvisible1({ open: false, image: '' });
+          }}
         >
           <TouchableOpacity
             onPress={() => {
-              setIsvisible1(false);
+              setIsvisible1({ open: false, image: '' });
             }}
             delayPressIn={0}
             hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
@@ -595,12 +602,10 @@ export default function CarDetailPersonal({ route, navigation }) {
             <Image
               resizeMode="contain"
               style={{ width: '100%', height: scale(270) }}
-              source={require('../../../images/k_7_02.png')}
+              source={{ uri: isvisible1.image }}
             />
             <Text style={{ ...styles.modalcardetail, marginLeft: scale(15) }}>
-              - 차종 : 니로 1.6 하이브리드 노블레스{'\n'}- 특이사항 : 무사고 A급
-              차량{'\n'}- 사고경력 없습니다!{'\n'}* 전액 할부가능
-              (차대금+이전비+보험료 포함)
+              {data.user_data.img_desc}
             </Text>
           </View>
         </Modal>
@@ -650,6 +655,37 @@ export default function CarDetailPersonal({ route, navigation }) {
         >
           <Text style={{ ...styles.modalbuttontext }}>확인</Text>
         </TouchableOpacity>
+      </Modal>
+      <Modal
+        isVisible={isvisible4}
+        style={{ alignItems: 'center' }}
+        useNativeDriver={true}
+      >
+        <View
+          style={{
+            width: scale(280),
+            backgroundColor: '#ffffff',
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(15),
+          }}
+        >
+          <Text style={{ ...styles.text1 }}>
+            해당 매물은 개인매물로 배달의 딜러와 무관하오니 거래 시 당사자간
+            신중히 검토하시길 바랍니다.
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setIsvisible4(false);
+              Linking.openURL(`tel:${data.user_data.user_phone}`);
+            }}
+            style={{ alignSelf: 'flex-end' }}
+            delayPressIn={0}
+          >
+            <Text style={{ ...styles.text2, marginTop: scale(20) }}>
+              연결하기
+            </Text>
+          </TouchableOpacity>
+        </View>
       </Modal>
     </>
   ) : (
@@ -910,5 +946,22 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'left',
     color: '#000000',
+  },
+  text1: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    lineHeight: 18,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#1d1d1d',
+  },
+  text2: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'right',
+    color: '#459bfe',
   },
 });

@@ -18,12 +18,12 @@ import Modal from 'react-native-modal';
 import AppServer from '../../../common/AppServer';
 import SubLoading from '../../../common/SubLoading';
 
-export default function DepositAccount({ route, navigation }) {
+export default function DepositAccountCom({ route, navigation }) {
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const { trade_no, car_no, car_user_type } = route.params;
   const [data, setData] = useState(null);
+  const [data1, setData1] = useState(null);
   const [drop, setDrop] = useState(false);
-  const [isvisible, setIsvisible] = useState(false);
 
   const _postDeposit = async () => {
     let result = await AppServer.CARDEALER_API_00034({
@@ -31,7 +31,7 @@ export default function DepositAccount({ route, navigation }) {
     });
     console.log('_postDeposit>>', result);
     if (result.success_yn) {
-      setIsvisible(true);
+      setData1(result);
     } else if (
       !result.success_yn &&
       result.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
@@ -69,11 +69,10 @@ export default function DepositAccount({ route, navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
       _getDetail();
+      _postDeposit();
     });
     return unsubscribe;
   }, [navigation]);
-
-  const _complete = () => {};
 
   return data ? (
     <>
@@ -226,11 +225,24 @@ export default function DepositAccount({ route, navigation }) {
                 {data.data.total_price.toString().replace(regexp, ',')}원
               </Text>
             </View>
+            <View
+              style={{
+                ...styles.bottombox,
+                paddingHorizontal: scale(29),
+                paddingVertical: scale(10.8),
+                marginTop: scale(20),
+              }}
+            >
+              <Text style={{ ...styles.bottomboxtext }}>
+                {data1.bank_nm} {data1.account_number} 예금주 :{' '}
+                {data1.account_user}
+              </Text>
+            </View>
           </View>
         </ScrollView>
         <TouchableOpacity
           onPress={() => {
-            _postDeposit();
+            //navigation.popToTop()
           }}
           delayPressIn={0}
           style={{
@@ -241,36 +253,8 @@ export default function DepositAccount({ route, navigation }) {
             alignSelf: 'center',
           }}
         >
-          <Text style={{ ...styles.bottombuttontext }}>입금계좌요청</Text>
+          <Text style={{ ...styles.bottombuttontext }}>입금완료</Text>
         </TouchableOpacity>
-        <Modal
-          isVisible={isvisible}
-          style={{ alignItems: 'center' }}
-          useNativeDriver={true}
-        >
-          <View
-            style={{
-              ...styles.modalview,
-              paddingHorizontal: scale(20),
-              paddingVertical: scale(16),
-            }}
-          >
-            <Text style={{ ...styles.modaltext }}>
-              입금완료 요청을 하였습니다. 빠르게 확인 후 문자로
-              안내해드리겠습니다.
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setIsvisible(false);
-                navigation.popToTop();
-              }}
-              delayPressIn={0}
-              style={{ marginTop: scale(20) }}
-            >
-              <Text style={{ ...styles.modalbutton }}>확인</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
       </SafeAreaView>
     </>
   ) : (

@@ -14,10 +14,53 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import AppServer from '../../../common/AppServer';
+import Modal from 'react-native-modal';
 
 export default function BuyCash({ route, navigation }) {
+  const { car_no, car_user_type, car_number, car_nm, car_year } = route.params;
+  const [isvisible, setIsvisible] = useState({ open: false, title: '' });
   const [personList, setPersonList] = useState(['남성', '여성']);
   const [select, setSelect] = useState('');
+  const [birth, setBirth] = useState('');
+
+  const _birth = (birthtext) => {
+    setBirth(birthtext);
+  };
+
+  const _postBuyCarAgree = async () => {
+    try {
+      let data = await AppServer.CARDEALER_API_00031({
+        car_no: car_no,
+        car_user_type: car_user_type,
+        birth_dt: birth,
+        gender: select === '남성' ? 'M' : 'F',
+      });
+      console.log('_postBuyCarAgree>>', data);
+      if (data.success_yn) {
+        navigation.navigate('BuyCashComplete', {
+          car_number: car_number,
+          car_nm: car_nm,
+          car_year: car_year,
+        });
+      } else if (
+        !data.success_yn &&
+        data.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      } else if (
+        !data.success_yn &&
+        data.msg === '딜러 판매동의 대기중입니다'
+      ) {
+        setIsvisible({ open: true, title: data.msg });
+      }
+    } catch (error) {
+      console.log('_postBuyCarAgree>>', error);
+    }
+  };
 
   return (
     <>
@@ -86,6 +129,10 @@ export default function BuyCash({ route, navigation }) {
                 placeholder={'ex) 930928'}
                 placeholderTextColor={'rgba(0, 0, 0, 0.3)'}
                 keyboardType={'number-pad'}
+                value={birth}
+                onChangeText={(text) => {
+                  _birth(text);
+                }}
               />
               <View
                 style={{
@@ -124,8 +171,9 @@ export default function BuyCash({ route, navigation }) {
               </View>
             </View>
             <TouchableOpacity
+              disabled={birth.length === 6 && select ? false : true}
               onPress={() => {
-                navigation.navigate('BuyCashComplete');
+                _postBuyCarAgree();
               }}
               delayPressIn={0}
               style={{
@@ -133,6 +181,10 @@ export default function BuyCash({ route, navigation }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: scale(15),
+                backgroundColor:
+                  birth.length === 6 && select
+                    ? '#459bfe'
+                    : 'rgba(69, 155, 254, 0.3)',
               }}
             >
               <Text style={{ ...styles.bottombuttontext }}>주문하기</Text>
@@ -140,6 +192,33 @@ export default function BuyCash({ route, navigation }) {
           </ScrollView>
         </SafeAreaView>
       </TouchableWithoutFeedback>
+      <Modal
+        isVisible={isvisible.open}
+        style={{ alignItems: 'center' }}
+        useNativeDriver={true}
+        onBackButtonPress={() => setIsvisible({ open: false, title: '' })}
+        onBackdropPress={() => setIsvisible({ open: false, title: '' })}
+      >
+        <View
+          style={{
+            width: scale(280),
+            backgroundColor: '#ffffff',
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(15),
+          }}
+        >
+          <Text style={{ ...styles.text1 }}>{isvisible.title}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              setIsvisible({ open: false, title: '' });
+            }}
+            style={{ alignSelf: 'flex-end' }}
+            delayPressIn={0}
+          >
+            <Text style={{ ...styles.text2, marginTop: scale(20) }}>확인</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -198,7 +277,6 @@ const styles = StyleSheet.create({
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: '#459bfe',
   },
   bottombuttontext: {
     fontFamily: 'Jalnan',
@@ -207,5 +285,22 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     color: '#ffffff',
+  },
+  text1: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    lineHeight: 18,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#1d1d1d',
+  },
+  text2: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: scale(13),
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'right',
+    color: '#459bfe',
   },
 });

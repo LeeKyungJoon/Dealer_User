@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 export default function BuyCar({ route, navigation }) {
+  const { trade_no, car_no, car_user_type } = route.params;
   const [agree, setAgree] = useState(false);
   const [agree1, setAgree1] = useState(false);
 
@@ -80,8 +81,9 @@ export default function BuyCar({ route, navigation }) {
             </View>
             <View style={{ alignSelf: 'center', marginTop: scale(30) }}>
               <TouchableOpacity
+                disabled={agree ? true : false}
                 onPress={() => {
-                  navigation.navigate('Terms');
+                  navigation.navigate('Terms', { setAgree });
                 }}
                 delayPressIn={0}
                 style={{
@@ -103,11 +105,7 @@ export default function BuyCar({ route, navigation }) {
                   source={require('../../../images/more_view_ic_72.png')}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  agree ? setAgree(false) : setAgree(true);
-                }}
-                delayPressIn={0}
+              <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -128,10 +126,11 @@ export default function BuyCar({ route, navigation }) {
                 <Text style={{ ...styles.agreetext, marginLeft: scale(5) }}>
                   위 내용을 확인하였으며, 약관에 동의합니다.
                 </Text>
-              </TouchableOpacity>
+              </View>
               <TouchableOpacity
+                disabled={agree1 ? true : false}
                 onPress={() => {
-                  navigation.navigate('Rules');
+                  navigation.navigate('Rules', { setAgree1 });
                 }}
                 delayPressIn={0}
                 style={{
@@ -153,11 +152,7 @@ export default function BuyCar({ route, navigation }) {
                   source={require('../../../images/more_view_ic_72.png')}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  agree1 ? setAgree1(false) : setAgree1(true);
-                }}
-                delayPressIn={0}
+              <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -179,12 +174,17 @@ export default function BuyCar({ route, navigation }) {
                 <Text style={{ ...styles.agreetext, marginLeft: scale(5) }}>
                   위 내용을 확인하였으며, 약관에 동의합니다.
                 </Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </View>
           <TouchableOpacity
+            disabled={agree && agree1 ? false : true}
             onPress={() => {
-              navigation.navigate('DepositAccount');
+              navigation.navigate('DepositAccount', {
+                trade_no: trade_no,
+                car_no: car_no,
+                car_user_type: car_user_type,
+              });
             }}
             delayPressIn={0}
             style={{
@@ -192,6 +192,8 @@ export default function BuyCar({ route, navigation }) {
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: scale(15),
+              backgroundColor:
+                agree && agree1 ? '#459bfe' : 'rgba(69, 155, 254, 0.3)',
             }}
           >
             <Text style={{ ...styles.bottombuttontext }}>다음</Text>
@@ -270,7 +272,6 @@ const styles = StyleSheet.create({
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: '#459bfe',
   },
   bottombuttontext: {
     fontFamily: 'Jalnan',

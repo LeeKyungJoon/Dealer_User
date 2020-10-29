@@ -237,7 +237,7 @@ export default function AllBuyPay({ route, navigation }) {
         }
         centerComponent={
           <Text style={{ ...styles.headercenter }}>
-            {data.data[0].dealer_nm} 인증딜러
+            {data.data[0].dealer_nm} 딜러
           </Text>
         }
       />
@@ -258,7 +258,7 @@ export default function AllBuyPay({ route, navigation }) {
               >
                 <View>
                   <Text style={{ ...styles.dealername }}>
-                    {data.data[0].dealer_nm} 인증딜러
+                    {data.data[0].dealer_nm} 딜러
                   </Text>
                   <View
                     style={{
@@ -274,7 +274,7 @@ export default function AllBuyPay({ route, navigation }) {
                     </Text>
                   </View>
                 </View>
-                {data.data[0].review_write_yn ? (
+                {data.data[0].dealer_certificate_txt === '부여' ? (
                   <Image
                     style={{ ...styles.compelete }}
                     source={require('../../../images/stamp_2_ic_320.png')}

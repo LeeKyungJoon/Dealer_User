@@ -16,6 +16,9 @@ import {
 } from 'react-native';
 
 export default function BuyCashComplete({ route, navigation }) {
+  const { car_number, car_nm, car_year } = route.params;
+  console.log(car_number, car_nm, car_year);
+
   return (
     <>
       <Header
@@ -68,9 +71,11 @@ export default function BuyCashComplete({ route, navigation }) {
                 marginLeft: scale(5),
               }}
             >
-              12가3456, 기아, 더뉴 K7, 2017년식 차량이 딜러에게 주문
-              요청되었습니다!{'\n'}판매 여부에 대해 빠른 시간 내로 알림을
-              보내드릴게요
+              <Text style={{ color: '#459bfe' }}>
+                {car_number}, {car_nm}, {car_year}년식
+              </Text>{' '}
+              차량이 딜러에게 주문 요청되었습니다!{'\n'}판매 여부에 대해 빠른
+              시간 내로 알림을 보내드릴게요
             </Text>
           </View>
           <TouchableOpacity

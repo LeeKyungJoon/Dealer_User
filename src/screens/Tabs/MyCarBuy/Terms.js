@@ -17,7 +17,13 @@ import {
 import { WebView } from 'react-native-webview';
 
 export default function Terms({ route, navigation }) {
-  const [agree, setAgree] = useState(false);
+  const { setAgree } = route.params;
+  const [agree2, setAgree2] = useState(false);
+
+  const _goBack = () => {
+    setAgree(true);
+    navigation.goBack();
+  };
 
   return (
     <>
@@ -91,7 +97,7 @@ export default function Terms({ route, navigation }) {
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  agree ? setAgree(false) : setAgree(true);
+                  setAgree2(!agree2);
                 }}
                 delayPressIn={0}
                 style={{
@@ -100,7 +106,7 @@ export default function Terms({ route, navigation }) {
                   marginTop: scale(15),
                 }}
               >
-                {agree ? (
+                {agree2 ? (
                   <Image
                     style={{ ...styles.agreeicon }}
                     source={require('../../../images/circle_on_ic_68.png')}
@@ -118,8 +124,9 @@ export default function Terms({ route, navigation }) {
             </View>
           </View>
           <TouchableOpacity
+            disabled={agree2 ? false : true}
             onPress={() => {
-              navigation.goBack();
+              _goBack();
             }}
             delayPressIn={0}
             style={{
@@ -127,6 +134,7 @@ export default function Terms({ route, navigation }) {
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: scale(15),
+              backgroundColor: agree2 ? '#459bfe' : 'rgba(69, 155, 254, 0.3)',
             }}
           >
             <Text style={{ ...styles.bottombuttontext }}>확인</Text>
@@ -193,7 +201,6 @@ const styles = StyleSheet.create({
     width: scale(330),
     height: scale(40),
     borderRadius: 10,
-    backgroundColor: '#459bfe',
   },
   bottombuttontext: {
     fontFamily: 'Jalnan',

@@ -30,6 +30,33 @@ export default function MyCarBuyMain({ route, navigation }) {
   const [premiumCheck, setPremiumCheck] = useState(false);
   const [data, setData] = useState(null);
 
+  const _getBuying = async (car_no, car_user_type) => {
+    try {
+      let result = await AppServer.CARDEALER_API_00033({ car_no: car_no });
+      console.log('_getBuying>>>', result);
+      if (result.success_yn) {
+        switch (result.data.trade_status_user_txt) {
+          case '주문승인':
+            navigation.navigate('BuyCar', {
+              trade_no: result.data.trade_no,
+              car_no: car_no,
+              car_user_type: car_user_type,
+            });
+            break;
+          case '입금계좌 요청':
+            navigation.navigate('DepositAccountCom', {
+              trade_no: result.data.trade_no,
+              car_no: car_no,
+              car_user_type: car_user_type,
+            });
+            break;
+        }
+      }
+    } catch (error) {
+      console.log('_getBuying>>>', error);
+    }
+  };
+
   const _getBuyList = async ({ check }) => {
     try {
       const data = await AppServer.CARDEALER_API_00015({
@@ -157,7 +184,7 @@ export default function MyCarBuyMain({ route, navigation }) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    navigation.navigate('BuyCar');
+                    _getBuying(item.car_no, item.car_user_type);
                   }}
                   delayPressIn={0}
                   style={{

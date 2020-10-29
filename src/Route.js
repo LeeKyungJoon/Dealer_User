@@ -20,6 +20,7 @@ import BuyCar from './screens/Tabs/MyCarBuy/BuyCar';
 import Terms from './screens/Tabs/MyCarBuy/Terms';
 import Rules from './screens/Tabs/MyCarBuy/Rules';
 import DepositAccount from './screens/Tabs/MyCarBuy/DepositAccount';
+import DepositAccountCom from './screens/Tabs/MyCarBuy/DepositAccountCom';
 import ReceivePlace from './screens/Tabs/MyCarBuy/ReceivePlace';
 import RefundAccount from './screens/Tabs/MyCarBuy/RefundAccount';
 import DeliverySchedule from './screens/Tabs/MyCarBuy/DeliverySchedule';
@@ -177,6 +178,13 @@ export default function Route() {
         <Stack.Screen
           name={'DepositAccount'}
           component={DepositAccount}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <Stack.Screen
+          name={'DepositAccountCom'}
+          component={DepositAccountCom}
           options={{
             cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
           }}

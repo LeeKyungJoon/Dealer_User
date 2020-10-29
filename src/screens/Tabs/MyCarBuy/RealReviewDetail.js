@@ -20,12 +20,169 @@ import Rating from 'react-native-rating';
 import { Easing } from 'react-native';
 import AppServer from '../../../common/AppServer';
 import SubLoading from '../../../common/SubLoading';
+import moment from 'moment';
 
 const Width = Dimensions.get('window').width;
 
 export default function RealReviewDetail({ route, navigation }) {
+  let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const [data, setData] = useState(null);
   const { review_no } = route.params;
+
+  const _star = () => {
+    switch (data.dealer_info.review_point) {
+      case '0':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '1':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '2':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '3':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '4':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_off.png')}
+            />
+          </View>
+        );
+      case '5':
+        return (
+          <View style={{ flexDirection: 'row', marginTop: scale(7) }}>
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+            <Image
+              style={{ ...styles.star }}
+              source={require('../../../images/likes_on.png')}
+            />
+          </View>
+        );
+    }
+  };
 
   const _getReview = async () => {
     try {
@@ -84,7 +241,7 @@ export default function RealReviewDetail({ route, navigation }) {
           </TouchableOpacity>
         }
         centerComponent={
-          <Text style={{ ...styles.headercenter }}>12가3456</Text>
+          <Text style={{ ...styles.headercenter }}>{data.data.car_number}</Text>
         }
       />
       <SafeAreaView style={{ ...styles.container }}>
@@ -129,9 +286,9 @@ export default function RealReviewDetail({ route, navigation }) {
                 paddingLeft: scale(15),
               }}
             >
-              <Text style={{ ...styles.carname }}>기아 더뉴 K7</Text>
+              <Text style={{ ...styles.carname }}>{data.data.car_nm}</Text>
               <Text style={{ ...styles.date, marginTop: scale(3) }}>
-                2020.05.06 거래완료
+                {moment(data.data.trade_dt * 1000).format('YYYY.MM.DD')}거래완료
               </Text>
               <View
                 style={{
@@ -143,7 +300,12 @@ export default function RealReviewDetail({ route, navigation }) {
                 <Text style={{ ...styles.sub, marginRight: scale(30) }}>
                   거래 금액
                 </Text>
-                <Text style={{ ...styles.price }}>1,740만원</Text>
+                <Text style={{ ...styles.price }}>
+                  {data.data.trade_price
+                    .substring(data.data.trade_price.length - 4, 0)
+                    .replace(regexp, ',')}
+                  만원
+                </Text>
               </View>
             </View>
             <View style={{ alignSelf: 'center', marginTop: scale(20) }}>
@@ -158,16 +320,7 @@ export default function RealReviewDetail({ route, navigation }) {
                 }}
               >
                 <Text style={{ ...styles.subsub }}>
-                  생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때 마음이
-                  좀 싱숭생숭 했지만 좋은 딜러분 만나서 마음 편히 거래했습니다.
-                  생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때 마음이
-                  좀 싱숭생숭 했지만 좋은 딜러분 만나서 마음 편히 거래했습니다.
-                  생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때 마음이
-                  좀 싱숭생숭 했지만 좋은 딜러분 만나서 마음 편히 거래했습니다.
-                  생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때 마음이
-                  좀 싱숭생숭 했지만 좋은 딜러분 만나서 마음 편히 거래했습니다.
-                  생에 첫 차이자 3년가 제 발이 되어준 아이라 떠나보낼 때 마음이
-                  좀 싱숭생숭 했지만 좋은 딜러분 만나서 마음 편히 거래했습니다.
+                  {data.data.review_desc}
                 </Text>
               </View>
             </View>
@@ -196,13 +349,13 @@ export default function RealReviewDetail({ route, navigation }) {
                   source={require('../../../images/shutterstock_682551649.png')}
                 />
                 <Text style={{ ...styles.name, marginVertical: scale(8) }}>
-                  홍길동 인증딜러
+                  {data.data.dealer_nm} 딜러
                 </Text>
                 <Rating
                   editable={false}
-                  initial={4}
-                  selectedStar={require('../../../images/likes_100_on.png')}
-                  unselectedStar={require('../../../images/likes_100_off.png')}
+                  initial={Number(data.data.review_point)}
+                  selectedStar={require('../../../images/likes_on.png')}
+                  unselectedStar={require('../../../images/likes_off.png')}
                   config={{
                     easing: Easing.inOut(Easing.ease),
                     duration: 0,
@@ -214,7 +367,7 @@ export default function RealReviewDetail({ route, navigation }) {
                   }}
                 />
                 <Text style={{ ...styles.score, marginTop: scale(5) }}>
-                  4점 / 후기 55
+                  {data.data.review_point}점 / 후기 {data.data.review_cnt}
                 </Text>
                 <View
                   style={{
@@ -227,17 +380,7 @@ export default function RealReviewDetail({ route, navigation }) {
                   }}
                 />
                 <Text style={{ ...styles.subsub }}>
-                  안녕하세요. 배달의 딜러 우수 인증딜러 홍길동입니다. 우수
-                  인증딜러는 배달의 딜러 내에 약 5000명 딜러종사자 중 배달의
-                  딜러에서 인증한 50명에 선정된 우수 딜러입니다.{'\n'}
-                  {'\n'}어떤 차량을 선택하는지도 중요하지만 어떤 딜러와 인연이
-                  될지 선택하는 것이 더욱 중요합니다. 단 한번의 계약으로 평생의
-                  카매니저가 되어드리겠습니다. ^^{'\n'}
-                  {'\n'}- 차종 : 니로 1.6 하이브리드 노블레스{'\n'}- 특이사항 :
-                  무사고 A급 차량{'\n'}
-                  {'\n'}* 전액 할부가능 (차대금+이전비+보험료 포함){'\n'}
-                  {'\n'}오시는 길{'\n'}-{'>'} 수원시 권선구 권선로 341
-                  오토컬렉션
+                  {data.data.dealer_desc}
                 </Text>
               </View>
             </View>

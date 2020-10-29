@@ -243,7 +243,7 @@ export default function DealerAuction({ route, navigation }) {
               }}
               source={require('../../../images/shutterstock_682551649.png')}
             />
-            <Text style={{ ...styles.modalname }}>홍길동 인증딜러</Text>
+            <Text style={{ ...styles.modalname }}>홍길동 딜러</Text>
             <View style={{ marginTop: scale(30) }}>
               <Text
                 style={{ ...styles.modalcarnumber, fontFamily: 'Roboto-Bold' }}
