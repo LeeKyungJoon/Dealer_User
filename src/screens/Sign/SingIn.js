@@ -96,6 +96,8 @@ export default function SingIn({ route, navigation }) {
         //let a = await AsyncStorage.getAllKeys();
         //console.log(a);
         await AsyncStorage.setItem('_token', data.token);
+        await AsyncStorage.setItem('_email', email);
+        await AsyncStorage.setItem('_pass', password);
         //if (fcm_token !== "NONE" && !fcm_token) {
         //  console.log("3333");
         //  await AsyncStorage.setItem("_token", data.token);

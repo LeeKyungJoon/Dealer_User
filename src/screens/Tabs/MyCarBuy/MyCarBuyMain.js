@@ -54,6 +54,16 @@ export default function MyCarBuyMain({ route, navigation }) {
           case '입금완료 요청':
             setIsvisible2(true);
             break;
+          case '입금확인':
+            navigation.navigate('ReceivePlace', {
+              trade_no: result.data.trade_no,
+            });
+            break;
+          case '인수장소 입력':
+            navigation.navigate('RefundAccount', {
+              trade_no: result.data.trade_no,
+            });
+            break;
         }
       }
     } catch (error) {

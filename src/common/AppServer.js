@@ -1034,4 +1034,130 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //차량 인수장소 조회
+  static CARDEALER_API_00036 = async ({ trade_no }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 인수장소 조회 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00036',
+        {
+          params: {
+            trade_no: trade_no,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 인수장소 조회 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00036', error);
+      return error.response.data;
+    }
+  };
+
+  //차량 인수장소 변경확인
+  static CARDEALER_API_00037 = async ({
+    trade_no,
+    take_over_address,
+    take_over_address_detail,
+    take_over_address_new,
+    take_over_address_detail_new,
+  }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 인수장소 변경확인 응답');
+    try {
+      let response = await Http.get(
+        '/cardealer/CARDEALER_API_00037',
+        {
+          params: {
+            trade_no: trade_no,
+            take_over_address: take_over_address,
+            take_over_address_detail: take_over_address_detail,
+            take_over_address_new: take_over_address_new,
+            take_over_address_detail_new: take_over_address_detail_new,
+          },
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 인수장소 변경확인 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00037', error);
+      return error.response.data;
+    }
+  };
+
+  //차량 인수장소 확정
+  static CARDEALER_API_00038 = async ({
+    trade_no,
+    change_yn,
+    take_over_address_new,
+    take_over_address_detail_new,
+  }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량 인수장소 확정 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00038',
+        {
+          trade_no: trade_no,
+          change_yn: change_yn,
+          take_over_address_new: take_over_address_new,
+          take_over_address_detail_new: take_over_address_detail_new,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량 인수장소 확정 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00038', error);
+      return error.response.data;
+    }
+  };
+
+  //이전비 환불
+  static CARDEALER_API_00039 = async ({
+    trade_no,
+    bank_nm,
+    account_number,
+    account_user,
+  }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('이전비 환불 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00039',
+        {
+          trade_no: trade_no,
+          bank_nm: bank_nm,
+          account_number: account_number,
+          account_user: account_user,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('이전비 환불 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00039', error);
+      return error.response.data;
+    }
+  };
 }
