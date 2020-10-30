@@ -64,6 +64,11 @@ export default function MyCarBuyMain({ route, navigation }) {
               trade_no: result.data.trade_no,
             });
             break;
+          case '이전비 환불 정보입력':
+            navigation.navigate('DeliverySchedule', {
+              trade_no: result.data.trade_no,
+            });
+            break;
         }
       }
     } catch (error) {
