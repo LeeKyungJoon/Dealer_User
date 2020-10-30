@@ -22,8 +22,34 @@ export default function DepositAccount({ route, navigation }) {
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const { trade_no, car_no, car_user_type } = route.params;
   const [data, setData] = useState(null);
-  const [drop, setDrop] = useState(false);
+  const [data1, setData1] = useState({
+    bank_nm: '',
+    account_number: '',
+    account_user: '',
+  });
   const [isvisible, setIsvisible] = useState(false);
+
+  const _postDepositCom = async () => {
+    try {
+      let result = await AppServer.CARDEALER_API_00035({
+        trade_no: trade_no,
+      });
+      console.log('_postDepositCom>>', result);
+      if (result.success_yn) {
+        setIsvisible(true);
+      } else if (
+        !result.success_yn &&
+        result.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_postDepositCom>>', error);
+    }
+  };
 
   const _postDeposit = async () => {
     let result = await AppServer.CARDEALER_API_00034({
@@ -31,7 +57,7 @@ export default function DepositAccount({ route, navigation }) {
     });
     console.log('_postDeposit>>', result);
     if (result.success_yn) {
-      setIsvisible(true);
+      setData1(result);
     } else if (
       !result.success_yn &&
       result.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
@@ -73,8 +99,6 @@ export default function DepositAccount({ route, navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  const _complete = () => {};
-
   return data ? (
     <>
       <Header
@@ -89,7 +113,9 @@ export default function DepositAccount({ route, navigation }) {
         leftComponent={
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              data1.bank_nm && data1.account_number && data1.account_user
+                ? navigation.popToTop()
+                : navigation.goBack();
             }}
             style={{ marginLeft: scale(5) }}
             delayPressIn={0}
@@ -185,7 +211,7 @@ export default function DepositAccount({ route, navigation }) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  paddingVertical: drop ? scale(9) : scale(4),
+                  paddingVertical: scale(4),
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>성능보증보험료</Text>
@@ -198,7 +224,7 @@ export default function DepositAccount({ route, navigation }) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  paddingVertical: drop ? scale(9) : scale(4),
+                  paddingVertical: scale(4),
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>이전비용</Text>
@@ -226,23 +252,56 @@ export default function DepositAccount({ route, navigation }) {
                 {data.data.total_price.toString().replace(regexp, ',')}원
               </Text>
             </View>
+            {data1.bank_nm && data1.account_number && data1.account_user ? (
+              <View
+                style={{
+                  ...styles.bottombox,
+                  //paddingHorizontal: scale(29),
+                  paddingVertical: scale(10.8),
+                  marginTop: scale(20),
+                }}
+              >
+                <Text style={{ ...styles.bottomboxtext }}>
+                  {data1.bank_nm} {data1.account_number} 예금주 :{' '}
+                  {data1.account_user}
+                </Text>
+              </View>
+            ) : null}
           </View>
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            _postDeposit();
-          }}
-          delayPressIn={0}
-          style={{
-            ...styles.bottombutton,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: scale(15),
-            alignSelf: 'center',
-          }}
-        >
-          <Text style={{ ...styles.bottombuttontext }}>입금계좌요청</Text>
-        </TouchableOpacity>
+        {data1.bank_nm && data1.account_number && data1.account_user ? (
+          <TouchableOpacity
+            onPress={() => {
+              _postDepositCom();
+            }}
+            delayPressIn={0}
+            style={{
+              ...styles.bottombutton,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: scale(15),
+              alignSelf: 'center',
+            }}
+          >
+            <Text style={{ ...styles.bottombuttontext }}>입금완료</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              _postDeposit();
+            }}
+            delayPressIn={0}
+            style={{
+              ...styles.bottombutton,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: scale(15),
+              alignSelf: 'center',
+            }}
+          >
+            <Text style={{ ...styles.bottombuttontext }}>입금계좌요청</Text>
+          </TouchableOpacity>
+        )}
         <Modal
           isVisible={isvisible}
           style={{ alignItems: 'center' }}

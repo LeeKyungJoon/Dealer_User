@@ -1010,4 +1010,28 @@ export default class AppServer {
       return error.response.data;
     }
   };
+
+  //차량구매 입금완료 요청
+  static CARDEALER_API_00035 = async ({ trade_no }) => {
+    const _token = await AsyncStorage.getItem('_token');
+    Http.defaults.headers.common['Authorization'] = _token;
+
+    console.log('>>>>>>>>>>>_token', _token);
+
+    console.log('차량구매 입금완료 요청 응답');
+    try {
+      let response = await Http.post(
+        '/cardealer/CARDEALER_API_00035',
+        {
+          trade_no: trade_no,
+        },
+        { 'Access-Control-Allow-Origin': '*', authorization: _token },
+      );
+      console.log('차량구매 입금완료 요청 확인', response.data);
+      return response.data;
+    } catch (error) {
+      console.log('CARDEALER_API_00035', error);
+      return error.response.data;
+    }
+  };
 }

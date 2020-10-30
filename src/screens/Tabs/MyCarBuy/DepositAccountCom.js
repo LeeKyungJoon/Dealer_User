@@ -23,23 +23,49 @@ export default function DepositAccountCom({ route, navigation }) {
   const { trade_no, car_no, car_user_type } = route.params;
   const [data, setData] = useState(null);
   const [data1, setData1] = useState(null);
-  const [drop, setDrop] = useState(false);
+  const [isvisible, setIsvisible] = useState(false);
+
+  const _postDepositCom = async () => {
+    try {
+      let result = await AppServer.CARDEALER_API_00035({
+        trade_no: trade_no,
+      });
+      console.log('_postDepositCom>>', result);
+      if (result.success_yn) {
+        setIsvisible(true);
+      } else if (
+        !result.success_yn &&
+        result.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_postDepositCom>>', error);
+    }
+  };
 
   const _postDeposit = async () => {
-    let result = await AppServer.CARDEALER_API_00034({
-      trade_no: trade_no,
-    });
-    console.log('_postDeposit>>', result);
-    if (result.success_yn) {
-      setData1(result);
-    } else if (
-      !result.success_yn &&
-      result.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
-    ) {
-      await AsyncStorage.clear();
-      navigation.reset({
-        routes: [{ name: 'Sign' }],
+    try {
+      let result = await AppServer.CARDEALER_API_00034({
+        trade_no: trade_no,
       });
+      console.log('_postDeposit>>', result);
+      if (result.success_yn) {
+        setData1(result);
+      } else if (
+        !result.success_yn &&
+        result.msg === '세션이 종료되어 로그인 페이지로 이동합니다.'
+      ) {
+        await AsyncStorage.clear();
+        navigation.reset({
+          routes: [{ name: 'Sign' }],
+        });
+      }
+    } catch (error) {
+      console.log('_postDeposit>>', error);
     }
   };
 
@@ -74,7 +100,7 @@ export default function DepositAccountCom({ route, navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  return data ? (
+  return data && data1 ? (
     <>
       <Header
         placement="left"
@@ -184,7 +210,7 @@ export default function DepositAccountCom({ route, navigation }) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  paddingVertical: drop ? scale(9) : scale(4),
+                  paddingVertical: scale(4),
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>성능보증보험료</Text>
@@ -197,7 +223,7 @@ export default function DepositAccountCom({ route, navigation }) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  paddingVertical: drop ? scale(9) : scale(4),
+                  paddingVertical: scale(4),
                 }}
               >
                 <Text style={{ ...styles.lefttext }}>이전비용</Text>
@@ -228,7 +254,7 @@ export default function DepositAccountCom({ route, navigation }) {
             <View
               style={{
                 ...styles.bottombox,
-                paddingHorizontal: scale(29),
+                //paddingHorizontal: scale(29),
                 paddingVertical: scale(10.8),
                 marginTop: scale(20),
               }}
@@ -242,7 +268,7 @@ export default function DepositAccountCom({ route, navigation }) {
         </ScrollView>
         <TouchableOpacity
           onPress={() => {
-            //navigation.popToTop()
+            _postDepositCom();
           }}
           delayPressIn={0}
           style={{
@@ -255,6 +281,34 @@ export default function DepositAccountCom({ route, navigation }) {
         >
           <Text style={{ ...styles.bottombuttontext }}>입금완료</Text>
         </TouchableOpacity>
+        <Modal
+          isVisible={isvisible}
+          style={{ alignItems: 'center' }}
+          useNativeDriver={true}
+        >
+          <View
+            style={{
+              ...styles.modalview,
+              paddingHorizontal: scale(20),
+              paddingVertical: scale(16),
+            }}
+          >
+            <Text style={{ ...styles.modaltext }}>
+              입금완료 요청을 하였습니다. 빠르게 확인 후 문자로
+              안내해드리겠습니다.
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setIsvisible(false);
+                navigation.goBack();
+              }}
+              delayPressIn={0}
+              style={{ marginTop: scale(20) }}
+            >
+              <Text style={{ ...styles.modalbutton }}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </SafeAreaView>
     </>
   ) : (

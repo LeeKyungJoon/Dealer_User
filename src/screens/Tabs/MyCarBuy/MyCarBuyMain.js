@@ -27,6 +27,7 @@ export default function MyCarBuyMain({ route, navigation }) {
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
   const [isvisible, setIsvisible] = useState(false);
   const [isvisible1, setIsvisible1] = useState(false);
+  const [isvisible2, setIsvisible2] = useState(false);
   const [premiumCheck, setPremiumCheck] = useState(false);
   const [data, setData] = useState(null);
 
@@ -49,6 +50,9 @@ export default function MyCarBuyMain({ route, navigation }) {
               car_no: car_no,
               car_user_type: car_user_type,
             });
+            break;
+          case '입금완료 요청':
+            setIsvisible2(true);
             break;
         }
       }
@@ -692,6 +696,36 @@ export default function MyCarBuyMain({ route, navigation }) {
             </TouchableOpacity>
           </View>
         </Modal>
+        <Modal
+          isVisible={isvisible2}
+          style={{ alignItems: 'center' }}
+          useNativeDriver={true}
+          onBackButtonPress={() => {
+            setIsvisible2(false);
+          }}
+          onBackdropPress={() => {
+            setIsvisible2(false);
+          }}
+        >
+          <View
+            style={{
+              ...styles.modalview,
+              paddingHorizontal: scale(20),
+              paddingVertical: scale(16),
+            }}
+          >
+            <Text style={{ ...styles.modaltext }}>입금확인 대기 중입니다.</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setIsvisible2(false);
+              }}
+              delayPressIn={0}
+              style={{ marginTop: scale(20) }}
+            >
+              <Text style={{ ...styles.modalbutton }}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </SafeAreaView>
     </>
   ) : (
@@ -850,7 +884,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
     fontSize: scale(13),
     fontStyle: 'normal',
-    lineHeight: scale(25),
     letterSpacing: 0,
     textAlign: 'right',
     color: '#459bfe',
